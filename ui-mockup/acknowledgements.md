@@ -1,0 +1,1 @@
+The Smile team acknowledges usage of Material Icons from Google used under Apache license version 2.0 (https://www.google.com/design/icons/) in our design.
