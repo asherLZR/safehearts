@@ -3,23 +3,19 @@ package edu.monash.smile.data.model;
 import androidx.annotation.NonNull;
 
 public class PatientReference {
-    private String reference;
+    private final String id;
 
-    public PatientReference(String reference) {
-        this.reference = reference;
+    public PatientReference(String id) {
+        this.id = id;
     }
 
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
+    public String getId() {
+        return id;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "Patient = " + reference;
+        return "PatientReference = " + id;
     }
 }

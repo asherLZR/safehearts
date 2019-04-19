@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import edu.monash.smile.data.model.Patient;
 import edu.monash.smile.data.model.PatientReference;
 
 public class FhirService {
@@ -39,7 +40,6 @@ public class FhirService {
                                       final FhirCallback<Set<PatientReference>> callback) {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(BASE_URL + "Encounter").newBuilder();
         urlBuilder.addQueryParameter("participant", "Practitioner/" + practitionerId);
-
         loadJson(urlBuilder, new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -58,6 +58,14 @@ public class FhirService {
 
             }
         });
+    }
+
+    public void loadPatientDetails(List<PatientReference> patientReferences) {
+        List<Patient> patients = new ArrayList<>(patientReferences.size());
+
+        for (PatientReference reference : patientReferences) {
+            // TODO: Load patient details from REST API.
+        }
     }
 
     private Set<PatientReference> parsePatientReferencesFromEntries(JSONArray entries) throws JSONException {
