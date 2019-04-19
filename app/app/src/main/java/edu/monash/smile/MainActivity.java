@@ -30,4 +30,10 @@ public class MainActivity extends AppCompatActivity implements Observer {
     public void update() {
         Log.d(TAG, "update: " + controller.getPatientReferences());
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        controller.detach(this);
+    }
 }
