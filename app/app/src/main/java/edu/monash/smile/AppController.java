@@ -4,7 +4,9 @@ import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import edu.monash.smile.data.FhirCallback;
@@ -32,7 +34,7 @@ class AppController extends Subject {
         });
     }
 
-    Set<PatientReference> getPatientReferences() {
-        return patientReferences;
+    List<PatientReference> getPatientReferences() {
+        return new ArrayList<>(patientReferences);
     }
 }
