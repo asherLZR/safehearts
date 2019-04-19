@@ -1,88 +1,41 @@
 package edu.monash.smile.data;
 
-import android.util.Log;
+import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.Encounter;
+import org.hl7.fhir.dstu3.model.Reference;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import edu.monash.smile.data.model.Patient;
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import edu.monash.smile.data.model.PatientReference;
 
 public class FhirService {
     private static final String TAG = "FhirService";
-    final private OkHttpClient client;
+    final private IGenericClient client;
     private static String BASE_URL = "http://hapi-fhir.erc.monash.edu:8080/baseDstu3/";
 
-    public FhirService(OkHttpClient client) {
-        this.client = client;
+    public FhirService() {
+        this.client = (FhirContext.forDstu3()).newRestfulGenericClient(BASE_URL);
     }
 
-    private void loadJson(HttpUrl.Builder urlBuilder, Callback callback) {
-        HttpUrl url = urlBuilder.build();
-        Request request = new Request.Builder().url(url).build();
-        client.newCall(request).enqueue(callback);
-    }
+    public Set<PatientReference> loadPatientReferences(Integer practitionerId) {
+        // Request all encounters by the practitioner
+        Bundle b = client.search().forResource(Encounter.class)
+                .where(new ReferenceClientParam("participant")
+                        .hasId("Practitioner/" + practitionerId))
+                .returnBundle(Bundle.class)
+                .execute();
 
-    public void loadPatientReferences(Integer practitionerId,
-                                      final FhirCallback<Set<PatientReference>> callback) {
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(BASE_URL + "Encounter").newBuilder();
-        urlBuilder.addQueryParameter("participant", "Practitioner/" + practitionerId);
-        loadJson(urlBuilder, new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                callback.onFailure(e);
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                try {
-                    JSONObject json = new JSONObject(response.body().string());
-                    JSONArray entries = json.getJSONArray("entry");
-                    callback.onResponse(parsePatientReferencesFromEntries(entries));
-                } catch (JSONException e) {
-                    callback.onFailure(e);
-                }
-
-            }
-        });
-    }
-
-    public void loadPatientDetails(List<PatientReference> patientReferences) {
-        List<Patient> patients = new ArrayList<>(patientReferences.size());
-
-        for (PatientReference reference : patientReferences) {
-            // TODO: Load patient details from REST API.
-        }
-    }
-
-    private Set<PatientReference> parsePatientReferencesFromEntries(JSONArray entries) throws JSONException {
-        // A patient can be seen multiple times. The set ensures only unique patient references are
-        // collected.
+        // Retain unique patients the practitioner has seen
         Set<PatientReference> references = new HashSet<>();
-
-        for (int i = 0; i < entries.length(); i++) {
-            JSONObject entry = (JSONObject) entries.get(i);
-
-            // Access nested reference in the JSON.
-            String reference = entry
-                    .getJSONObject("resource")
-                    .getJSONObject("subject")
-                    .getString("reference");
-
-            references.add(new PatientReference(reference));
+        for (Bundle.BundleEntryComponent entry : b.getEntry()) {
+            Encounter encounter = (Encounter) entry.getResource();
+            Reference subject = encounter.getSubject();
+            String id = subject.getReference();
+            references.add(new PatientReference(id));
         }
 
         return references;

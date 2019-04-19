@@ -1,36 +1,31 @@
 package edu.monash.smile;
 
-import android.util.Log;
-
-import com.squareup.okhttp.OkHttpClient;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Executors;
 
-import edu.monash.smile.data.FhirCallback;
 import edu.monash.smile.data.FhirService;
 import edu.monash.smile.data.model.PatientReference;
 import edu.monash.smile.observerPattern.Subject;
 
 class AppController extends Subject {
     private static final String TAG = "AppController";
-    private Set<PatientReference> patientReferences = new HashSet<>();
-    private FhirService fhirService = new FhirService(new OkHttpClient());
+    private Set<PatientReference> patientReferences;
+    private FhirService fhirService;
+
+    AppController() {
+        this.fhirService = new FhirService();
+        this.patientReferences = new HashSet<>();
+    }
 
     void fetchPatients(int practitionerId) {
-        fhirService.loadPatientReferences(practitionerId, new FhirCallback<Set<PatientReference>>() {
-            @Override
-            public void onResponse(Set<PatientReference> response) {
-                patientReferences = response;
-                notifyObservers();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Log.e(TAG, "onFailure: ", e);
-            }
+        // All network operations need to run on a separate thread to avoid blocking the
+        // UI thread.
+        Executors.newSingleThreadExecutor().submit(() -> {
+            patientReferences = fhirService.loadPatientReferences(practitionerId);
+            notifyObservers();
         });
     }
 
