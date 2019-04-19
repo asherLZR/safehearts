@@ -35,7 +35,8 @@ public class FhirService {
         client.newCall(request).enqueue(callback);
     }
 
-    public void loadPatientIds(Integer practitionerId, final FhirCallback<Set<PatientReference>> callback) {
+    public void loadPatientReferences(Integer practitionerId,
+                                      final FhirCallback<Set<PatientReference>> callback) {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(BASE_URL + "Encounter").newBuilder();
         urlBuilder.addQueryParameter("participant", "Practitioner/" + practitionerId);
 
@@ -47,29 +48,35 @@ public class FhirService {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                Set<PatientReference> references = new HashSet<>();
-
                 try {
                     JSONObject json = new JSONObject(response.body().string());
                     JSONArray entries = json.getJSONArray("entry");
-
-                    for (int i = 0; i < entries.length(); i++) {
-                        JSONObject entry = (JSONObject) entries.get(i);
-
-                        String reference = entry
-                                .getJSONObject("resource")
-                                .getJSONObject("subject")
-                                .getString("reference");
-
-                        references.add(new PatientReference(reference));
-                    }
-
-                    callback.onResponse(references);
+                    callback.onResponse(parsePatientReferencesFromEntries(entries));
                 } catch (JSONException e) {
                     callback.onFailure(e);
                 }
 
             }
         });
+    }
+
+    private Set<PatientReference> parsePatientReferencesFromEntries(JSONArray entries) throws JSONException {
+        // A patient can be seen multiple times. The set ensures only unique patient references are
+        // collected.
+        Set<PatientReference> references = new HashSet<>();
+
+        for (int i = 0; i < entries.length(); i++) {
+            JSONObject entry = (JSONObject) entries.get(i);
+
+            // Access nested reference in the JSON.
+            String reference = entry
+                    .getJSONObject("resource")
+                    .getJSONObject("subject")
+                    .getString("reference");
+
+            references.add(new PatientReference(reference));
+        }
+
+        return references;
     }
 }

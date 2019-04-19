@@ -4,10 +4,7 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 
 import edu.monash.smile.data.FhirCallback;
@@ -37,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         FhirService fhirService = new FhirService(new OkHttpClient());
 
-        fhirService.loadPatientIds(3252, new FhirCallback<Set<PatientReference>>() {
+        fhirService.loadPatientReferences(3252, new FhirCallback<Set<PatientReference>>() {
             @Override
             public void onFailure(Exception e) {
                 Log.e(TAG, "onFailure: ", e);
