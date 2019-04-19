@@ -4,15 +4,29 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+
+import edu.monash.smile.data.FhirCallback;
+import edu.monash.smile.data.FhirService;
+import edu.monash.smile.data.model.PatientReference;
+
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +34,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        FhirService fhirService = new FhirService(new OkHttpClient());
+
+        fhirService.loadPatientIds(3252, new FhirCallback<Set<PatientReference>>() {
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(TAG, "onFailure: ", e);
+            }
+
+            @Override
+            public void onResponse(Set<PatientReference> response) throws IOException {
+                Log.d(TAG, "onResponse: " + response);
+            }
+        });
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
