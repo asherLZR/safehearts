@@ -1,18 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".DashboardActivity"
     tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:id="@+id/patientTitleView"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:padding="@dimen/appMargin"
+        android:text="@string/patientsTitle" />
+
     <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/patientTitleView"
         android:id="@+id/patientListView"
-        android:layout_width="wrap_content"
+        android:paddingStart="@dimen/appMargin"
+        android:paddingEnd="@dimen/appMargin" />
+
+    <TextView
+        android:id="@+id/dashboardTitleView"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/patientListView"
+        android:padding="@dimen/appMargin"
+        android:text="@string/dashboardTitle" />
+
+    <ListView
+        android:id="@+id/statusCardListView"
+        android:layout_width="match_parent"
+        android:layout_below="@id/dashboardTitleView"
+        android:paddingStart="@dimen/appMargin"
+        android:paddingEnd="@dimen/appMargin"
         android:layout_height="wrap_content" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</RelativeLayout>

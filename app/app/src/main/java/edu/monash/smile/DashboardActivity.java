@@ -9,16 +9,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import edu.monash.smile.data.model.PatientReference;
 import edu.monash.smile.observerPattern.Observer;
 
 public class DashboardActivity extends AppCompatActivity implements Observer {
-//    private static final String TAG = "MainActivity";
-    private final AppController controller = new AppController();
-    private PatientArrayAdapter adapter;
-    private Integer practitionerId;
+    private static final String TAG = "MainActivity";
+    private final PatientController controller = new PatientController();
+    private PatientArrayAdapter patientAdapter;
+    private StatusCardAdapter statusCardAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,34 +24,34 @@ public class DashboardActivity extends AppCompatActivity implements Observer {
         setContentView(R.layout.activity_main);
 
         Bundle b = getIntent().getExtras();
-        practitionerId = b.getInt("practitionerId");
-
+        assert b != null;
+        int practitionerId = b.getInt("practitionerId");
 
         // Set up patient list view
-        adapter = new PatientArrayAdapter(this, new ArrayList<PatientReference>());
+        patientAdapter = new PatientArrayAdapter(this, new ArrayList<>());
         ListView patientListView = findViewById(R.id.patientListView);
-        patientListView.setAdapter(adapter);
+        patientListView.setAdapter(patientAdapter);
+
+        // Set up status card list view
+        statusCardAdapter = new StatusCardAdapter(this, new ArrayList<>());
+        ListView statusCardListView = findViewById(R.id.statusCardListView);
+        statusCardListView.setAdapter(statusCardAdapter);
 
         // Listen to data events
         controller.attach(this);
-        controller.fetchPatients(practitionerId);
+        controller.setUp(practitionerId); // TODO: Pass in practitionerId from the home screen activity
     }
 
     @Override
     public void update() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                List<PatientReference> patientReferences = controller.getPatientReferences();
-                adapter.updatePatients(patientReferences);
-                adapter.notifyDataSetInvalidated();
-            }
-        });
-    }
+        runOnUiThread(() -> {
+            patientAdapter.updatePatients(controller.getPatientReferences());
+            patientAdapter.notifyDataSetInvalidated();
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        controller.detach(this);
+            statusCardAdapter.updateObservedPatients(
+                    controller.getObservedPatients()
+            );
+            statusCardAdapter.notifyDataSetInvalidated();
+        });
     }
 }
