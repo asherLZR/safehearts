@@ -14,7 +14,7 @@ import edu.monash.smile.observerPattern.Observer;
 
 public class MainActivity extends AppCompatActivity implements Observer {
     private static final String TAG = "MainActivity";
-    private final AppController controller = new AppController();
+    private final PatientController controller = new PatientController();
     private PatientArrayAdapter adapter;
 
     @Override

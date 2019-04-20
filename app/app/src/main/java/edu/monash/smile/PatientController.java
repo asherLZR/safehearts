@@ -11,12 +11,12 @@ import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.model.PatientReference;
 import edu.monash.smile.observerPattern.Subject;
 
-class AppController extends Subject {
-    private static final String TAG = "AppController";
+class PatientController extends Subject {
+    private static final String TAG = "PatientController";
     private Set<PatientReference> patientReferences;
     private HealthService healthService;
 
-    AppController() {
+    PatientController() {
         this.healthService = new FhirService();
         this.patientReferences = new HashSet<>();
     }
