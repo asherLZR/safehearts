@@ -1,24 +1,24 @@
 package edu.monash.smile;
 
-import android.content.SharedPreferences;
+import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import edu.monash.smile.data.model.ObservationType;
+import edu.monash.smile.preferences.SharedPreferencesHelper;
 
 public class PatientsMonitor {
-    private static final String MONITORED_PATIENTS_PREFERENCE_KEY = "monitoredPatients";
-    private Map<ObservationType, List<String>> monitoredPatients = new HashMap<>();
-    private SharedPreferences preferences;
+    private Map<ObservationType, Set<String>> monitoredPatients = new HashMap<>();
+    private Context context;
 
-    PatientsMonitor(SharedPreferences preferences) {
-        this.preferences = preferences;
+    PatientsMonitor(Context context) {
+        this.context = context;
         restoreMonitoredPatientsList();
     }
 
@@ -26,13 +26,13 @@ public class PatientsMonitor {
         if (!monitoredPatients.containsKey(type)) {
             return false;
         }
-        List<String> patientList = monitoredPatients.get(type);
+        Set<String> patientList = monitoredPatients.get(type);
         assert patientList != null;
         return patientList.contains(patientId);
     }
 
     public void monitorPatient(String patientId, ObservationType type) {
-        List<String> patientList = monitoredPatients.getOrDefault(type, new ArrayList<>());
+        Set<String> patientList = monitoredPatients.getOrDefault(type, new HashSet<>());
         assert patientList != null;
         patientList.add(patientId);
         monitoredPatients.put(type, patientList);
@@ -40,7 +40,7 @@ public class PatientsMonitor {
     }
 
     public void unmonitorPatient(String patientId, ObservationType type) {
-        List<String> patientList = monitoredPatients.getOrDefault(type, new ArrayList<>());
+        Set<String> patientList = monitoredPatients.getOrDefault(type, new HashSet<>());
         assert patientList != null;
         patientList.remove(patientId);
         monitoredPatients.put(type, patientList);
@@ -50,18 +50,16 @@ public class PatientsMonitor {
     private void saveMonitoredPatientsList() {
         Gson gson = new Gson();
         String json = gson.toJson(monitoredPatients);
-        preferences.edit().putString(MONITORED_PATIENTS_PREFERENCE_KEY, json).apply();
+        SharedPreferencesHelper.writeMonitoredPatients(context, json);
     }
 
     private void restoreMonitoredPatientsList() {
-        if (preferences.contains(MONITORED_PATIENTS_PREFERENCE_KEY)) {
-            Gson gson = new Gson();
-            String json = preferences.getString(MONITORED_PATIENTS_PREFERENCE_KEY, "{}");
-            this.monitoredPatients = gson.fromJson(
-                    json,
-                    new TypeToken<HashMap<ObservationType, List<String>>>() {
-                    }.getType()
-            );
-        }
+        Gson gson = new Gson();
+        String json = SharedPreferencesHelper.readMonitoredPatients(context);
+        this.monitoredPatients = gson.fromJson(
+                json,
+                new TypeToken<HashMap<ObservationType, Set<String>>>() {
+                }.getType()
+        );
     }
 }

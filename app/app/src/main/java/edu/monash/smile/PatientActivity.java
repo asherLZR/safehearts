@@ -15,8 +15,8 @@ import edu.monash.smile.observerPattern.Observer;
 import static edu.monash.smile.DashboardActivity.controller;
 
 public class PatientActivity extends AppCompatActivity implements Observer {
-
     private PatientArrayAdapter patientAdapter;
+    private PatientsMonitor patientsMonitor;
     private int practitionerId;
 
     @Override
@@ -39,8 +39,11 @@ public class PatientActivity extends AppCompatActivity implements Observer {
             return false;
         });
 
+        // Set up patients monitor
+        this.patientsMonitor = new PatientsMonitor(this);
+
         // Set up patient list view
-        patientAdapter = new PatientArrayAdapter(this, new ArrayList<>());
+        patientAdapter = new PatientArrayAdapter(this, new ArrayList<>(), patientsMonitor);
         ListView patientListView = findViewById(R.id.patientListView);
         patientListView.setAdapter(patientAdapter);
 
