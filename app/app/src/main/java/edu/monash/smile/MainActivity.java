@@ -5,18 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import edu.monash.smile.data.model.PatientReference;
-import edu.monash.smile.observerPattern.Observer;
 
 public class MainActivity extends AppCompatActivity{
     @Override
@@ -42,20 +33,5 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-//        EditText tv = findViewById(R.id.pracIdEditText);
-//        tv.setText(savedInstanceState.getInt("practitionerId"));
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-//        String edValue = findViewById(R.id.pracIdEditText).toString();
-//        int practitionerId = Integer.valueOf(edValue);
-//        outState.putInt("practitionerId", practitionerId);
     }
 }

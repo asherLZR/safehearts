@@ -14,9 +14,10 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import ca.uhn.fhir.rest.gclient.TokenClientParam;
+import edu.monash.smile.data.model.ObservationType;
 import edu.monash.smile.data.model.PatientReference;
 
-public class FhirService {
+public class FhirService implements HealthService {
     private static final String TAG = "FhirService";
     final private IGenericClient client;
     private static String BASE_URL = "http://hapi-fhir.erc.monash.edu:8080/baseDstu3/";
@@ -51,6 +52,7 @@ public class FhirService {
     ) {
         Map<PatientReference, Float> results = new HashMap<>();
 
+        // Request an observation for a patient
         Bundle b = client.search().forResource(Observation.class)
                 .where(new ReferenceClientParam("subject")
                         .hasId("Patient/" + patientReference.getId()))
@@ -60,8 +62,7 @@ public class FhirService {
                 .returnBundle(Bundle.class)
                 .execute();
 
-        // TODO: Read bundle for cholesterol reading
-
+        // TODO: Read bundle for reading of the observation
         return results;
     }
 
