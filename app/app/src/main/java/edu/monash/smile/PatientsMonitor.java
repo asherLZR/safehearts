@@ -12,14 +12,23 @@ import java.util.Map;
 
 import edu.monash.smile.data.model.ObservationType;
 
-public class MonitorPatientController {
+public class PatientsMonitor {
     private static final String MONITORED_PATIENTS_PREFERENCE_KEY = "monitoredPatients";
     private Map<ObservationType, List<String>> monitoredPatients = new HashMap<>();
     private SharedPreferences preferences;
 
-    MonitorPatientController(SharedPreferences preferences) {
+    PatientsMonitor(SharedPreferences preferences) {
         this.preferences = preferences;
         restoreMonitoredPatientsList();
+    }
+
+    public boolean isPatientMonitored(String patientId, ObservationType type) {
+        if (!monitoredPatients.containsKey(type)) {
+            return false;
+        }
+        List<String> patientList = monitoredPatients.get(type);
+        assert patientList != null;
+        return patientList.contains(patientId);
     }
 
     public void monitorPatient(String patientId, ObservationType type) {
