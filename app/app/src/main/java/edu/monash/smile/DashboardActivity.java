@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import edu.monash.smile.observerPattern.Observer;
 
 public class DashboardActivity extends AppCompatActivity implements Observer {
-    private static final String TAG = "MainActivity";
-    public static final PatientController controller = new PatientController();
+    private PatientObservationController patientObservationController;
     private StatusCardAdapter statusCardAdapter;
 
     int practitionerId;
@@ -48,15 +47,16 @@ public class DashboardActivity extends AppCompatActivity implements Observer {
         statusCardListView.setAdapter(statusCardAdapter);
 
         // Listen to data events
-        controller.attach(this);
-        controller.setUp(practitionerId);
+        patientObservationController = new PatientObservationController(new PatientsMonitor(this));
+        patientObservationController.attach(this);
+        patientObservationController.setUp();
     }
 
     @Override
     public void update() {
         runOnUiThread(() -> {
             statusCardAdapter.updateObservedPatients(
-                    controller.getObservedPatients()
+                    patientObservationController.getObservedPatients()
             );
             statusCardAdapter.notifyDataSetInvalidated();
         });

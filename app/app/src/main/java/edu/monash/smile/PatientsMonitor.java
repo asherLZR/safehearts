@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.monash.smile.data.model.ObservationType;
+import edu.monash.smile.data.model.PatientReference;
 import edu.monash.smile.preferences.SharedPreferencesHelper;
 
 public class PatientsMonitor {
@@ -20,6 +21,20 @@ public class PatientsMonitor {
     PatientsMonitor(Context context) {
         this.context = context;
         restoreMonitoredPatientsList();
+    }
+
+    public Set<PatientReference> getMonitoredPatientsByType(ObservationType type) {
+        Set<PatientReference> results = new HashSet<>();
+
+        if (!monitoredPatients.containsKey(type)) {
+            return results;
+        }
+
+        for (String patientId : monitoredPatients.get(type)) {
+            results.add(new PatientReference(patientId));
+        }
+
+        return results;
     }
 
     public boolean isPatientMonitored(String patientId, ObservationType type) {
