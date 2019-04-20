@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -16,10 +15,6 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.login_main);
-
-        // Set up toolbar view
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         Button btn = findViewById(R.id.changePracBtn);
         btn.setOnClickListener(new View.OnClickListener() {
