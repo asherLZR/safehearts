@@ -15,7 +15,6 @@ import java.util.Objects;
 
 import edu.monash.smile.observerPattern.Observer;
 
-import static edu.monash.smile.DashboardActivity.controller;
 
 public class DashboardFragment extends Fragment implements Observer {
 
@@ -23,6 +22,7 @@ public class DashboardFragment extends Fragment implements Observer {
 
     private int practitionerId;
     private StatusCardAdapter statusCardAdapter;
+    public static PatientObservationController patientObservationController;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -35,9 +35,6 @@ public class DashboardFragment extends Fragment implements Observer {
         if (getArguments().containsKey(PRACTITIONER_ID)) {
             practitionerId = getArguments().getInt(PRACTITIONER_ID);
         }
-        // Listen to data events
-        controller.attach(this);
-        controller.setUp(practitionerId);
     }
 
     @Override
@@ -48,6 +45,11 @@ public class DashboardFragment extends Fragment implements Observer {
         statusCardAdapter = new StatusCardAdapter(Objects.requireNonNull(getContext()), new ArrayList<>());
         ListView statusCardListView = rootView.findViewById(R.id.statusCardListView);
         statusCardListView.setAdapter(statusCardAdapter);
+
+        // Listen to data events
+        patientObservationController = new PatientObservationController(new PatientsMonitor(getContext()));
+        patientObservationController.attach(this);
+        patientObservationController.setUp();
         return rootView;
     }
 
@@ -55,23 +57,9 @@ public class DashboardFragment extends Fragment implements Observer {
     public void update() {
         Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
             statusCardAdapter.updateObservedPatients(
-                    controller.getObservedPatients()
+                patientObservationController.getObservedPatients()
             );
             statusCardAdapter.notifyDataSetInvalidated();
         });
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null){
-            practitionerId = savedInstanceState.getInt(PRACTITIONER_ID);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(PRACTITIONER_ID, practitionerId);
     }
 }

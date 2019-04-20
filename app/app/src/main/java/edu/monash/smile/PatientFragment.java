@@ -13,8 +13,6 @@ import java.util.Objects;
 
 import edu.monash.smile.observerPattern.Observer;
 
-import static edu.monash.smile.DashboardActivity.controller;
-
 
 public class PatientFragment extends Fragment implements Observer {
 
@@ -22,6 +20,8 @@ public class PatientFragment extends Fragment implements Observer {
 
     private int practitionerId;
     private PatientArrayAdapter patientAdapter;
+    private PatientsMonitor patientsMonitor;
+    private PatientController patientController = new PatientController();
 
     public PatientFragment() {
         // Required empty public constructor
@@ -35,8 +35,8 @@ public class PatientFragment extends Fragment implements Observer {
             practitionerId = getArguments().getInt(PRACTITIONER_ID);
         }
         // Listen to data events
-        controller.attach(this);
-        controller.setUp(practitionerId);
+        patientController.attach(this);
+        patientController.setUp(practitionerId);
     }
 
     @Override
@@ -45,17 +45,21 @@ public class PatientFragment extends Fragment implements Observer {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_patient, container, false);
 
-        // Set up patient list view
-        patientAdapter = new PatientArrayAdapter(Objects.requireNonNull(getContext()), new ArrayList<>());
+        // Set up patients monitor
+        patientsMonitor = new PatientsMonitor(getContext());
+
+//        // Set up patient list view
+        patientAdapter = new PatientArrayAdapter(Objects.requireNonNull(getContext()), new ArrayList<>(), patientsMonitor);
         ListView patientListView = rootView.findViewById(R.id.patientListView);
         patientListView.setAdapter(patientAdapter);
+
         return rootView;
     }
 
     @Override
     public void update() {
         Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
-            patientAdapter.updatePatients(controller.getPatientReferences());
+            patientAdapter.updatePatients(patientController.getPatientReferences());
             patientAdapter.notifyDataSetInvalidated();
         });
     }

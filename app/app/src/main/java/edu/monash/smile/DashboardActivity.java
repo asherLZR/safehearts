@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+
 public class DashboardActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    public static final PatientController controller = new PatientController();
+//    public static final PatientController controller = new PatientController();
+
 
     private int practitionerId;
     private PatientFragment patientFragment = null;

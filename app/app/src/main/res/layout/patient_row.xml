@@ -7,4 +7,11 @@
         android:id="@+id/patientName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/cholesterolChip"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cholesterol" />
 </LinearLayout>
