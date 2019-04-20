@@ -7,15 +7,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import edu.monash.smile.data.model.PatientReference;
 import edu.monash.smile.observerPattern.Observer;
 
 public class MainActivity extends AppCompatActivity implements Observer {
     private static final String TAG = "MainActivity";
     private final PatientController controller = new PatientController();
-    private PatientArrayAdapter adapter;
+    private PatientArrayAdapter patientAdapter;
+    private StatusCardAdapter statusCardAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,21 +27,30 @@ public class MainActivity extends AppCompatActivity implements Observer {
         setSupportActionBar(toolbar);
 
         // Set up patient list view
-        adapter = new PatientArrayAdapter(this, new ArrayList<>());
+        patientAdapter = new PatientArrayAdapter(this, new ArrayList<>());
         ListView patientListView = findViewById(R.id.patientListView);
-        patientListView.setAdapter(adapter);
+        patientListView.setAdapter(patientAdapter);
+
+        // Set up status card list view
+        statusCardAdapter = new StatusCardAdapter(this, new ArrayList<>());
+        ListView statusCardListView = findViewById(R.id.statusCardListView);
+        statusCardListView.setAdapter(statusCardAdapter);
 
         // Listen to data events
         controller.attach(this);
-        controller.fetchPatients(3252); // TODO: Pass in practitionerId from user
+        controller.setUp(3252); // TODO: Pass in practitionerId from the home screen activity
     }
 
     @Override
     public void update() {
         runOnUiThread(() -> {
-            List<PatientReference> patientReferences = controller.getPatientReferences();
-            adapter.updatePatients(patientReferences);
-            adapter.notifyDataSetInvalidated();
+            patientAdapter.updatePatients(controller.getPatientReferences());
+            patientAdapter.notifyDataSetInvalidated();
+
+            statusCardAdapter.updateObservedPatients(
+                    controller.getObservedPatients()
+            );
+            statusCardAdapter.notifyDataSetInvalidated();
         });
     }
 

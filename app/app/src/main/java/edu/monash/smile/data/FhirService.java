@@ -3,11 +3,12 @@ package edu.monash.smile.data;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Encounter;
 import org.hl7.fhir.dstu3.model.Observation;
+import org.hl7.fhir.dstu3.model.Quantity;
 import org.hl7.fhir.dstu3.model.Reference;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import ca.uhn.fhir.context.FhirContext;
@@ -16,6 +17,7 @@ import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import edu.monash.smile.data.model.ObservationType;
 import edu.monash.smile.data.model.PatientReference;
+import edu.monash.smile.data.model.QuantitativeObservation;
 
 public class FhirService implements HealthService {
     private static final String TAG = "FhirService";
@@ -46,24 +48,38 @@ public class FhirService implements HealthService {
         return references;
     }
 
-    public Map<PatientReference, Float> readMostRecentPatientObservation(
+    public List<QuantitativeObservation> readPatientQuantitativeObservations(
             PatientReference patientReference,
             ObservationType type
     ) {
-        Map<PatientReference, Float> results = new HashMap<>();
-
         // Request an observation for a patient
         Bundle b = client.search().forResource(Observation.class)
                 .where(new ReferenceClientParam("subject")
-                        .hasId("Patient/" + patientReference.getId()))
+                        .hasId(patientReference.getId()))
                 .where(new TokenClientParam("code")
                         .exactly()
                         .code(observationCodeToFhirCode(type)))
                 .returnBundle(Bundle.class)
                 .execute();
 
-        // TODO: Read bundle for reading of the observation
-        return results;
+        List<Observation> observations = new ArrayList<>();
+
+        // Maps from bundle entry into a specific observation
+        for (Bundle.BundleEntryComponent e : b.getEntry()) {
+            observations.add((Observation) e.getResource());
+        }
+
+        List<QuantitativeObservation> quantitativeObservations = new ArrayList<>(observations.size());
+
+        // Extracts information about the information into a QuantitativeObservation
+        for (Observation o : observations) {
+            String description = o.getCode().getText();
+            Quantity quantity = (Quantity) o.getValue();
+            String result = quantity.getValue() + " " + quantity.getUnit();
+            quantitativeObservations.add(new QuantitativeObservation(result, description));
+        }
+
+        return quantitativeObservations;
     }
 
     private String observationCodeToFhirCode(ObservationType type) {
