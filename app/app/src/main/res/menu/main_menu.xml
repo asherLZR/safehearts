@@ -2,10 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id = "@+id/dashboard"
-        android:title="Dashboard">
+        android:title="Dashboard"
+        android:icon="@drawable/baseline_dashboard_white_24dp">
     </item>
     <item
         android:id = "@+id/my_patients"
-        android:title="Patients">
+        android:title="Patients"
+        android:icon="@drawable/baseline_people_white_24dp">
     </item>
 </menu>

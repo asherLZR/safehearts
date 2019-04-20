@@ -2,4 +2,7 @@
     <string name="app_name">Smile</string>
     <string name="patientsTitle">My patients</string>
     <string name="dashboardTitle">Dashboard</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

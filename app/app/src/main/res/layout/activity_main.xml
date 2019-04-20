@@ -5,7 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".DashboardActivity">
 
-    <include layout="@layout/content_main" />
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!--<include layout="@layout/content_main" />-->
 
     <include layout="@layout/bottom_nav"/>
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

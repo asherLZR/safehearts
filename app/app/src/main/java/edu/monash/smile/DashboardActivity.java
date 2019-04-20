@@ -1,23 +1,18 @@
 package edu.monash.smile;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
-
-import edu.monash.smile.observerPattern.Observer;
-
-public class DashboardActivity extends AppCompatActivity implements Observer {
+public class DashboardActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     public static final PatientController controller = new PatientController();
-    private StatusCardAdapter statusCardAdapter;
 
-    int practitionerId;
+    private int practitionerId;
+    private PatientFragment patientFragment = null;
+    private DashboardFragment dbFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,33 +27,34 @@ public class DashboardActivity extends AppCompatActivity implements Observer {
         BottomNavigationView nv = findViewById(R.id.bottom_navigation);
         nv.setOnNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
-
             if(id == R.id.my_patients){
-                Intent i = new Intent(DashboardActivity.this, PatientActivity.class);
-                i.putExtra("practitionerId", practitionerId);
-                startActivity(i);
+                getSupportFragmentManager().beginTransaction().hide(dbFragment).show(patientFragment).commit();
+                return true;
+            }else if(id == R.id.dashboard){
+                getSupportFragmentManager().beginTransaction().show(dbFragment).hide(patientFragment).commit();
                 return true;
             }
             return false;
         });
 
-        // Set up status card list view
-        statusCardAdapter = new StatusCardAdapter(this, new ArrayList<>());
-        ListView statusCardListView = findViewById(R.id.statusCardListView);
-        statusCardListView.setAdapter(statusCardAdapter);
+        if (savedInstanceState == null) {
+            Bundle dbArguments = new Bundle();
+            dbArguments.putInt(DashboardFragment.PRACTITIONER_ID, practitionerId);
+            dbFragment = new DashboardFragment();
+            dbFragment.setArguments(dbArguments);
 
-        // Listen to data events
-        controller.attach(this);
-        controller.setUp(practitionerId);
+            Bundle patientArguments = new Bundle();
+            patientArguments.putInt(PatientFragment.PRACTITIONER_ID, practitionerId);
+            patientFragment = new PatientFragment();
+            patientFragment.setArguments(patientArguments);
+
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, dbFragment)
+                    .add(R.id.fragment_container, patientFragment)
+                    .hide(patientFragment).commit();
+        }
     }
 
     @Override
-    public void update() {
-        runOnUiThread(() -> {
-            statusCardAdapter.updateObservedPatients(
-                    controller.getObservedPatients()
-            );
-            statusCardAdapter.notifyDataSetInvalidated();
-        });
+    public void onBackPressed() {
     }
 }
