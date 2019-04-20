@@ -2,35 +2,45 @@ package edu.monash.smile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ListView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
+
 import edu.monash.smile.observerPattern.Observer;
 
 public class DashboardActivity extends AppCompatActivity implements Observer {
     private static final String TAG = "MainActivity";
-    private final PatientController controller = new PatientController();
-    private PatientArrayAdapter patientAdapter;
+    public static final PatientController controller = new PatientController();
     private StatusCardAdapter statusCardAdapter;
 
+    int practitionerId;
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
 
         Bundle b = getIntent().getExtras();
         assert b != null;
-        int practitionerId = b.getInt("practitionerId");
+        practitionerId = b.getInt("practitionerId");
 
-        // Set up patient list view
-        patientAdapter = new PatientArrayAdapter(this, new ArrayList<>());
-        ListView patientListView = findViewById(R.id.patientListView);
-        patientListView.setAdapter(patientAdapter);
+        BottomNavigationView nv = findViewById(R.id.bottom_navigation);
+        nv.setOnNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if(id == R.id.my_patients){
+                Intent i = new Intent(DashboardActivity.this, PatientActivity.class);
+                i.putExtra("practitionerId", practitionerId);
+                startActivity(i);
+                return true;
+            }
+            return false;
+        });
 
         // Set up status card list view
         statusCardAdapter = new StatusCardAdapter(this, new ArrayList<>());
@@ -39,15 +49,12 @@ public class DashboardActivity extends AppCompatActivity implements Observer {
 
         // Listen to data events
         controller.attach(this);
-        controller.setUp(practitionerId); // TODO: Pass in practitionerId from the home screen activity
+        controller.setUp(practitionerId);
     }
 
     @Override
     public void update() {
         runOnUiThread(() -> {
-            patientAdapter.updatePatients(controller.getPatientReferences());
-            patientAdapter.notifyDataSetInvalidated();
-
             statusCardAdapter.updateObservedPatients(
                     controller.getObservedPatients()
             );
