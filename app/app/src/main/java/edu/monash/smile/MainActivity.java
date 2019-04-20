@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         setSupportActionBar(toolbar);
 
         // Set up patient list view
-        adapter = new PatientArrayAdapter(this, new ArrayList<PatientReference>());
+        adapter = new PatientArrayAdapter(this, new ArrayList<>());
         ListView patientListView = findViewById(R.id.patientListView);
         patientListView.setAdapter(adapter);
 
@@ -39,13 +39,10 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                List<PatientReference> patientReferences = controller.getPatientReferences();
-                adapter.updatePatients(patientReferences);
-                adapter.notifyDataSetInvalidated();
-            }
+        runOnUiThread(() -> {
+            List<PatientReference> patientReferences = controller.getPatientReferences();
+            adapter.updatePatients(patientReferences);
+            adapter.notifyDataSetInvalidated();
         });
     }
 

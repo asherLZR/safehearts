@@ -7,16 +7,17 @@ import java.util.Set;
 import java.util.concurrent.Executors;
 
 import edu.monash.smile.data.FhirService;
+import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.model.PatientReference;
 import edu.monash.smile.observerPattern.Subject;
 
 class AppController extends Subject {
     private static final String TAG = "AppController";
     private Set<PatientReference> patientReferences;
-    private FhirService fhirService;
+    private HealthService healthService;
 
     AppController() {
-        this.fhirService = new FhirService();
+        this.healthService = new FhirService();
         this.patientReferences = new HashSet<>();
     }
 
@@ -24,7 +25,7 @@ class AppController extends Subject {
         // All network operations need to run on a separate thread to avoid blocking the
         // UI thread.
         Executors.newSingleThreadExecutor().submit(() -> {
-            patientReferences = fhirService.loadPatientReferences(practitionerId);
+            patientReferences = healthService.loadPatientReferences(practitionerId);
             notifyObservers();
         });
     }
