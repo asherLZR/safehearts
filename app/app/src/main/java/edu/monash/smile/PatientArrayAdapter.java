@@ -22,7 +22,7 @@ public class PatientArrayAdapter extends ArrayAdapter<PatientReference> {
     private PatientsMonitor patientsMonitor;
 
     PatientArrayAdapter(
-            @NonNull Context context,
+            Context context,
             List<PatientReference> patients,
             PatientsMonitor patientsMonitor
     ) {

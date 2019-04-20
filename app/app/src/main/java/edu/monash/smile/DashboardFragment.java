@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
@@ -17,24 +15,11 @@ import edu.monash.smile.observerPattern.Observer;
 
 
 public class DashboardFragment extends Fragment implements Observer {
-
-    public static final String PRACTITIONER_ID = "practitionerId";
-
-    private int practitionerId;
     private StatusCardAdapter statusCardAdapter;
-    public static PatientObservationController patientObservationController;
+    private PatientObservationController patientObservationController;
 
-    public DashboardFragment() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        assert getArguments() != null;
-        if (getArguments().containsKey(PRACTITIONER_ID)) {
-            practitionerId = getArguments().getInt(PRACTITIONER_ID);
-        }
+    public DashboardFragment(PatientsMonitor patientsMonitor) {
+        this.patientObservationController = new PatientObservationController(patientsMonitor);
     }
 
     @Override
@@ -47,10 +32,13 @@ public class DashboardFragment extends Fragment implements Observer {
         statusCardListView.setAdapter(statusCardAdapter);
 
         // Listen to data events
-        patientObservationController = new PatientObservationController(new PatientsMonitor(getContext()));
         patientObservationController.attach(this);
         patientObservationController.setUp();
         return rootView;
+    }
+
+    public void handleFragmentSwitched() {
+        patientObservationController.setUp();
     }
 
     @Override

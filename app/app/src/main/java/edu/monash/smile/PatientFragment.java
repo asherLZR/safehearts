@@ -23,8 +23,8 @@ public class PatientFragment extends Fragment implements Observer {
     private PatientsMonitor patientsMonitor;
     private PatientController patientController = new PatientController();
 
-    public PatientFragment() {
-        // Required empty public constructor
+    public PatientFragment(PatientsMonitor patientsMonitor) {
+        this.patientsMonitor = patientsMonitor;
     }
 
     @Override
@@ -45,11 +45,12 @@ public class PatientFragment extends Fragment implements Observer {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_patient, container, false);
 
-        // Set up patients monitor
-        patientsMonitor = new PatientsMonitor(getContext());
-
-//        // Set up patient list view
-        patientAdapter = new PatientArrayAdapter(Objects.requireNonNull(getContext()), new ArrayList<>(), patientsMonitor);
+        // Set up patient list view
+        patientAdapter = new PatientArrayAdapter(
+                getContext(),
+                new ArrayList<>(),
+                patientsMonitor
+        );
         ListView patientListView = rootView.findViewById(R.id.patientListView);
         patientListView.setAdapter(patientAdapter);
 

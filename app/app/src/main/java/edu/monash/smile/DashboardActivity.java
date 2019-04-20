@@ -8,13 +8,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 public class DashboardActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
-//    public static final PatientController controller = new PatientController();
-
-
-    private int practitionerId;
     private PatientFragment patientFragment = null;
-    private DashboardFragment dbFragment = null;
+    private DashboardFragment dashboardFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,35 +17,36 @@ public class DashboardActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        Bundle b = getIntent().getExtras();
-        assert b != null;
-        practitionerId = b.getInt("practitionerId");
-
         BottomNavigationView nv = findViewById(R.id.bottom_navigation);
         nv.setOnNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
-            if(id == R.id.my_patients){
-                getSupportFragmentManager().beginTransaction().hide(dbFragment).show(patientFragment).commit();
+
+            if (id == R.id.my_patients) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .hide(dashboardFragment)
+                        .show(patientFragment).commit();
                 return true;
-            }else if(id == R.id.dashboard){
-                getSupportFragmentManager().beginTransaction().show(dbFragment).hide(patientFragment).commit();
+            } else if (id == R.id.dashboard) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .show(dashboardFragment)
+                        .hide(patientFragment)
+                        .commit();
+                dashboardFragment.handleFragmentSwitched();
                 return true;
             }
             return false;
         });
 
         if (savedInstanceState == null) {
-            Bundle dbArguments = new Bundle();
-            dbArguments.putInt(DashboardFragment.PRACTITIONER_ID, practitionerId);
-            dbFragment = new DashboardFragment();
-            dbFragment.setArguments(dbArguments);
-
-            Bundle patientArguments = new Bundle();
-            patientArguments.putInt(PatientFragment.PRACTITIONER_ID, practitionerId);
-            patientFragment = new PatientFragment();
-            patientFragment.setArguments(patientArguments);
-
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, dbFragment)
+            PatientsMonitor patientsMonitor = new PatientsMonitor(this);
+            dashboardFragment = new DashboardFragment(patientsMonitor);
+            patientFragment = new PatientFragment(patientsMonitor);
+            patientFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_container, dashboardFragment)
                     .add(R.id.fragment_container, patientFragment)
                     .hide(patientFragment).commit();
         }
