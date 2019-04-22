@@ -1,5 +1,6 @@
 package edu.monash.smile.dashboard;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.patientsTab.PatientFragment;
 import edu.monash.smile.dashboard.statusTab.StatusFragment;
+import edu.monash.smile.preferences.SharedPreferencesHelper;
 
 
 public class DashboardActivity extends AppCompatActivity {
@@ -58,5 +60,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
+        SharedPreferencesHelper.removeAllSharedPreferences(this);
     }
 }

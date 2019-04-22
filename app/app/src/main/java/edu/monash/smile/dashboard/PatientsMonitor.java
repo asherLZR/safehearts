@@ -68,12 +68,6 @@ public class PatientsMonitor {
     }
 
     private void restoreMonitoredPatientsList() {
-        Gson gson = new Gson();
-        String json = SharedPreferencesHelper.readMonitoredPatients(context);
-        this.monitoredPatients = gson.fromJson(
-                json,
-                new TypeToken<HashMap<ObservationType, Set<String>>>() {
-                }.getType()
-        );
+        this.monitoredPatients = SharedPreferencesHelper.readMonitoredPatients(context);
     }
 }

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,9 +26,14 @@ public class SharedPreferencesHelper {
         editor.commit();
     }
 
-    public static String readMonitoredPatients(Context context) {
+    public static HashMap<ObservationType, Set<String>> readMonitoredPatients(Context context) {
         SharedPreferences preferences = getSharedPreferences(context);
-        return preferences.getString(MONITORED_PATIENTS_KEY, "{}");
+        String serializedString = preferences.getString(MONITORED_PATIENTS_KEY, "{}");
+        return new Gson().fromJson(
+                serializedString,
+                new TypeToken<HashMap<ObservationType, Set<String>>>() {
+                }.getType()
+        );
     }
 
     private static SharedPreferences.Editor getEditor(Context context) {
@@ -38,14 +45,13 @@ public class SharedPreferencesHelper {
         return context.getSharedPreferences(SMILE_PREFERENCES, Context.MODE_PRIVATE);
     }
 
+    public static void removeAllSharedPreferences(Context context){
+        getEditor(context).clear().commit();
+    }
+
     public static void writeAllPatients(Context context, ArrayList<ShPatient> patient){
         SharedPreferences.Editor editor = getEditor(context);
         editor.putString(ALL_PATIENTS, new Gson().toJson(new Gson().toJson(patient)));
         editor.apply();
-    }
-
-    public static String readPatient(Context context){
-        SharedPreferences preferences = getSharedPreferences(context);
-        return preferences.getString(ALL_PATIENTS, "");
     }
 }

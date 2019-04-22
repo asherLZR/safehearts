@@ -91,7 +91,6 @@ public class FhirService implements HealthService {
             }
             SharedPreferencesHelper.writeAllPatients(context, shPatients);
         }
-        Log.i("Debug", "storeAllPatients: " + SharedPreferencesHelper.readPatient(context));
     }
 
     public List<QuantitativeObservation> readPatientQuantitativeObservations(
