@@ -1,4 +1,4 @@
-package edu.monash.smile;
+package edu.monash.smile.dashboard.statusTab;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
+import edu.monash.smile.R;
 import edu.monash.smile.data.model.ObservedPatient;
 import edu.monash.smile.data.model.QuantitativeObservation;
 
@@ -39,7 +40,7 @@ public class StatusCardAdapter extends ArrayAdapter<ObservedPatient> {
 
         if (statusCardView == null) {
             statusCardView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.status_card, parent, false
+                    R.layout.item_status_card, parent, false
             );
         }
 

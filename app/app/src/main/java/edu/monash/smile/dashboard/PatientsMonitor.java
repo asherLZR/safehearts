@@ -1,4 +1,4 @@
-package edu.monash.smile;
+package edu.monash.smile.dashboard;
 
 import android.content.Context;
 

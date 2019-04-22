@@ -1,10 +1,11 @@
-package edu.monash.smile;
+package edu.monash.smile.dashboard.statusTab;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.data.FhirService;
 import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.model.ObservationType;
@@ -36,7 +37,7 @@ class PatientObservationController extends Subject {
     /**
      * Populates observations of the patients of the practitioner.
      */
-    private void loadPatientData() {
+    void loadPatientData() {
         // Remove stale patient data (if any)
         observations.clear();
 

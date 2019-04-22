@@ -1,4 +1,4 @@
-package edu.monash.smile;
+package edu.monash.smile.dashboard.statusTab;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,21 +11,23 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import edu.monash.smile.R;
+import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.observerPattern.Observer;
 
 
-public class DashboardFragment extends Fragment implements Observer {
+public class StatusFragment extends Fragment implements Observer {
     private StatusCardAdapter statusCardAdapter;
     private PatientObservationController patientObservationController;
 
-    public DashboardFragment(PatientsMonitor patientsMonitor) {
+    public StatusFragment(PatientsMonitor patientsMonitor) {
         this.patientObservationController = new PatientObservationController(patientsMonitor);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_status, container, false);
         // Set up status card list view
         statusCardAdapter = new StatusCardAdapter(Objects.requireNonNull(getContext()), new ArrayList<>());
         ListView statusCardListView = rootView.findViewById(R.id.statusCardListView);

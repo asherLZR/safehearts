@@ -1,4 +1,4 @@
-package edu.monash.smile;
+package edu.monash.smile.dashboard;
 
 import android.os.Bundle;
 
@@ -6,16 +6,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import edu.monash.smile.R;
+import edu.monash.smile.dashboard.patientsTab.PatientFragment;
+import edu.monash.smile.dashboard.statusTab.StatusFragment;
+
 
 public class DashboardActivity extends AppCompatActivity {
     private PatientFragment patientFragment = null;
-    private DashboardFragment dashboardFragment = null;
+    private StatusFragment statusFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_dashboard);
 
         BottomNavigationView nv = findViewById(R.id.bottom_navigation);
         nv.setOnNavigationItemSelectedListener(item -> {
@@ -24,16 +28,16 @@ public class DashboardActivity extends AppCompatActivity {
             if (id == R.id.my_patients) {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .hide(dashboardFragment)
+                        .hide(statusFragment)
                         .show(patientFragment).commit();
                 return true;
             } else if (id == R.id.dashboard) {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .show(dashboardFragment)
+                        .show(statusFragment)
                         .hide(patientFragment)
                         .commit();
-                dashboardFragment.handleFragmentSwitched();
+                statusFragment.handleFragmentSwitched();
                 return true;
             }
             return false;
@@ -41,12 +45,12 @@ public class DashboardActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             PatientsMonitor patientsMonitor = new PatientsMonitor(this);
-            dashboardFragment = new DashboardFragment(patientsMonitor);
+            statusFragment = new StatusFragment(patientsMonitor);
             patientFragment = new PatientFragment(patientsMonitor);
             patientFragment.setArguments(getIntent().getExtras());
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_container, dashboardFragment)
+                    .add(R.id.fragment_container, statusFragment)
                     .add(R.id.fragment_container, patientFragment)
                     .hide(patientFragment).commit();
         }

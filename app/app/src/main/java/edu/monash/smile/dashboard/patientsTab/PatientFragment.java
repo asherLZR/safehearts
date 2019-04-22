@@ -1,4 +1,4 @@
-package edu.monash.smile;
+package edu.monash.smile.dashboard.patientsTab;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import edu.monash.smile.R;
+import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.observerPattern.Observer;
 
 

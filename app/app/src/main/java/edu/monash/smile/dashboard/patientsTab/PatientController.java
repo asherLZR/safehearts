@@ -1,4 +1,4 @@
-package edu.monash.smile;
+package edu.monash.smile.dashboard.patientsTab;
 
 import java.util.ArrayList;
 import java.util.HashMap;

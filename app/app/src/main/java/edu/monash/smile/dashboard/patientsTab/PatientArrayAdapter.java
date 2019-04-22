@@ -1,4 +1,4 @@
-package edu.monash.smile;
+package edu.monash.smile.dashboard.patientsTab;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,6 +14,8 @@ import com.google.android.material.chip.Chip;
 
 import java.util.List;
 
+import edu.monash.smile.R;
+import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.data.model.ObservationType;
 import edu.monash.smile.data.model.PatientReference;
 
@@ -47,7 +49,7 @@ public class PatientArrayAdapter extends ArrayAdapter<PatientReference> {
 
         if (patientListItem == null) {
             patientListItem = LayoutInflater.from(getContext()).inflate(
-                    R.layout.patient_row, parent, false
+                    R.layout.item_patient_row, parent, false
             );
         }
 
