@@ -16,16 +16,16 @@ import java.util.List;
 
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
-import edu.monash.smile.data.model.ObservationType;
-import edu.monash.smile.data.model.PatientReference;
+import edu.monash.smile.data.safeheartsModel.ObservationType;
+import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 
-public class PatientArrayAdapter extends ArrayAdapter<PatientReference> {
-    private List<PatientReference> patients;
+public class PatientArrayAdapter extends ArrayAdapter<ShPatientReference> {
+    private List<ShPatientReference> patients;
     private PatientsMonitor patientsMonitor;
 
     PatientArrayAdapter(
             Context context,
-            List<PatientReference> patients,
+            List<ShPatientReference> patients,
             PatientsMonitor patientsMonitor
     ) {
         super(context, 0, patients);
@@ -33,7 +33,7 @@ public class PatientArrayAdapter extends ArrayAdapter<PatientReference> {
         this.patientsMonitor = patientsMonitor;
     }
 
-    void updatePatients(List<PatientReference> patients) {
+    void updatePatients(List<ShPatientReference> patients) {
         this.patients = patients;
     }
 
@@ -53,23 +53,23 @@ public class PatientArrayAdapter extends ArrayAdapter<PatientReference> {
             );
         }
 
-        PatientReference patientReference = patients.get(position);
+        ShPatientReference shPatientReference = patients.get(position);
 
         // Display patient name
         TextView patientName = patientListItem.findViewById(R.id.patientName);
-        patientName.setText(patientReference.getId());
+        patientName.setText(shPatientReference.getId());
 
         // Display patient filter for cholesterol
         Chip cholesterolChip = patientListItem.findViewById(R.id.cholesterolChip);
         cholesterolChip.setChecked(patientsMonitor.isPatientMonitored(
-                patientReference.getId(),
+                shPatientReference.getId(),
                 ObservationType.cholesterol
         ));
         cholesterolChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                patientsMonitor.monitorPatient(patientReference.getId(), ObservationType.cholesterol);
+                patientsMonitor.monitorPatient(shPatientReference.getId(), ObservationType.cholesterol);
             } else {
-                patientsMonitor.unmonitorPatient(patientReference.getId(), ObservationType.cholesterol);
+                patientsMonitor.unmonitorPatient(shPatientReference.getId(), ObservationType.cholesterol);
             }
         });
 

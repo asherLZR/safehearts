@@ -1,5 +1,7 @@
 package edu.monash.smile.dashboard.patientsTab;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,21 +11,21 @@ import java.util.concurrent.Executors;
 
 import edu.monash.smile.data.FhirService;
 import edu.monash.smile.data.HealthService;
-import edu.monash.smile.data.model.ObservationType;
-import edu.monash.smile.data.model.ObservedPatient;
-import edu.monash.smile.data.model.PatientReference;
-import edu.monash.smile.data.model.QuantitativeObservation;
+import edu.monash.smile.data.safeheartsModel.ObservationType;
+import edu.monash.smile.data.safeheartsModel.ObservedPatient;
+import edu.monash.smile.data.safeheartsModel.ShPatientReference;
+import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
 import edu.monash.smile.observerPattern.Subject;
 
 class PatientController extends Subject {
     private static final String TAG = "PatientController";
-    private Set<PatientReference> patientReferences;
-    private HashMap<PatientReference, List<QuantitativeObservation>> observations;
+    private Set<ShPatientReference> shPatientReferences;
+    private HashMap<ShPatientReference, List<QuantitativeObservation>> observations;
     private HealthService healthService;
 
     PatientController() {
         this.healthService = new FhirService();
-        this.patientReferences = new HashSet<>();
+        this.shPatientReferences = new HashSet<>();
         this.observations = new HashMap<>();
     }
 
@@ -33,11 +35,11 @@ class PatientController extends Subject {
      *
      * @param practitionerId The ID of the practitioner
      */
-    void setUp(int practitionerId) {
+    void setUp(Context context, int practitionerId) {
         // All network operations need to run on a separate thread to avoid blocking the
         // main thread.
         Executors.newSingleThreadExecutor().submit(() -> {
-            fetchPatients(practitionerId);
+            fetchPatients(context, practitionerId);
             loadPatientData();
             notifyObservers();
         });
@@ -48,8 +50,8 @@ class PatientController extends Subject {
      *
      * @param practitionerId The ID of the practitioner
      */
-    private void fetchPatients(int practitionerId) {
-        patientReferences = healthService.loadPatientReferences(practitionerId);
+    private void fetchPatients(Context context, int practitionerId) {
+        shPatientReferences = healthService.loadPatientReferences(context, practitionerId);
     }
 
     /**
@@ -60,7 +62,7 @@ class PatientController extends Subject {
         observations.clear();
 
         // Get data for ALL patients (the assignment only needs data for the selected subset)
-        for (PatientReference patient : patientReferences) {
+        for (ShPatientReference patient : shPatientReferences) {
             List<QuantitativeObservation> results = healthService
                     .readPatientQuantitativeObservations(patient, ObservationType.cholesterol);
             // Currently using all results for the patient
@@ -78,14 +80,14 @@ class PatientController extends Subject {
     List<ObservedPatient> getObservedPatients() {
         List<ObservedPatient> observedPatients = new ArrayList<>();
 
-        for (PatientReference p : observations.keySet()) {
+        for (ShPatientReference p : observations.keySet()) {
             observedPatients.add(new ObservedPatient(observations.get(p), p));
         }
 
         return observedPatients;
     }
 
-    List<PatientReference> getPatientReferences() {
-        return new ArrayList<>(patientReferences);
+    List<ShPatientReference> getShPatientReferences() {
+        return new ArrayList<>(shPatientReferences);
     }
 }

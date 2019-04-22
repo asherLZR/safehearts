@@ -38,7 +38,7 @@ public class PatientFragment extends Fragment implements Observer {
         }
         // Listen to data events
         patientController.attach(this);
-        patientController.setUp(practitionerId);
+        patientController.setUp(getContext(), practitionerId);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class PatientFragment extends Fragment implements Observer {
     @Override
     public void update() {
         Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
-            patientAdapter.updatePatients(patientController.getPatientReferences());
+            patientAdapter.updatePatients(patientController.getShPatientReferences());
             patientAdapter.notifyDataSetInvalidated();
         });
     }

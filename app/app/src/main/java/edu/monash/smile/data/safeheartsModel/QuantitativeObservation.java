@@ -1,4 +1,4 @@
-package edu.monash.smile.data.model;
+package edu.monash.smile.data.safeheartsModel;
 
 import java.util.Objects;
 

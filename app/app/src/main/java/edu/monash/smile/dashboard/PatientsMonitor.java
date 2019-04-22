@@ -10,8 +10,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.monash.smile.data.model.ObservationType;
-import edu.monash.smile.data.model.PatientReference;
+import edu.monash.smile.data.safeheartsModel.ObservationType;
+import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.preferences.SharedPreferencesHelper;
 
 public class PatientsMonitor {
@@ -23,15 +23,15 @@ public class PatientsMonitor {
         restoreMonitoredPatientsList();
     }
 
-    public Set<PatientReference> getMonitoredPatientsByType(ObservationType type) {
-        Set<PatientReference> results = new HashSet<>();
+    public Set<ShPatientReference> getMonitoredPatientsByType(ObservationType type) {
+        Set<ShPatientReference> results = new HashSet<>();
 
         if (!monitoredPatients.containsKey(type)) {
             return results;
         }
 
         for (String patientId : monitoredPatients.get(type)) {
-            results.add(new PatientReference(patientId));
+            results.add(new ShPatientReference(patientId));
         }
 
         return results;

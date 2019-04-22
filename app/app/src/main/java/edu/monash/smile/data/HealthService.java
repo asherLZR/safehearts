@@ -1,11 +1,13 @@
 package edu.monash.smile.data;
 
+import android.content.Context;
+
 import java.util.List;
 import java.util.Set;
 
-import edu.monash.smile.data.model.ObservationType;
-import edu.monash.smile.data.model.PatientReference;
-import edu.monash.smile.data.model.QuantitativeObservation;
+import edu.monash.smile.data.safeheartsModel.ObservationType;
+import edu.monash.smile.data.safeheartsModel.ShPatientReference;
+import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
 
 public interface HealthService {
     /**
@@ -14,17 +16,17 @@ public interface HealthService {
      * @param practitionerId The practitioner of interest
      * @return A set of unique patient IDs that the practitioner has seen
      */
-    Set<PatientReference> loadPatientReferences(Integer practitionerId);
+    Set<ShPatientReference> loadPatientReferences(Context context, Integer practitionerId);
 
     /**
      * Reads all historical observations for a given type (e.g. cholesterol), for a patient
      *
-     * @param patientReference The ID of the patient
+     * @param shPatientReference The ID of the patient
      * @param type             The type of the observation
      * @return A list with all observations for the given type
      */
     List<QuantitativeObservation> readPatientQuantitativeObservations(
-            PatientReference patientReference,
+            ShPatientReference shPatientReference,
             ObservationType type
     );
 }

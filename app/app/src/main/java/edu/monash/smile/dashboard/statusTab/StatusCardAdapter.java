@@ -13,8 +13,8 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import edu.monash.smile.R;
-import edu.monash.smile.data.model.ObservedPatient;
-import edu.monash.smile.data.model.QuantitativeObservation;
+import edu.monash.smile.data.safeheartsModel.ObservedPatient;
+import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
 
 public class StatusCardAdapter extends ArrayAdapter<ObservedPatient> {
     private List<ObservedPatient> observedPatients;
@@ -49,7 +49,7 @@ public class StatusCardAdapter extends ArrayAdapter<ObservedPatient> {
         QuantitativeObservation viewedObservation = cardPatient.getObservations().get(0);
 
         TextView statusCardHeading = statusCardView.findViewById(R.id.statusCardHeading);
-        statusCardHeading.setText(cardPatient.getPatientReference().getId());
+        statusCardHeading.setText(cardPatient.getShPatientReference().getId());
 
         TextView statusCardDescription = statusCardView.findViewById(R.id.statusCardDescription);
         statusCardDescription.setText(viewedObservation.getDescription());

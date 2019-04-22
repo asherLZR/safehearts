@@ -1,11 +1,11 @@
-package edu.monash.smile.data.model;
+package edu.monash.smile.data.safeheartsModel;
 
 import androidx.annotation.NonNull;
 
-public class PatientReference {
+public class ShPatientReference {
     private final String id;
 
-    public PatientReference(String id) {
+    public ShPatientReference(String id) {
         this.id = id;
     }
 
@@ -16,7 +16,7 @@ public class PatientReference {
     @NonNull
     @Override
     public String toString() {
-        return "PatientReference = " + id;
+        return "ShPatientReference = " + id;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class PatientReference {
             return false;
         }
 
-        PatientReference other = (PatientReference) o;
+        ShPatientReference other = (ShPatientReference) o;
         return id.equals(other.id);
     }
 

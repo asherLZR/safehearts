@@ -8,14 +8,14 @@ import java.util.concurrent.Executors;
 import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.data.FhirService;
 import edu.monash.smile.data.HealthService;
-import edu.monash.smile.data.model.ObservationType;
-import edu.monash.smile.data.model.ObservedPatient;
-import edu.monash.smile.data.model.PatientReference;
-import edu.monash.smile.data.model.QuantitativeObservation;
+import edu.monash.smile.data.safeheartsModel.ObservationType;
+import edu.monash.smile.data.safeheartsModel.ObservedPatient;
+import edu.monash.smile.data.safeheartsModel.ShPatientReference;
+import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
 import edu.monash.smile.observerPattern.Subject;
 
 class PatientObservationController extends Subject {
-    private HashMap<PatientReference, List<QuantitativeObservation>> observations;
+    private HashMap<ShPatientReference, List<QuantitativeObservation>> observations;
     private HealthService healthService;
     private PatientsMonitor patientsMonitor;
 
@@ -43,7 +43,7 @@ class PatientObservationController extends Subject {
 
         // Get data for ALL patients (the assignment only needs data for the selected subset)
         for (
-                PatientReference patient :
+                ShPatientReference patient :
                 patientsMonitor.getMonitoredPatientsByType(ObservationType.cholesterol)
         ) {
             List<QuantitativeObservation> results = healthService
@@ -63,7 +63,7 @@ class PatientObservationController extends Subject {
     List<ObservedPatient> getObservedPatients() {
         List<ObservedPatient> observedPatients = new ArrayList<>();
 
-        for (PatientReference p : observations.keySet()) {
+        for (ShPatientReference p : observations.keySet()) {
             observedPatients.add(new ObservedPatient(observations.get(p), p));
         }
 
