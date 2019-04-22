@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import edu.monash.smile.data.safeheartsModel.ObservationType;
@@ -30,7 +31,7 @@ public class PatientsMonitor {
             return results;
         }
 
-        for (String patientId : monitoredPatients.get(type)) {
+        for (String patientId : Objects.requireNonNull(monitoredPatients.get(type))) {
             results.add(new ShPatientReference(patientId));
         }
 
@@ -63,9 +64,7 @@ public class PatientsMonitor {
     }
 
     private void saveMonitoredPatientsList() {
-        Gson gson = new Gson();
-        String json = gson.toJson(monitoredPatients);
-        SharedPreferencesHelper.writeMonitoredPatients(context, json);
+        SharedPreferencesHelper.writeMonitoredPatients(context, monitoredPatients);
     }
 
     private void restoreMonitoredPatientsList() {

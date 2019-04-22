@@ -6,7 +6,10 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
+import edu.monash.smile.data.safeheartsModel.ObservationType;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 
 public class SharedPreferencesHelper {
@@ -15,9 +18,9 @@ public class SharedPreferencesHelper {
     private static final String MONITORED_PATIENTS_KEY = "monitoredPatients";
     private static final String ALL_PATIENTS = "allPatients";
 
-    public static void writeMonitoredPatients(Context context, String monitoredPatients) {
+    public static void writeMonitoredPatients(Context context, Map<ObservationType, Set<String>> monitoredPatients) {
         SharedPreferences.Editor editor = getEditor(context);
-        editor.putString(MONITORED_PATIENTS_KEY, monitoredPatients);
+        editor.putString(MONITORED_PATIENTS_KEY, new Gson().toJson(monitoredPatients));
         editor.commit();
     }
 
@@ -36,9 +39,8 @@ public class SharedPreferencesHelper {
     }
 
     public static void writeAllPatients(Context context, ArrayList<ShPatient> patient){
-        Gson gson = new Gson();
         SharedPreferences.Editor editor = getEditor(context);
-        editor.putString(ALL_PATIENTS, gson.toJson(patient));
+        editor.putString(ALL_PATIENTS, new Gson().toJson(new Gson().toJson(patient)));
         editor.apply();
     }
 
