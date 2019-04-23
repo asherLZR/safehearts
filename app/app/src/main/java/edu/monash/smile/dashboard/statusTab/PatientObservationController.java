@@ -3,7 +3,6 @@ package edu.monash.smile.dashboard.statusTab;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Executors;
 
 import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.data.HealthService;
@@ -29,10 +28,10 @@ class PatientObservationController extends Subject {
     void setUp() {
         // All network operations need to run on a separate thread to avoid blocking the
         // main thread.
-        Executors.newSingleThreadExecutor().submit(() -> {
-            loadPatientData();
-            notifyObservers();
-        });
+//        Executors.newSingleThreadExecutor().submit(() -> {
+        loadPatientData();
+        notifyObservers();
+//        });
     }
 
     /**

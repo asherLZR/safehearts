@@ -68,4 +68,10 @@ public class DashboardActivity extends AppCompatActivity {
         super.onBackPressed();
         SharedPreferencesHelper.removeAllSharedPreferences(this);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferencesHelper.removeAllSharedPreferences(this);
+    }
 }
