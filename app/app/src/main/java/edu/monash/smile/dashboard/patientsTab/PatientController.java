@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
 
-import edu.monash.smile.data.FhirService;
 import edu.monash.smile.data.HealthService;
+import edu.monash.smile.data.HealthServiceProducer;
+import edu.monash.smile.data.HealthServiceUrl;
 import edu.monash.smile.data.safeheartsModel.ObservationType;
 import edu.monash.smile.data.safeheartsModel.ObservedPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
@@ -24,7 +25,7 @@ class PatientController extends Subject {
     private HealthService healthService;
 
     PatientController() {
-        this.healthService = new FhirService();
+        this.healthService = HealthServiceProducer.getService(HealthServiceUrl.HEALTH_SERVICE_TYPE.FHIR);
         this.shPatientReferences = new HashSet<>();
         this.observations = new HashMap<>();
     }

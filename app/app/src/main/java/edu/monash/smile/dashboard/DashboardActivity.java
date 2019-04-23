@@ -1,6 +1,5 @@
 package edu.monash.smile.dashboard;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +21,25 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dashboard);
+        setupBottomNavigation();
+        if (savedInstanceState == null) {
+            initialiseFragments();
+        }
+    }
 
+    private void initialiseFragments(){
+        PatientsMonitor patientsMonitor = new PatientsMonitor(this);
+        statusFragment = new StatusFragment(patientsMonitor);
+        patientFragment = new PatientFragment(patientsMonitor);
+        patientFragment.setArguments(getIntent().getExtras());
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, statusFragment)
+                .add(R.id.fragment_container, patientFragment)
+                .hide(patientFragment).commit();
+    }
+
+    private void setupBottomNavigation(){
         BottomNavigationView nv = findViewById(R.id.bottom_navigation);
         nv.setOnNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -44,18 +61,6 @@ public class DashboardActivity extends AppCompatActivity {
             }
             return false;
         });
-
-        if (savedInstanceState == null) {
-            PatientsMonitor patientsMonitor = new PatientsMonitor(this);
-            statusFragment = new StatusFragment(patientsMonitor);
-            patientFragment = new PatientFragment(patientsMonitor);
-            patientFragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.fragment_container, statusFragment)
-                    .add(R.id.fragment_container, patientFragment)
-                    .hide(patientFragment).commit();
-        }
     }
 
     @Override

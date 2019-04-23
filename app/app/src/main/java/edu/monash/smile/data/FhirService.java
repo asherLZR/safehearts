@@ -1,7 +1,6 @@
 package edu.monash.smile.data;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.hl7.fhir.dstu3.model.Bundle;
@@ -24,19 +23,20 @@ import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import edu.monash.smile.data.safeheartsModel.ObservationType;
+import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
 import edu.monash.smile.data.safeheartsModel.ShHumanName;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
-import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
-import edu.monash.smile.preferences.SharedPreferencesHelper;
+import static edu.monash.smile.data.HealthServiceUrl.HEALTH_SERVICE_TYPE.FHIR;
 
-public class FhirService implements HealthService {
-    private static final String TAG = "FhirService";
+class FhirService extends HealthService {
     final private IGenericClient client;
-    private static String BASE_URL = "http://hapi-fhir.erc.monash.edu:8080/baseDstu3/";
 
-    public FhirService() {
-        this.client = (FhirContext.forDstu3()).newRestfulGenericClient(BASE_URL);
+    FhirService() {
+        super(FHIR);
+        String url = super.getHealthServiceUrl();
+        Log.i("Debug", "FhirService: " + url);
+        this.client = (FhirContext.forDstu3()).newRestfulGenericClient(url);
     }
 
     public Set<ShPatientReference> loadPatientReferences(Context context, Integer practitionerId) {
@@ -56,13 +56,12 @@ public class FhirService implements HealthService {
             references.add(new ShPatientReference(id));
         }
 
-        storeAllPatients(context, references);
-
         return references;
     }
 
+    // TODO: Use this method to store persistent state/cache
     // For all patients the practitioner has seen, create ShPatients and store in SP
-    private void storeAllPatients(Context context, Set<ShPatientReference> references){
+    private ArrayList<ShPatient> getAllPatients(Context context, Set<ShPatientReference> references){
         ArrayList<ShPatient> shPatients = new ArrayList<>();
         for (ShPatientReference reference: references){
             Bundle patientBundle = client.search().forResource(Patient.class)
@@ -89,8 +88,8 @@ public class FhirService implements HealthService {
                         patient.getBirthDate()
                 ));
             }
-            SharedPreferencesHelper.writeAllPatients(context, shPatients);
         }
+        return shPatients;
     }
 
     public List<QuantitativeObservation> readPatientQuantitativeObservations(
@@ -131,7 +130,6 @@ public class FhirService implements HealthService {
         if (type == ObservationType.cholesterol) {
             return "2093-3";
         }
-
         return null;
     }
 }

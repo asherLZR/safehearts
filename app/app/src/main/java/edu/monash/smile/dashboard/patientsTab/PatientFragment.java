@@ -13,6 +13,7 @@ import java.util.Objects;
 
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
+import edu.monash.smile.data.HealthService;
 import edu.monash.smile.observerPattern.Observer;
 
 
@@ -23,10 +24,11 @@ public class PatientFragment extends Fragment implements Observer {
     private int practitionerId;
     private PatientArrayAdapter patientAdapter;
     private PatientsMonitor patientsMonitor;
-    private PatientController patientController = new PatientController();
+    private PatientController patientController;
 
     public PatientFragment(PatientsMonitor patientsMonitor) {
         this.patientsMonitor = patientsMonitor;
+        this.patientController = new PatientController();
     }
 
     @Override
