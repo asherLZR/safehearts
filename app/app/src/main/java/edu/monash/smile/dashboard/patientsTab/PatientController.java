@@ -25,7 +25,7 @@ class PatientController extends Subject {
     private HealthService healthService;
 
     PatientController() {
-        this.healthService = HealthServiceProducer.getService(HealthServiceUrl.HEALTH_SERVICE_TYPE.FHIR);
+        this.healthService = HealthServiceProducer.getService(HealthServiceUrl.HealthServiceType.FHIR);
         this.shPatientReferences = new HashSet<>();
         this.observations = new HashMap<>();
     }

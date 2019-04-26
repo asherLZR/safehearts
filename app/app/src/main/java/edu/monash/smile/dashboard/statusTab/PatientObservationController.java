@@ -21,7 +21,7 @@ class PatientObservationController extends Subject {
 
     PatientObservationController(PatientsMonitor patientsMonitor) {
         this.patientsMonitor = patientsMonitor;
-        this.healthService = HealthServiceProducer.getService(HealthServiceUrl.HEALTH_SERVICE_TYPE.FHIR);
+        this.healthService = HealthServiceProducer.getService(HealthServiceUrl.HealthServiceType.FHIR);
         this.observations = new HashMap<>();
     }
 

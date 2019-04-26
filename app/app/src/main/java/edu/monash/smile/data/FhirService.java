@@ -27,7 +27,7 @@ import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
 import edu.monash.smile.data.safeheartsModel.ShHumanName;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
-import static edu.monash.smile.data.HealthServiceUrl.HEALTH_SERVICE_TYPE.FHIR;
+import static edu.monash.smile.data.HealthServiceUrl.HealthServiceType.FHIR;
 
 class FhirService extends HealthService {
     final private IGenericClient client;
