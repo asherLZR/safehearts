@@ -106,7 +106,7 @@ public class PatientFragment extends Fragment implements Observer {
     @Override
     public void update() {
         Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
-            patientAdapter.updatePatients(patientController.getShPatientReferences());
+            patientAdapter.updatePatients(patientController.getShPatients());
             patientAdapter.notifyDataSetInvalidated();
         });
     }

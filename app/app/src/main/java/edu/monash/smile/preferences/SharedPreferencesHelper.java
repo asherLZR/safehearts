@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,9 +50,15 @@ public class SharedPreferencesHelper {
         getEditor(context).clear().commit();
     }
 
-    public static void writeAllPatients(Context context, ArrayList<ShPatient> patient){
+    public static void writeAllPatients(Context context, HashMap<String, ShPatient> patients){
         SharedPreferences.Editor editor = getEditor(context);
-        editor.putString(ALL_PATIENTS, new Gson().toJson(new Gson().toJson(patient)));
+        editor.putString(ALL_PATIENTS, new Gson().toJson(patients));
         editor.apply();
+    }
+
+    public static HashMap<String, ShPatient> readAllPatients(Context context){
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
+        return new Gson().fromJson(sharedPreferences.getString(ALL_PATIENTS, ""),
+                new TypeToken<HashMap<String, ShPatient>>(){}.getType());
     }
 }

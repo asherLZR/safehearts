@@ -2,16 +2,29 @@ package edu.monash.smile.data.safeheartsModel;
 
 import androidx.annotation.NonNull;
 
+import edu.monash.smile.data.HealthServiceType;
+
 public class ShPatientReference {
     private final String id;
+    private HealthServiceType healthServiceType;
 
+    // FIXME: temporary overloading - always specify type for new declarations!
     public ShPatientReference(String id) {
         this.id = id;
+        this.healthServiceType = null;
+    }
+
+    public ShPatientReference(String id, HealthServiceType type) {
+        this.id = id;
+        this.healthServiceType = type;
     }
 
     public String getId() {
         return id;
     }
+
+    // Unique key of the format "HealthServiceType/ID"
+    public String getFullReference() { return this.healthServiceType + "/" + this.id; }
 
     @NonNull
     @Override

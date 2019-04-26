@@ -14,12 +14,14 @@ import edu.monash.smile.data.HealthServiceType;
 import edu.monash.smile.data.safeheartsModel.ObservationType;
 import edu.monash.smile.data.safeheartsModel.ObservedPatient;
 import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
+import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.observerPattern.Subject;
 
 class PatientController extends Subject {
     private static final String TAG = "PatientController";
     private Set<ShPatientReference> shPatientReferences;
+    private HashMap<String, ShPatient> shPatients;
     private HashMap<ShPatientReference, List<QuantitativeObservation>> observations;
     private HealthService healthService;
 
@@ -49,7 +51,8 @@ class PatientController extends Subject {
      * @param practitionerId The ID of the practitioner
      */
     private void fetchPatients(Context context, int practitionerId) {
-        shPatientReferences = healthService.loadPatientReferences(context, practitionerId);
+        this.shPatientReferences = healthService.loadPatientReferences(context, practitionerId);
+        this.shPatients = healthService.getAllPatients(this.shPatientReferences);
     }
 
     /**
@@ -87,5 +90,9 @@ class PatientController extends Subject {
 
     List<ShPatientReference> getShPatientReferences() {
         return new ArrayList<>(shPatientReferences);
+    }
+
+    List<ShPatient> getShPatients() {
+        return new ArrayList<>(shPatients.values());
     }
 }

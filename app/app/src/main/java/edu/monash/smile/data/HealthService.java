@@ -2,18 +2,20 @@ package edu.monash.smile.data;
 
 import android.content.Context;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 import edu.monash.smile.data.safeheartsModel.ObservationType;
 import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
+import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 
 public abstract class HealthService {
-    private HealthServiceType tag;
+    HealthServiceType healthServiceType;
 
-    HealthService(HealthServiceType tag){
-        this.tag = tag;
+    HealthService(HealthServiceType healthServiceType){
+        this.healthServiceType = healthServiceType;
     }
 
     /**
@@ -35,4 +37,11 @@ public abstract class HealthService {
             ShPatientReference shPatientReference,
             ObservationType type
     );
+
+    /**
+     * Store all patients the practitioner has seen in SharedPreferences
+     * @param references The PatientReferences of the Patients to return
+     * @return A dictionary of Patient objects identified by their full reference
+     */
+    public abstract HashMap<String, ShPatient> getAllPatients(Set<ShPatientReference> references);
 }

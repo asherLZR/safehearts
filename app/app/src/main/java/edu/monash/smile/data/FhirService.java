@@ -9,13 +9,12 @@ import org.hl7.fhir.dstu3.model.Observation;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Quantity;
 import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.dstu3.model.StringType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
@@ -23,20 +22,18 @@ import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import edu.monash.smile.data.safeheartsModel.ObservationType;
 import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
-import edu.monash.smile.data.safeheartsModel.ShHumanName;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
+import edu.monash.smile.preferences.SharedPreferencesHelper;
 
 import static edu.monash.smile.data.HealthServiceType.FHIR;
 
 class FhirService extends HealthService {
     final private IGenericClient client;
-    private String url;
 
     FhirService(String url) {
         super(FHIR);
-        this.url = url;
-        this.client = (FhirContext.forDstu3()).newRestfulGenericClient(this.url);
+        this.client = (FhirContext.forDstu3()).newRestfulGenericClient(url);
     }
 
     public Set<ShPatientReference> loadPatientReferences(Context context, Integer practitionerId) {
@@ -53,45 +50,38 @@ class FhirService extends HealthService {
             Encounter encounter = (Encounter) entry.getResource();
             Reference subject = encounter.getSubject();
             String id = subject.getReference();
-            references.add(new ShPatientReference(id));
+            references.add(new ShPatientReference(id, this.healthServiceType));
         }
 
         return references;
     }
 
-    // TODO: Use this method to store persistent state/cache
-    // For all patients the practitioner has seen, create ShPatients and store in SP
-    private ArrayList<ShPatient> getAllPatients(Context context, Set<ShPatientReference> references){
-        ArrayList<ShPatient> shPatients = new ArrayList<>();
+    public HashMap<String, ShPatient> getAllPatients(Set<ShPatientReference> references){
+        HashMap<String, ShPatient> shPatients = new HashMap<>();
         for (ShPatientReference reference: references){
             Bundle patientBundle = this.client.search().forResource(Patient.class)
                     .where(Patient.RES_ID.exactly().identifier(reference.getId()))
                     .returnBundle(Bundle.class)
                     .execute();
-            for (Bundle.BundleEntryComponent entry : patientBundle.getEntry()) {
-                Patient patient = (Patient) entry.getResource();
-                List<HumanName> humanNames = patient.getName();
-                ArrayList<ShHumanName> shHumanNames = new ArrayList<>();
-                for (HumanName name : humanNames) {
-                    // Convert List<StringType> to List<String>
-                    List<String> prefixes = name.getPrefix().stream()
-                            .map(StringType::toString)
-                            .collect(Collectors.toList());
-                    List<String> givenNames = name.getGiven().stream()
-                            .map(StringType::toString)
-                            .collect(Collectors.toList());
-                    shHumanNames.add(new ShHumanName(prefixes, givenNames, name.getFamily()));
-                }
-                shPatients.add(new ShPatient(
-                        reference,
-                        shHumanNames,
-                        patient.getBirthDate()
-                ));
-            }
+            Bundle.BundleEntryComponent entry = patientBundle.getEntry().get(0);
+            Patient patient = (Patient) entry.getResource();
+
+            HumanName humanName = patient.getName().get(0);
+
+            assert humanName != null;
+
+            shPatients.put(reference.getFullReference(),
+                    new ShPatient(reference,
+                    humanName.getPrefixAsSingleString() + " " +
+                            humanName.getGivenAsSingleString() + " " +
+                            humanName.getFamily(),
+                    patient.getBirthDate()
+            ));
         }
         return shPatients;
     }
 
+    @Override
     public List<QuantitativeObservation> readPatientQuantitativeObservations(
             ShPatientReference shPatientReference,
             ObservationType type
