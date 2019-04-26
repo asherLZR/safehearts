@@ -1,7 +1,6 @@
 package edu.monash.smile.data;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Encounter;
@@ -27,21 +26,21 @@ import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
 import edu.monash.smile.data.safeheartsModel.ShHumanName;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
-import static edu.monash.smile.data.HealthServiceUrl.HealthServiceType.FHIR;
+
+import static edu.monash.smile.data.HealthServiceType.FHIR;
 
 class FhirService extends HealthService {
     final private IGenericClient client;
+    private static final String url = "http://hapi-fhir.erc.monash.edu:8080/baseDstu3/";
 
     FhirService() {
         super(FHIR);
-        String url = super.getHealthServiceUrl();
-        Log.i("Debug", "FhirService: " + url);
         this.client = (FhirContext.forDstu3()).newRestfulGenericClient(url);
     }
 
     public Set<ShPatientReference> loadPatientReferences(Context context, Integer practitionerId) {
         // Request all encounters by the practitioner
-        Bundle b = client.search().forResource(Encounter.class)
+        Bundle b = this.client.search().forResource(Encounter.class)
                 .where(new ReferenceClientParam("participant")
                         .hasId("Practitioner/" + practitionerId))
                 .returnBundle(Bundle.class)
@@ -64,7 +63,7 @@ class FhirService extends HealthService {
     private ArrayList<ShPatient> getAllPatients(Context context, Set<ShPatientReference> references){
         ArrayList<ShPatient> shPatients = new ArrayList<>();
         for (ShPatientReference reference: references){
-            Bundle patientBundle = client.search().forResource(Patient.class)
+            Bundle patientBundle = this.client.search().forResource(Patient.class)
                     .where(Patient.RES_ID.exactly().identifier(reference.getId()))
                     .returnBundle(Bundle.class)
                     .execute();
@@ -97,7 +96,7 @@ class FhirService extends HealthService {
             ObservationType type
     ) {
         // Request an observation for a patient
-        Bundle b = client.search().forResource(Observation.class)
+        Bundle b = this.client.search().forResource(Observation.class)
                 .where(new ReferenceClientParam("subject")
                         .hasId(shPatientReference.getId()))
                 .where(new TokenClientParam("code")

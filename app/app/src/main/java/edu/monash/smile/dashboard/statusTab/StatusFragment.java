@@ -90,7 +90,7 @@ public class StatusFragment extends Fragment implements Observer {
     public void update() {
         Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
             statusCardAdapter.updateObservedPatients(
-                patientObservationController.getObservedPatients()
+                    patientObservationController.getObservedPatients()
             );
             statusCardAdapter.notifyDataSetInvalidated();
         });

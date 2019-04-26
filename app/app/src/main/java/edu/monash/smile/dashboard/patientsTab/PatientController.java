@@ -7,15 +7,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Executors;
 
 import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.HealthServiceProducer;
-import edu.monash.smile.data.HealthServiceUrl;
+import edu.monash.smile.data.HealthServiceType;
 import edu.monash.smile.data.safeheartsModel.ObservationType;
 import edu.monash.smile.data.safeheartsModel.ObservedPatient;
-import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
+import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.observerPattern.Subject;
 
 class PatientController extends Subject {
@@ -25,7 +24,7 @@ class PatientController extends Subject {
     private HealthService healthService;
 
     PatientController() {
-        this.healthService = HealthServiceProducer.getService(HealthServiceUrl.HealthServiceType.FHIR);
+        this.healthService = HealthServiceProducer.getService(HealthServiceType.FHIR);
         this.shPatientReferences = new HashSet<>();
         this.observations = new HashMap<>();
     }

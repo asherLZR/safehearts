@@ -7,7 +7,7 @@ import java.util.List;
 import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.HealthServiceProducer;
-import edu.monash.smile.data.HealthServiceUrl;
+import edu.monash.smile.data.HealthServiceType;
 import edu.monash.smile.data.safeheartsModel.ObservationType;
 import edu.monash.smile.data.safeheartsModel.ObservedPatient;
 import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
@@ -21,7 +21,7 @@ class PatientObservationController extends Subject {
 
     PatientObservationController(PatientsMonitor patientsMonitor) {
         this.patientsMonitor = patientsMonitor;
-        this.healthService = HealthServiceProducer.getService(HealthServiceUrl.HealthServiceType.FHIR);
+        this.healthService = HealthServiceProducer.getService(HealthServiceType.FHIR);
         this.observations = new HashMap<>();
     }
 

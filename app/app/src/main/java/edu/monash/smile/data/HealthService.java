@@ -10,9 +10,9 @@ import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 
 public abstract class HealthService {
-    private HealthServiceUrl.HealthServiceType tag;
+    private HealthServiceType tag;
 
-    HealthService(HealthServiceUrl.HealthServiceType tag){
+    HealthService(HealthServiceType tag){
         this.tag = tag;
     }
 
@@ -35,14 +35,4 @@ public abstract class HealthService {
             ShPatientReference shPatientReference,
             ObservationType type
     );
-
-    /**
-     * Returns the URL for the health service in question based on the type identified as an ENUM
-     * in HealthServiceUrl.HealthServiceType.
-     *
-     * @return The URL of the given service
-     */
-    String getHealthServiceUrl() {
-        return new HealthServiceUrl().getServiceUrl(tag);
-    }
 }
