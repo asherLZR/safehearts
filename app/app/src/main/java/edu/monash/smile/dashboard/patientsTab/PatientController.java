@@ -39,11 +39,9 @@ class PatientController extends Subject {
     void setUp(Context context, int practitionerId) {
         // All network operations need to run on a separate thread to avoid blocking the
         // main thread.
-        Executors.newSingleThreadExecutor().submit(() -> {
-            fetchPatients(context, practitionerId);
-            loadPatientData();
-            notifyObservers();
-        });
+        fetchPatients(context, practitionerId);
+        loadPatientData();
+        notifyObservers();
     }
 
     /**
