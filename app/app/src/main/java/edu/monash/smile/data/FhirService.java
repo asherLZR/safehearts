@@ -31,11 +31,12 @@ import static edu.monash.smile.data.HealthServiceType.FHIR;
 
 class FhirService extends HealthService {
     final private IGenericClient client;
-    private static final String url = "http://hapi-fhir.erc.monash.edu:8080/baseDstu3/";
+    private String url;
 
-    FhirService() {
+    FhirService(String url) {
         super(FHIR);
-        this.client = (FhirContext.forDstu3()).newRestfulGenericClient(url);
+        this.url = url;
+        this.client = (FhirContext.forDstu3()).newRestfulGenericClient(this.url);
     }
 
     public Set<ShPatientReference> loadPatientReferences(Context context, Integer practitionerId) {
