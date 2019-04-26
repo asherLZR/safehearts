@@ -27,7 +27,7 @@ public abstract class HealthService {
     public abstract Set<ShPatientReference> loadPatientReferences(Context context, Integer practitionerId);
 
     /**
-     * Reads all historical observations for a given type (e.g. cholesterol), for a patient
+     * Reads all historical observations for a given type (e.g. CHOLESTEROL), for a patient
      *
      * @param shPatientReference The ID of the patient
      * @param type               The type of the observation
@@ -43,5 +43,5 @@ public abstract class HealthService {
      * @param references The PatientReferences of the Patients to return
      * @return A dictionary of Patient objects identified by their full reference
      */
-    public abstract HashMap<String, ShPatient> getAllPatients(Set<ShPatientReference> references);
+    public abstract HashMap<ShPatientReference, ShPatient> getAllPatients(Set<ShPatientReference> references);
 }

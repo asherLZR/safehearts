@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import edu.monash.smile.data.HealthService;
@@ -21,11 +22,12 @@ import edu.monash.smile.observerPattern.Subject;
 class PatientController extends Subject {
     private static final String TAG = "PatientController";
     private Set<ShPatientReference> shPatientReferences;
-    private HashMap<String, ShPatient> shPatients;
+    private HashMap<ShPatientReference, ShPatient> shPatients;
     private HashMap<ShPatientReference, List<QuantitativeObservation>> observations;
     private HealthService healthService;
 
     PatientController() {
+        // FIXME: HARDCODED SERVICE!
         this.healthService = HealthServiceProducer.getService(HealthServiceType.FHIR);
         this.shPatientReferences = new HashSet<>();
         this.observations = new HashMap<>();
@@ -65,7 +67,7 @@ class PatientController extends Subject {
         // Get data for ALL patients (the assignment only needs data for the selected subset)
         for (ShPatientReference patient : shPatientReferences) {
             List<QuantitativeObservation> results = healthService
-                    .readPatientQuantitativeObservations(patient, ObservationType.cholesterol);
+                    .readPatientQuantitativeObservations(patient, ObservationType.CHOLESTEROL);
             // Currently using all results for the patient
             if (results.size() != 0) {
                 observations.put(patient, results);
@@ -76,13 +78,16 @@ class PatientController extends Subject {
     /**
      * Links each patient to its observations.
      *
-     * @return A list of patients with their metrics (e.g. a patient and cholesterol readings)
+     * @return A list of patients with their metrics (e.g. a patient and CHOLESTEROL readings)
      */
     List<ObservedPatient> getObservedPatients() {
         List<ObservedPatient> observedPatients = new ArrayList<>();
 
         for (ShPatientReference p : observations.keySet()) {
-            observedPatients.add(new ObservedPatient(observations.get(p), p));
+            observedPatients.add(new ObservedPatient(
+                    observations.get(p),
+                    p,
+                    Objects.requireNonNull(shPatients.get(p)).getName()));
         }
 
         return observedPatients;

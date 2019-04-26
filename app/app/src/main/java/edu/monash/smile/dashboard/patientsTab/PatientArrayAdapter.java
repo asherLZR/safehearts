@@ -61,17 +61,17 @@ public class PatientArrayAdapter extends ArrayAdapter<ShPatient> {
         TextView patientName = patientListItem.findViewById(R.id.patientName);
         patientName.setText(patients.get(position).getName());
 
-        // Display patient filter for cholesterol
+        // Display patient filter for CHOLESTEROL
         Chip cholesterolChip = patientListItem.findViewById(R.id.cholesterolChip);
         cholesterolChip.setChecked(patientsMonitor.isPatientMonitored(
                 shPatientReference.getId(),
-                ObservationType.cholesterol
+                ObservationType.CHOLESTEROL
         ));
         cholesterolChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                patientsMonitor.monitorPatient(shPatientReference.getId(), ObservationType.cholesterol);
+                patientsMonitor.monitorPatient(shPatientReference.getId(), ObservationType.CHOLESTEROL);
             } else {
-                patientsMonitor.unmonitorPatient(shPatientReference.getId(), ObservationType.cholesterol);
+                patientsMonitor.unmonitorPatient(shPatientReference.getId(), ObservationType.CHOLESTEROL);
             }
         });
 

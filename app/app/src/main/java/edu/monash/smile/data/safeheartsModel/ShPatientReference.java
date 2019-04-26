@@ -8,12 +8,6 @@ public class ShPatientReference {
     private final String id;
     private HealthServiceType healthServiceType;
 
-    // FIXME: temporary overloading - always specify type for new declarations!
-    public ShPatientReference(String id) {
-        this.id = id;
-        this.healthServiceType = null;
-    }
-
     public ShPatientReference(String id, HealthServiceType type) {
         this.id = id;
         this.healthServiceType = type;
@@ -24,7 +18,10 @@ public class ShPatientReference {
     }
 
     // Unique key of the format "HealthServiceType/ID"
-    public String getFullReference() { return this.healthServiceType + "/" + this.id; }
+    public String getFullReference() {
+        assert this.healthServiceType != null;
+        return this.healthServiceType + "/" + this.id;
+    }
 
     @NonNull
     @Override
@@ -43,7 +40,7 @@ public class ShPatientReference {
         }
 
         ShPatientReference other = (ShPatientReference) o;
-        return id.equals(other.id);
+        return this.getFullReference().equals(other.getFullReference());
     }
 
     @Override

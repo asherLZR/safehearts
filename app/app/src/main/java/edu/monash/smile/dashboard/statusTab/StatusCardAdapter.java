@@ -49,7 +49,10 @@ public class StatusCardAdapter extends ArrayAdapter<ObservedPatient> {
         QuantitativeObservation viewedObservation = cardPatient.getObservations().get(0);
 
         TextView statusCardHeading = statusCardView.findViewById(R.id.statusCardHeading);
-        statusCardHeading.setText(cardPatient.getShPatientReference().getId());
+        statusCardHeading.setText(cardPatient.getPatientName());
+
+        TextView patientTextView = statusCardView.findViewById(R.id.patientIdView);
+        patientTextView.setText(cardPatient.getShPatientReference().getFullReference());
 
         TextView statusCardDescription = statusCardView.findViewById(R.id.statusCardDescription);
         statusCardDescription.setText(viewedObservation.getDescription());

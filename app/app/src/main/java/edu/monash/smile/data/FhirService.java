@@ -24,7 +24,6 @@ import edu.monash.smile.data.safeheartsModel.ObservationType;
 import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
-import edu.monash.smile.preferences.SharedPreferencesHelper;
 
 import static edu.monash.smile.data.HealthServiceType.FHIR;
 
@@ -56,8 +55,8 @@ class FhirService extends HealthService {
         return references;
     }
 
-    public HashMap<String, ShPatient> getAllPatients(Set<ShPatientReference> references){
-        HashMap<String, ShPatient> shPatients = new HashMap<>();
+    public HashMap<ShPatientReference, ShPatient> getAllPatients(Set<ShPatientReference> references){
+        HashMap<ShPatientReference, ShPatient> shPatients = new HashMap<>();
         for (ShPatientReference reference: references){
             Bundle patientBundle = this.client.search().forResource(Patient.class)
                     .where(Patient.RES_ID.exactly().identifier(reference.getId()))
@@ -70,7 +69,7 @@ class FhirService extends HealthService {
 
             assert humanName != null;
 
-            shPatients.put(reference.getFullReference(),
+            shPatients.put(reference,
                     new ShPatient(reference,
                     humanName.getPrefixAsSingleString() + " " +
                             humanName.getGivenAsSingleString() + " " +
@@ -117,7 +116,7 @@ class FhirService extends HealthService {
     }
 
     private String observationCodeToFhirCode(ObservationType type) {
-        if (type == ObservationType.cholesterol) {
+        if (type == ObservationType.CHOLESTEROL) {
             return "2093-3";
         }
         return null;

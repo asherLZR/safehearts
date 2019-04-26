@@ -5,10 +5,16 @@ import java.util.List;
 public class ObservedPatient {
     private List<QuantitativeObservation> observations;
     private ShPatientReference shPatientReference;
+    private String patientName;
 
-    public ObservedPatient(List<QuantitativeObservation> observations, ShPatientReference shPatientReference) {
+    public ObservedPatient(
+            List<QuantitativeObservation> observations,
+            ShPatientReference shPatientReference,
+            String patientName
+    ) {
         this.observations = observations;
         this.shPatientReference = shPatientReference;
+        this.patientName = patientName;
     }
 
     public List<QuantitativeObservation> getObservations() {
@@ -25,5 +31,9 @@ public class ObservedPatient {
 
     public void setShPatientReference(ShPatientReference shPatientReference) {
         this.shPatientReference = shPatientReference;
+    }
+
+    public String getPatientName() {
+        return patientName;
     }
 }
