@@ -23,14 +23,14 @@ import edu.monash.smile.polling.PollCallback;
 
 
 public class StatusFragment extends Fragment implements Observer, PollCallback {
-    private static final int POLLING_INTERVAL = 60000;
-
     private StatusCardAdapter statusCardAdapter;
     private PatientObservationController patientObservationController;
     private ProgressBar progressBar;
+    private Poll poll;
 
-    public StatusFragment(PatientsMonitor patientsMonitor) {
+    public StatusFragment(PatientsMonitor patientsMonitor, Poll poll) {
         this.patientObservationController = new PatientObservationController(patientsMonitor);
+        this.poll = poll;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
 
         // Listen to data events
         patientObservationController.attach(this);
-        new Poll(POLLING_INTERVAL, this);
+        this.poll.addCallback(this);
 
         return rootView;
     }
@@ -61,7 +61,7 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
         private WeakReference<StatusFragment> fragment;
 
         ControllerSetUp(StatusFragment fragment){
-            Log.i("Debug", "StatusFragment: update");
+            Log.i("Debug", "StatusFragment: Update");
             this.fragment = new WeakReference<>(fragment);
         }
 

@@ -25,18 +25,19 @@ import edu.monash.smile.polling.PollCallback;
 public class PatientFragment extends Fragment implements Observer, PollCallback {
 
     private static final String PRACTITIONER_ID = "practitionerId";
-    private static final int POLLING_INTERVAL = 60000;
 
     private int practitionerId;
     private PatientArrayAdapter patientAdapter;
     private PatientsMonitor patientsMonitor;
     private PatientController patientController;
+    private Poll poll;
 
     private ProgressBar progressBar;
 
-    public PatientFragment(PatientsMonitor patientsMonitor) {
+    public PatientFragment(PatientsMonitor patientsMonitor, Poll poll) {
         this.patientsMonitor = patientsMonitor;
         this.patientController = new PatientController();
+        this.poll = poll;
     }
 
     @Override
@@ -66,7 +67,7 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
 
         // Listen to data events
         patientController.attach(this);
-        new Poll(POLLING_INTERVAL, this).initialisePolling();
+        this.poll.addCallback(this);
 
         return rootView;
     }

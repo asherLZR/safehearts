@@ -1,17 +1,25 @@
 package edu.monash.smile.polling;
 
 import android.os.Handler;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 public class Poll {
     private Handler mHandler;
     private int mInterval;
     private Runnable runnable;
-    private PollCallback pollCallback;
+    private ArrayList<PollCallback> callbackList;
 
-    public Poll(int interval, PollCallback pollCallback){
+    public Poll(int interval){
         this.mInterval = interval;
         this.mHandler = new Handler();
-        this.pollCallback = pollCallback;
+        this.callbackList = new ArrayList<>();
+    }
+
+    public void addCallback(PollCallback pollCallback){
+        pollCallback.callback();
+        this.callbackList.add(pollCallback);
     }
 
     public void initialisePolling() {
@@ -19,10 +27,17 @@ public class Poll {
         runnable.run();
     }
 
+    private void execute(){
+        for (PollCallback pollCallback : callbackList){
+            pollCallback.callback();
+        }
+    }
+
     private Runnable createRunnable() {
         return () -> {
             try {
-                pollCallback.callback();
+                Log.i("Debug", "createRunnable: RUN!" + callbackList);
+                execute();
             } finally {
                 mHandler.postDelayed(runnable, mInterval);
             }
