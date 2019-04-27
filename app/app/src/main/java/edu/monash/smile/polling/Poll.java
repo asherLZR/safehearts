@@ -6,14 +6,14 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class Poll {
-    private Handler mHandler;
-    private int mInterval;
+    private Handler handler;
+    private int interval;
     private Runnable runnable;
     private ArrayList<PollCallback> callbackList;
 
     public Poll(int interval){
-        this.mInterval = interval;
-        this.mHandler = new Handler();
+        this.interval = interval;
+        this.handler = new Handler();
         this.callbackList = new ArrayList<>();
     }
 
@@ -39,7 +39,7 @@ public class Poll {
                 Log.i("Debug", "createRunnable: RUN!" + callbackList);
                 execute();
             } finally {
-                mHandler.postDelayed(runnable, mInterval);
+                handler.postDelayed(runnable, interval);
             }
         };
     }
@@ -49,6 +49,6 @@ public class Poll {
      * controlled halting of polling.
      * */
     public void stopRepeatingTask() {
-        mHandler.removeCallbacks(runnable);
+        handler.removeCallbacks(runnable);
     }
 }
