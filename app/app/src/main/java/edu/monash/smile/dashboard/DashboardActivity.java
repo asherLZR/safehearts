@@ -69,6 +69,12 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        this.poll.stopRepeatingTask();
+        super.onStop();
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         SharedPreferencesHelper.removeAllSharedPreferences(this);
