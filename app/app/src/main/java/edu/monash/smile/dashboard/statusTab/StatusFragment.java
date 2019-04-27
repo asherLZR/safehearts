@@ -98,8 +98,12 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
     }
 
     @Override
-    public void update() {
-        Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
+        public void update() {
+        if (getActivity() == null) {
+            return;
+        }
+
+        getActivity().runOnUiThread(() -> {
             statusCardAdapter.updateObservedPatients(
                     patientObservationController.getObservedPatients()
             );

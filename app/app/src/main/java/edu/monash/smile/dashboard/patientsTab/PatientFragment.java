@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
@@ -115,7 +114,11 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
 
     @Override
     public void update() {
-        Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
+        if (getActivity() == null) {
+            return;
+        }
+
+        getActivity().runOnUiThread(() -> {
             patientAdapter.updatePatients(patientController.getShPatients());
             patientAdapter.notifyDataSetInvalidated();
         });
