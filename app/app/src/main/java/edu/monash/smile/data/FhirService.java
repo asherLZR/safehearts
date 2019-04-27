@@ -1,7 +1,5 @@
 package edu.monash.smile.data;
 
-import android.content.Context;
-
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Encounter;
 import org.hl7.fhir.dstu3.model.HumanName;
@@ -35,7 +33,7 @@ class FhirService extends HealthService {
         this.client = (FhirContext.forDstu3()).newRestfulGenericClient(url);
     }
 
-    public Set<ShPatientReference> loadPatientReferences(Context context, Integer practitionerId) {
+    public Set<ShPatientReference> loadPatientReferences(Integer practitionerId) {
         // Request all encounters by the practitioner
         Bundle b = this.client.search().forResource(Encounter.class)
                 .where(new ReferenceClientParam("participant")

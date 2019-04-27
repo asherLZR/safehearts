@@ -1,7 +1,5 @@
 package edu.monash.smile.data;
 
-import android.content.Context;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +22,7 @@ public abstract class HealthService {
      * @param practitionerId The practitioner of interest
      * @return A set of unique patient IDs that the practitioner has seen
      */
-    public abstract Set<ShPatientReference> loadPatientReferences(Context context, Integer practitionerId);
+    public abstract Set<ShPatientReference> loadPatientReferences(Integer practitionerId);
 
     /**
      * Reads all historical observations for a given type (e.g. CHOLESTEROL), for a patient

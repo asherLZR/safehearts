@@ -2,6 +2,7 @@ package edu.monash.smile.dashboard.patientsTab;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,14 @@ import java.util.Objects;
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.observerPattern.Observer;
+import edu.monash.smile.polling.Poll;
+import edu.monash.smile.polling.PollCallback;
 
 
-public class PatientFragment extends Fragment implements Observer {
+public class PatientFragment extends Fragment implements Observer, PollCallback {
 
-    public static final String PRACTITIONER_ID = "practitionerId";
+    private static final String PRACTITIONER_ID = "practitionerId";
+    private static final int POLLING_INTERVAL = 60000;
 
     private int practitionerId;
     private PatientArrayAdapter patientAdapter;
@@ -62,9 +66,14 @@ public class PatientFragment extends Fragment implements Observer {
 
         // Listen to data events
         patientController.attach(this);
-        new ControllerSetUp(this).execute();
+        new Poll(POLLING_INTERVAL, this).initialisePolling();
 
         return rootView;
+    }
+
+    @Override
+    public void callback() {
+        new PatientFragment.ControllerSetUp(this).execute();
     }
 
     private static class ControllerSetUp extends AsyncTask<Void, Void, Void> {
@@ -72,14 +81,14 @@ public class PatientFragment extends Fragment implements Observer {
 
         ControllerSetUp(PatientFragment fragment){
             this.fragment = new WeakReference<>(fragment);
+            Log.i("Debug", "PatientFragment: Update");
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             if (fragment != null){
                 final PatientFragment parentFragment = fragment.get();
-                parentFragment.patientController.setUp(parentFragment.getContext(),
-                        parentFragment.practitionerId);
+                parentFragment.patientController.setUp(parentFragment.practitionerId);
             }
             return null;
         }

@@ -1,7 +1,5 @@
 package edu.monash.smile.dashboard.patientsTab;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,7 +17,7 @@ import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.observerPattern.Subject;
 
-class PatientController extends Subject {
+class PatientController extends Subject{
     private static final String TAG = "PatientController";
     private Set<ShPatientReference> shPatientReferences;
     private HashMap<ShPatientReference, ShPatient> shPatients;
@@ -39,10 +37,10 @@ class PatientController extends Subject {
      *
      * @param practitionerId The ID of the practitioner
      */
-    void setUp(Context context, int practitionerId) {
+    void setUp(int practitionerId) {
         // All network operations need to run on a separate thread to avoid blocking the
         // main thread.
-        fetchPatients(context, practitionerId);
+        fetchPatients(practitionerId);
         loadPatientData();
         notifyObservers();
     }
@@ -52,8 +50,8 @@ class PatientController extends Subject {
      *
      * @param practitionerId The ID of the practitioner
      */
-    private void fetchPatients(Context context, int practitionerId) {
-        this.shPatientReferences = healthService.loadPatientReferences(context, practitionerId);
+    private void fetchPatients(int practitionerId) {
+        this.shPatientReferences = healthService.loadPatientReferences(practitionerId);
         this.shPatients = healthService.getAllPatients(this.shPatientReferences);
     }
 

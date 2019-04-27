@@ -2,6 +2,7 @@ package edu.monash.smile.dashboard.statusTab;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,13 @@ import java.util.Objects;
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.observerPattern.Observer;
+import edu.monash.smile.polling.Poll;
+import edu.monash.smile.polling.PollCallback;
 
 
-public class StatusFragment extends Fragment implements Observer {
+public class StatusFragment extends Fragment implements Observer, PollCallback {
+    private static final int POLLING_INTERVAL = 60000;
+
     private StatusCardAdapter statusCardAdapter;
     private PatientObservationController patientObservationController;
     private ProgressBar progressBar;
@@ -42,15 +47,21 @@ public class StatusFragment extends Fragment implements Observer {
 
         // Listen to data events
         patientObservationController.attach(this);
-        new ControllerSetUp(this).execute();
+        new Poll(POLLING_INTERVAL, this);
 
         return rootView;
+    }
+
+    @Override
+    public void callback() {
+        new ControllerSetUp(this).execute();
     }
 
     private static class ControllerSetUp extends AsyncTask<Void, Void, Void> {
         private WeakReference<StatusFragment> fragment;
 
         ControllerSetUp(StatusFragment fragment){
+            Log.i("Debug", "StatusFragment: update");
             this.fragment = new WeakReference<>(fragment);
         }
 
