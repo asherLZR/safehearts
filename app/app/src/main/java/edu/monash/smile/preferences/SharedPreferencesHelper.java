@@ -6,9 +6,7 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,10 +14,18 @@ import edu.monash.smile.data.safeheartsModel.ObservationType;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 
 public class SharedPreferencesHelper {
-    private static final String TAG = "SharedPreferencesHelper";
     private static final String SMILE_PREFERENCES = "smilePreferences";
     private static final String MONITORED_PATIENTS_KEY = "monitoredPatients";
     private static final String ALL_PATIENTS = "allPatients";
+
+    private static SharedPreferences getSharedPreferences(Context context) {
+        return context.getSharedPreferences(SMILE_PREFERENCES, Context.MODE_PRIVATE);
+    }
+
+    private static SharedPreferences.Editor getEditor(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.edit();
+    }
 
     public static void writeMonitoredPatients(Context context, Map<ObservationType, Set<String>> monitoredPatients) {
         SharedPreferences.Editor editor = getEditor(context);
@@ -35,15 +41,6 @@ public class SharedPreferencesHelper {
                 new TypeToken<HashMap<ObservationType, Set<String>>>() {
                 }.getType()
         );
-    }
-
-    private static SharedPreferences.Editor getEditor(Context context) {
-        SharedPreferences preferences = getSharedPreferences(context);
-        return preferences.edit();
-    }
-
-    private static SharedPreferences getSharedPreferences(Context context) {
-        return context.getSharedPreferences(SMILE_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     public static void removeAllSharedPreferences(Context context){
