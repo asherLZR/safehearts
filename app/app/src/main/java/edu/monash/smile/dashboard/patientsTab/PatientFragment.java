@@ -3,13 +3,13 @@ package edu.monash.smile.dashboard.patientsTab;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import java.lang.ref.WeakReference;
@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
-import edu.monash.smile.data.HealthServiceType;
 import edu.monash.smile.observerPattern.Observer;
 import edu.monash.smile.polling.Poll;
 import edu.monash.smile.polling.PollCallback;
@@ -59,7 +58,7 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull  LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_patient, container, false);

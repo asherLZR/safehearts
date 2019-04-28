@@ -21,17 +21,9 @@ public class ObservedPatient {
         return observations;
     }
 
-//    public void setObservations(List<QuantitativeObservation> observations) {
-//        this.observations = observations;
-//    }
-
     public ShPatientReference getShPatientReference() {
         return shPatientReference;
     }
-
-//    public void setShPatientReference(ShPatientReference shPatientReference) {
-//        this.shPatientReference = shPatientReference;
-//    }
 
     public String getPatientName() {
         return patientName;

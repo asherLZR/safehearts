@@ -16,7 +16,7 @@ import edu.monash.smile.data.safeheartsModel.ShPatient;
 public class SharedPreferencesHelper {
     private static final String SMILE_PREFERENCES = "smilePreferences";
     private static final String MONITORED_PATIENTS_KEY = "monitoredPatients";
-    private static final String ALL_PATIENTS = "allPatients";
+    private static final String ALL_PATIENTS_KEY = "allPatients";
 
     private static SharedPreferences getSharedPreferences(Context context) {
         return context.getSharedPreferences(SMILE_PREFERENCES, Context.MODE_PRIVATE);
@@ -49,13 +49,13 @@ public class SharedPreferencesHelper {
 
     public static void writeAllPatients(Context context, HashMap<String, ShPatient> patients){
         SharedPreferences.Editor editor = getEditor(context);
-        editor.putString(ALL_PATIENTS, new Gson().toJson(patients));
+        editor.putString(ALL_PATIENTS_KEY, new Gson().toJson(patients));
         editor.apply();
     }
 
     public static HashMap<String, ShPatient> readAllPatients(Context context){
         SharedPreferences sharedPreferences = getSharedPreferences(context);
-        return new Gson().fromJson(sharedPreferences.getString(ALL_PATIENTS, ""),
+        return new Gson().fromJson(sharedPreferences.getString(ALL_PATIENTS_KEY, ""),
                 new TypeToken<HashMap<String, ShPatient>>(){}.getType());
     }
 }

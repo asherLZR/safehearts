@@ -9,7 +9,6 @@ import edu.monash.smile.dashboard.DashboardActivity;
 import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.HealthServiceProducer;
-import edu.monash.smile.data.HealthServiceType;
 import edu.monash.smile.data.safeheartsModel.ObservationType;
 import edu.monash.smile.data.safeheartsModel.ObservedPatient;
 import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
@@ -29,9 +28,10 @@ class PatientObservationController extends Subject {
         this.observations = new HashMap<>();
     }
 
+    /**
+     * Network operations need to run on a separate thread to avoid blocking the main thread.
+     */
     void setUp() {
-        // All network operations need to run on a separate thread to avoid blocking the
-        // main thread.
         loadPatientData();
         notifyObservers();
     }
