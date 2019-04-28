@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import edu.monash.smile.MainActivity;
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.observerPattern.Observer;
@@ -23,9 +24,6 @@ import edu.monash.smile.polling.PollCallback;
 
 
 public class PatientFragment extends Fragment implements Observer, PollCallback {
-
-    private static final String PRACTITIONER_ID = "practitionerId";
-
     private int practitionerId;
     private PatientArrayAdapter patientAdapter;
     private PatientController patientController;
@@ -52,8 +50,8 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         assert getArguments() != null;
-        if (getArguments().containsKey(PRACTITIONER_ID)) {
-            this.practitionerId = getArguments().getInt(PRACTITIONER_ID);
+        if (getArguments().containsKey(MainActivity.BUNDLE_PRACTITIONER_ID)) {
+            this.practitionerId = getArguments().getInt(MainActivity.BUNDLE_PRACTITIONER_ID);
         }
     }
 

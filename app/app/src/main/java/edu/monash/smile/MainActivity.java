@@ -11,6 +11,8 @@ import edu.monash.smile.dashboard.DashboardActivity;
 
 
 public class MainActivity extends AppCompatActivity{
+    public static final String BUNDLE_PRACTITIONER_ID = "practitionerId";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +23,7 @@ public class MainActivity extends AppCompatActivity{
         btn.setOnClickListener(v -> {
             Bundle b = new Bundle();
             EditText ed = findViewById(R.id.pracIdEditText);
-            b.putInt("practitionerId", Integer.valueOf(ed.getText().toString()));
+            b.putInt(BUNDLE_PRACTITIONER_ID, Integer.valueOf(ed.getText().toString()));
 
             Intent i = new Intent(MainActivity.this, DashboardActivity.class);
             i.putExtras(b);
