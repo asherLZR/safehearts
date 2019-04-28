@@ -31,6 +31,12 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
 
     private ProgressBar progressBar;
 
+    /**
+     * Displays the patient details.
+     * @param patientsMonitor The controller that handles selection of patients and their observation types
+     * @param poll The poll that handles new data notifications
+     * @param context The Android context
+     */
     public PatientFragment(
             PatientsMonitor patientsMonitor,
             Poll poll,
@@ -46,6 +52,9 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
         this.patientController = new PatientController();
     }
 
+    /**
+     * Restores the selected practitioner from the parent activity
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +64,9 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
         }
     }
 
+    /**
+     * Creates the view showing the list of patients, and listens to new events.
+     */
     @Override
     public View onCreateView(@NonNull  LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,11 +84,19 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
         return rootView;
     }
 
+    /**
+     * Called when the poll notifies of new data. This method will refresh the controller as the
+     * data has changed.
+     */
     @Override
     public void callback() {
         new PatientFragment.ControllerSetUp(this).execute();
     }
 
+    /**
+     * Displays a loading screen while data is asynchronous fetched in the background when the
+     * controller is set up.
+     */
     private static class ControllerSetUp extends AsyncTask<Void, Void, Void> {
         private WeakReference<PatientFragment> fragment;
 
@@ -84,6 +104,9 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
             this.fragment = new WeakReference<>(fragment);
         }
 
+        /**
+         * In a background thread, start the controller.
+         */
         @Override
         protected Void doInBackground(Void... voids) {
             if (fragment != null){
@@ -93,6 +116,9 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
             return null;
         }
 
+        /**
+         * Show the progress bar
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -102,6 +128,9 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
             }
         }
 
+        /**
+         * Hide the progress bar.
+         */
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
@@ -112,6 +141,10 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
         }
     }
 
+    /**
+     * Observed changes to the data requires that the list shown on this screen is refreshed with
+     * new data.
+     */
     @Override
     public void update() {
         if (getActivity() == null) {

@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity{
      */
     public static final String BUNDLE_PRACTITIONER_ID = "practitionerId";
 
+    /**
+     * Creates an activity to get the practitioner ID from user input.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

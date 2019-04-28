@@ -19,20 +19,38 @@ import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
 public class StatusCardAdapter extends ArrayAdapter<ObservedPatient> {
     private List<ObservedPatient> observedPatients;
 
+    /**
+     * The status card is a summary of the patient's health, shown in the dashboard.
+     * It displays information about the patient's tracked observations.
+     */
     StatusCardAdapter(@NonNull Context context, List<ObservedPatient> observedPatients) {
         super(context, 0, observedPatients);
         this.observedPatients = observedPatients;
     }
 
+    /**
+     * Called when the underlying data source changes (e.g. when new patients are observed)
+     * @param observedPatients the observed patients to show in this list
+     */
     void updateObservedPatients(List<ObservedPatient> observedPatients) {
         this.observedPatients = observedPatients;
     }
 
+    /**
+     * The number of views to show.
+     * @return count of patients
+     */
     @Override
     public int getCount() {
         return observedPatients.size();
     }
 
+    /**
+     * Displays a status card at a given index with the:
+     * - Patient name
+     * - Patient ID
+     * - Patient observation (description and value)
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

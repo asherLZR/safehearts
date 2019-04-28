@@ -24,11 +24,11 @@ class PatientController extends Subject{
     }
 
     /**
-     * Loads data about the practitioner.
+     * Loads data about the practitioner's patients.
      *
      * Whenever the practitioner changes, this method should be called.
      *
-     * This method should not be run on the UI thread, as it will block all interactions.
+     * This method should not be run on the UI thread, as it will block all user interaction.
      *
      * @param practitionerId The ID of the practitioner
      */
@@ -38,8 +38,8 @@ class PatientController extends Subject{
     }
 
     /**
-     * Populates data containing the IDs of the patients of the practitioner and stores an instance
-     * of all such ShPatients.
+     * Populates data containing the IDs of the patients of the practitioner and stores
+     * an instance of all such ShPatients.
      *
      * @param practitionerId The ID of the practitioner
      */
@@ -48,6 +48,10 @@ class PatientController extends Subject{
         this.shPatients = healthService.getAllPatients(this.shPatientReferences);
     }
 
+    /**
+     * Creates a list of patients to show.
+     * @return The patients
+     */
     List<ShPatient> getShPatients() {
         return new ArrayList<>(shPatients.values());
     }

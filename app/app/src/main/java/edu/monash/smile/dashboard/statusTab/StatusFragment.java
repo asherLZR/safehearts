@@ -2,7 +2,6 @@ package edu.monash.smile.dashboard.statusTab;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import java.util.Objects;
 
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
-import edu.monash.smile.data.HealthServiceType;
 import edu.monash.smile.observerPattern.Observer;
 import edu.monash.smile.polling.Poll;
 import edu.monash.smile.polling.PollCallback;
@@ -34,6 +32,9 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
         this.patientObservationController = new PatientObservationController(patientsMonitor);
     }
 
+    /**
+     * Creates the view showing the list of status cards, and listens to new events.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,11 +54,19 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
         return rootView;
     }
 
+    /**
+     * Called when the poll notifies of new data. This method will refresh the controller as the
+     * data has changed.
+     */
     @Override
     public void callback() {
         new ControllerSetUp(this).execute();
     }
 
+    /**
+     * Displays a loading screen while data is asynchronous fetched in the background when the
+     * controller is set up.
+     */
     private static class ControllerSetUp extends AsyncTask<Void, Void, Void> {
         private WeakReference<StatusFragment> fragment;
 
@@ -65,6 +74,9 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
             this.fragment = new WeakReference<>(fragment);
         }
 
+        /**
+         * In a background thread, start the controller.
+         */
         @Override
         protected Void doInBackground(Void... voids) {
             if (fragment != null){
@@ -74,6 +86,9 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
             return null;
         }
 
+        /**
+         * Show the progress bar
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -83,6 +98,9 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
             }
         }
 
+        /**
+         * Hide the progress bar.
+         */
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
@@ -93,10 +111,18 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
         }
     }
 
+    /**
+     * To be used when the focus is returned to this fragment, as the patients which are observed
+     * could be changed in other screens of the app.
+     */
     public void handleFragmentSwitched() {
         new ControllerSetUp(this).execute();
     }
 
+    /**
+     * Observed changes to the data requires that the list shown on this screen is refreshed with
+     * new data.
+     */
     @Override
         public void update() {
         if (getActivity() == null) {

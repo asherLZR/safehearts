@@ -25,6 +25,12 @@ public class PatientArrayAdapter extends ArrayAdapter<ShPatient> {
     private List<ShPatient> patients;
     private PatientsMonitor patientsMonitor;
 
+    /**
+     * Handles view to display a patient details, as well as toggles to track/untrack a patient by its type
+     * @param context the android context
+     * @param patients the patients to show in this list
+     * @param patientsMonitor controller to handle selection of patients
+     */
     PatientArrayAdapter(
             Context context,
             List<ShPatient> patients,
@@ -35,15 +41,26 @@ public class PatientArrayAdapter extends ArrayAdapter<ShPatient> {
         this.patientsMonitor = patientsMonitor;
     }
 
+    /**
+     * Called when the underlying data source changes (e.g. when new patients arrive)
+     * @param patients the patients to show in this list
+     */
     void updatePatients(List<ShPatient> patients) {
         this.patients = patients;
     }
 
+    /**
+     * The number of views to show.
+     * @return count of patients
+     */
     @Override
     public int getCount() {
         return patients.size();
     }
 
+    /**
+     * Displays a patient at a given index
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -67,6 +84,8 @@ public class PatientArrayAdapter extends ArrayAdapter<ShPatient> {
                 shPatientReference.getId(),
                 ObservationType.CHOLESTEROL
         ));
+
+        // Handles selection of the chip, by delegating to the patients' monitor
         cholesterolChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 patientsMonitor.monitorPatient(shPatientReference.getId(), ObservationType.CHOLESTEROL);

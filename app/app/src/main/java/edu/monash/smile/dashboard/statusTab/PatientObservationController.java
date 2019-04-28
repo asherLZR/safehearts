@@ -29,6 +29,8 @@ class PatientObservationController extends Subject {
     }
 
     /**
+     * Loads data about the patients and notifies observers when loading is complete.
+     *
      * Network operations need to run on a separate thread to avoid blocking the main thread.
      */
     void setUp() {
