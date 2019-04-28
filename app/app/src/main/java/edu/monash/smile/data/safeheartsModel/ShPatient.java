@@ -9,6 +9,12 @@ public class ShPatient {
     private final Date birthday;
     private final String name;
 
+    /**
+     * A Patient model class
+     * @param reference the ID of this patient
+     * @param name the name of this patient
+     * @param birthday the birthday of this patient
+     */
     public ShPatient(ShPatientReference reference, String name, Date birthday) {
         this.reference = reference;
         this.birthday = birthday;
@@ -19,10 +25,6 @@ public class ShPatient {
         return reference;
     }
 
-//    public Date getBirthday() {
-//        return birthday;
-//    }
-
     public String getName() {return this.name; }
 
     @NonNull
@@ -30,6 +32,4 @@ public class ShPatient {
     public String toString() {
         return "ShPatient = " + reference.toString();
     }
-
-
 }

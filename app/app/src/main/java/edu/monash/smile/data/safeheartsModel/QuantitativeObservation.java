@@ -6,6 +6,11 @@ public class QuantitativeObservation {
     final private String value;
     final private String description;
 
+    /**
+     * A single observation of a patient.
+     * @param value The metric recorded in the observation
+     * @param description A description of the observation
+     */
     public QuantitativeObservation(String value, String description) {
         this.value = value;
         this.description = description;

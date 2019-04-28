@@ -37,9 +37,10 @@ public abstract class HealthService {
     );
 
     /**
-     * Store all patients the practitioner has seen in SharedPreferences
-     * @param references The PatientReferences of the Patients to return
-     * @return A dictionary of Patient objects identified by their full reference
+     * Creates a mapping of patient references (IDs) to specific patients.
+     * This is used to discover patient details based on their ID.
+     * @param references the patient IDs to find the patient details of
+     * @return a mapping from the ID to the patient details
      */
     public abstract HashMap<ShPatientReference, ShPatient> getAllPatients(Set<ShPatientReference> references);
 }

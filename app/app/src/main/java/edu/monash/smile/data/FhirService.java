@@ -33,6 +33,12 @@ class FhirService extends HealthService {
         this.client = (FhirContext.forDstu3()).newRestfulGenericClient(url);
     }
 
+    /**
+     * Loads all the patient IDs that a practitioner is responsible for.
+     *
+     * @param practitionerId The practitioner of interest
+     * @return A set of unique patient IDs that the practitioner has seen
+     */
     @Override
     public Set<ShPatientReference> loadPatientReferences(int practitionerId) {
         // Request all encounters by the practitioner
@@ -54,6 +60,12 @@ class FhirService extends HealthService {
         return references;
     }
 
+    /**
+     * Creates a mapping of patient references (IDs) to specific patients.
+     * This is used to discover patient details based on their ID.
+     * @param references the patient IDs to find the patient details of
+     * @return a mapping from the ID to the patient details
+     */
     @Override
     public HashMap<ShPatientReference, ShPatient> getAllPatients(Set<ShPatientReference> references){
         HashMap<ShPatientReference, ShPatient> shPatients = new HashMap<>();
@@ -80,6 +92,13 @@ class FhirService extends HealthService {
         return shPatients;
     }
 
+    /**
+     * Reads all historical observations for a given type (e.g. CHOLESTEROL), for a patient
+     *
+     * @param shPatientReference The ID of the patient
+     * @param type               The type of the observation
+     * @return A list with all observations for the given type
+     */
     @Override
     public List<QuantitativeObservation> readPatientQuantitativeObservations(
             ShPatientReference shPatientReference,
@@ -115,6 +134,11 @@ class FhirService extends HealthService {
         return quantitativeObservations;
     }
 
+    /**
+     * An internal class that maps from the ObservationType to the internal FHIR code string
+     * @param type the observation type
+     * @return FHIR code representing the observation type
+     */
     private String observationCodeToFhirCode(ObservationType type) {
         if (type == ObservationType.CHOLESTEROL) {
             return "2093-3";

@@ -7,6 +7,9 @@ public class ObservedPatient {
     private ShPatientReference shPatientReference;
     private String patientName;
 
+    /**
+     * A detailed patient linked with its observations and ID.
+     */
     public ObservedPatient(
             List<QuantitativeObservation> observations,
             ShPatientReference shPatientReference,
