@@ -31,7 +31,6 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
     private PatientArrayAdapter patientAdapter;
     private PatientController patientController;
     private Poll poll;
-    private HealthServiceType healthServiceType;
 
     private ProgressBar progressBar;
 
@@ -42,13 +41,13 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
             Context context
     ) {
         this.poll = poll;
-        this.healthServiceType = healthServiceType;
         // Set up patient list view
         this.patientAdapter = new PatientArrayAdapter(
                 context,
                 new ArrayList<>(),
                 patientsMonitor
         );
+        this.patientController = new PatientController(healthServiceType);
     }
 
     @Override
@@ -58,7 +57,6 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
         if (getArguments().containsKey(PRACTITIONER_ID)) {
             this.practitionerId = getArguments().getInt(PRACTITIONER_ID);
         }
-        this.patientController = new PatientController(this.healthServiceType);
     }
 
     @Override

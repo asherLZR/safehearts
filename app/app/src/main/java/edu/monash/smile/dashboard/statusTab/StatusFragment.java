@@ -28,12 +28,10 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
     private PatientObservationController patientObservationController;
     private ProgressBar progressBar;
     private Poll poll;
-    private HealthServiceType healthServiceType;
 
     public StatusFragment(PatientsMonitor patientsMonitor, Poll poll, HealthServiceType healthServiceType) {
         this.poll = poll;
-        this.healthServiceType = healthServiceType;
-        this.patientObservationController = new PatientObservationController(patientsMonitor, this.healthServiceType);
+        this.patientObservationController = new PatientObservationController(patientsMonitor, healthServiceType);
     }
 
     @Override
