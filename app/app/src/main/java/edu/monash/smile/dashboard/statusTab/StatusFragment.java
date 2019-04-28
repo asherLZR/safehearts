@@ -29,9 +29,9 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
     private ProgressBar progressBar;
     private Poll poll;
 
-    public StatusFragment(PatientsMonitor patientsMonitor, Poll poll, HealthServiceType healthServiceType) {
+    public StatusFragment(PatientsMonitor patientsMonitor, Poll poll) {
         this.poll = poll;
-        this.patientObservationController = new PatientObservationController(patientsMonitor, healthServiceType);
+        this.patientObservationController = new PatientObservationController(patientsMonitor);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
     private static class ControllerSetUp extends AsyncTask<Void, Void, Void> {
         private WeakReference<StatusFragment> fragment;
 
-        ControllerSetUp(StatusFragment fragment){
+        private ControllerSetUp(StatusFragment fragment){
             this.fragment = new WeakReference<>(fragment);
         }
 

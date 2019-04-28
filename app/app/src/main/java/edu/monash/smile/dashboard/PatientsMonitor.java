@@ -22,9 +22,9 @@ public class PatientsMonitor {
     private Context context;
     private HealthServiceType healthServiceType;
 
-    PatientsMonitor(Context context, HealthServiceType healthServiceType) {
+    PatientsMonitor(Context context) {
         this.context = context;
-        this.healthServiceType = healthServiceType;
+        this.healthServiceType = DashboardActivity.HEALTH_SERVICE_TYPE;
         restoreMonitoredPatientsList();
     }
 

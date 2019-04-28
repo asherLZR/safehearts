@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import edu.monash.smile.dashboard.DashboardActivity;
 import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.HealthServiceProducer;
@@ -22,9 +23,9 @@ class PatientObservationController extends Subject {
     private PatientsMonitor patientsMonitor;
     private HashMap<ShPatientReference, ShPatient> shPatients;
 
-    PatientObservationController(PatientsMonitor patientsMonitor, HealthServiceType healthServiceType) {
+    PatientObservationController(PatientsMonitor patientsMonitor) {
         this.patientsMonitor = patientsMonitor;
-        this.healthService = HealthServiceProducer.getService(healthServiceType);
+        this.healthService = HealthServiceProducer.getService(DashboardActivity.HEALTH_SERVICE_TYPE);
         this.observations = new HashMap<>();
     }
 

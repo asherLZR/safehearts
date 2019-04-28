@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import edu.monash.smile.dashboard.DashboardActivity;
 import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.HealthServiceProducer;
 import edu.monash.smile.data.HealthServiceType;
@@ -18,14 +19,13 @@ import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.observerPattern.Subject;
 
 class PatientController extends Subject{
-    private static final String TAG = "PatientController";
     private Set<ShPatientReference> shPatientReferences;
     private HashMap<ShPatientReference, ShPatient> shPatients;
     private HashMap<ShPatientReference, List<QuantitativeObservation>> observations;
     private HealthService healthService;
 
-    PatientController(HealthServiceType healthServiceType) {
-        this.healthService = HealthServiceProducer.getService(healthServiceType);
+    PatientController() {
+        this.healthService = HealthServiceProducer.getService(DashboardActivity.HEALTH_SERVICE_TYPE);
         this.shPatientReferences = new HashSet<>();
         this.observations = new HashMap<>();
     }
@@ -72,29 +72,25 @@ class PatientController extends Subject{
         }
     }
 
-    /**
-     * Links each patient to its observations.
-     *
-     * @return A list of patients with their metrics (e.g. a patient and CHOLESTEROL readings)
-     */
-    List<ObservedPatient> getObservedPatients() {
-        List<ObservedPatient> observedPatients = new ArrayList<>();
-
-        for (ShPatientReference p : observations.keySet()) {
-            observedPatients.add(new ObservedPatient(
-                    observations.get(p),
-                    p,
-                    Objects.requireNonNull(shPatients.get(p)).getName()));
-        }
-
-        return observedPatients;
-    }
-
-    List<ShPatientReference> getShPatientReferences() {
-        return new ArrayList<>(shPatientReferences);
-    }
-
     List<ShPatient> getShPatients() {
         return new ArrayList<>(shPatients.values());
     }
+
+//    /**
+//     * Links each patient to its observations.
+//     *
+//     * @return A list of patients with their metrics (e.g. a patient and CHOLESTEROL readings)
+//     */
+//    List<ObservedPatient> getObservedPatients() {
+//        List<ObservedPatient> observedPatients = new ArrayList<>();
+//
+//        for (ShPatientReference p : observations.keySet()) {
+//            observedPatients.add(new ObservedPatient(
+//                    observations.get(p),
+//                    p,
+//                    Objects.requireNonNull(shPatients.get(p)).getName()));
+//        }
+//
+//        return observedPatients;
+//    }
 }

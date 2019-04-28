@@ -37,7 +37,6 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
     public PatientFragment(
             PatientsMonitor patientsMonitor,
             Poll poll,
-            HealthServiceType healthServiceType,
             Context context
     ) {
         this.poll = poll;
@@ -47,7 +46,7 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
                 new ArrayList<>(),
                 patientsMonitor
         );
-        this.patientController = new PatientController(healthServiceType);
+        this.patientController = new PatientController();
     }
 
     @Override
@@ -84,7 +83,7 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
     private static class ControllerSetUp extends AsyncTask<Void, Void, Void> {
         private WeakReference<PatientFragment> fragment;
 
-        ControllerSetUp(PatientFragment fragment){
+        private ControllerSetUp(PatientFragment fragment){
             this.fragment = new WeakReference<>(fragment);
         }
 
