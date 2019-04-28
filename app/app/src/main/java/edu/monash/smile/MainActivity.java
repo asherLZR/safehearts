@@ -11,6 +11,10 @@ import edu.monash.smile.dashboard.DashboardActivity;
 
 
 public class MainActivity extends AppCompatActivity{
+    /**
+     * This constant defines the ID to use of the practitioner for activity to fragment
+     * communication using a bundle.
+     */
     public static final String BUNDLE_PRACTITIONER_ID = "practitionerId";
 
     @Override
@@ -21,12 +25,16 @@ public class MainActivity extends AppCompatActivity{
 
         Button btn = findViewById(R.id.changePracBtn);
         btn.setOnClickListener(v -> {
+            // Launch the Dashboard activity
+            Intent i = new Intent(MainActivity.this, DashboardActivity.class);
+
+            // Store the received ID of the practitioner into the bundle
             Bundle b = new Bundle();
             EditText ed = findViewById(R.id.pracIdEditText);
             b.putInt(BUNDLE_PRACTITIONER_ID, Integer.valueOf(ed.getText().toString()));
 
-            Intent i = new Intent(MainActivity.this, DashboardActivity.class);
             i.putExtras(b);
+
             startActivity(i);
         });
     }
