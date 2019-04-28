@@ -37,7 +37,7 @@ public class DashboardActivity extends AppCompatActivity {
     private void initialiseFragments(){
         PatientsMonitor patientsMonitor = new PatientsMonitor(this.getApplicationContext(), HEALTH_SERVICE_TYPE);
         this.statusFragment = new StatusFragment(patientsMonitor, this.poll, HEALTH_SERVICE_TYPE);
-        this.patientFragment = new PatientFragment(patientsMonitor, this.poll, HEALTH_SERVICE_TYPE);
+        this.patientFragment = new PatientFragment(patientsMonitor, this.poll, HEALTH_SERVICE_TYPE, this);
         this.patientFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager()
                 .beginTransaction()

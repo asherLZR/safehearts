@@ -1,5 +1,6 @@
 package edu.monash.smile.dashboard.patientsTab;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,17 +29,26 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
 
     private int practitionerId;
     private PatientArrayAdapter patientAdapter;
-    private PatientsMonitor patientsMonitor;
     private PatientController patientController;
     private Poll poll;
     private HealthServiceType healthServiceType;
 
     private ProgressBar progressBar;
 
-    public PatientFragment(PatientsMonitor patientsMonitor, Poll poll, HealthServiceType healthServiceType) {
-        this.patientsMonitor = patientsMonitor;
+    public PatientFragment(
+            PatientsMonitor patientsMonitor,
+            Poll poll,
+            HealthServiceType healthServiceType,
+            Context context
+    ) {
         this.poll = poll;
         this.healthServiceType = healthServiceType;
+        // Set up patient list view
+        this.patientAdapter = new PatientArrayAdapter(
+                context,
+                new ArrayList<>(),
+                patientsMonitor
+        );
     }
 
     @Override
@@ -58,12 +68,6 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
         View rootView = inflater.inflate(R.layout.fragment_patient, container, false);
         this.progressBar = rootView.findViewById(R.id.loadingWheel);
 
-        // Set up patient list view
-        patientAdapter = new PatientArrayAdapter(
-                getContext(),
-                new ArrayList<>(),
-                patientsMonitor
-        );
         ListView patientListView = rootView.findViewById(R.id.patientListView);
         patientListView.setAdapter(patientAdapter);
 
@@ -84,7 +88,6 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
 
         ControllerSetUp(PatientFragment fragment){
             this.fragment = new WeakReference<>(fragment);
-            Log.i("Debug", "PatientFragment: Update");
         }
 
         @Override

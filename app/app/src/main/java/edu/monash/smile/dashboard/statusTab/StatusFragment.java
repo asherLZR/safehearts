@@ -64,7 +64,6 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
         private WeakReference<StatusFragment> fragment;
 
         ControllerSetUp(StatusFragment fragment){
-            Log.i("Debug", "StatusFragment: Update");
             this.fragment = new WeakReference<>(fragment);
         }
 
