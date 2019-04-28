@@ -19,9 +19,9 @@ public class ShPatient {
         return reference;
     }
 
-    public Date getBirthday() {
-        return birthday;
-    }
+//    public Date getBirthday() {
+//        return birthday;
+//    }
 
     public String getName() {return this.name; }
 

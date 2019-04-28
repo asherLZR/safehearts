@@ -22,7 +22,7 @@ public abstract class HealthService {
      * @param practitionerId The practitioner of interest
      * @return A set of unique patient IDs that the practitioner has seen
      */
-    public abstract Set<ShPatientReference> loadPatientReferences(Integer practitionerId);
+    public abstract Set<ShPatientReference> loadPatientReferences(int practitionerId);
 
     /**
      * Reads all historical observations for a given type (e.g. CHOLESTEROL), for a patient

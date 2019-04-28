@@ -33,7 +33,8 @@ class FhirService extends HealthService {
         this.client = (FhirContext.forDstu3()).newRestfulGenericClient(url);
     }
 
-    public Set<ShPatientReference> loadPatientReferences(Integer practitionerId) {
+    @Override
+    public Set<ShPatientReference> loadPatientReferences(int practitionerId) {
         // Request all encounters by the practitioner
         Bundle b = this.client.search().forResource(Encounter.class)
                 .where(new ReferenceClientParam("participant")
@@ -53,6 +54,7 @@ class FhirService extends HealthService {
         return references;
     }
 
+    @Override
     public HashMap<ShPatientReference, ShPatient> getAllPatients(Set<ShPatientReference> references){
         HashMap<ShPatientReference, ShPatient> shPatients = new HashMap<>();
         for (ShPatientReference reference: references){

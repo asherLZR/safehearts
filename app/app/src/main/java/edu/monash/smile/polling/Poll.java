@@ -1,7 +1,6 @@
 package edu.monash.smile.polling;
 
 import android.os.Handler;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -36,7 +35,6 @@ public class Poll {
     private Runnable createRunnable() {
         return () -> {
             try {
-                Log.i("Debug", "createRunnable: RUN!" + callbackList);
                 execute();
             } finally {
                 handler.postDelayed(runnable, interval);
@@ -44,10 +42,6 @@ public class Poll {
         };
     }
 
-    /**
-     * Poll will automatically be destroyed along with any activity. The following is for
-     * controlled halting of polling.
-     * */
     public void stopRepeatingTask() {
         handler.removeCallbacks(runnable);
     }
