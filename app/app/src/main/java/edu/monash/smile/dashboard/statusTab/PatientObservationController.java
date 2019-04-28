@@ -22,10 +22,9 @@ class PatientObservationController extends Subject {
     private PatientsMonitor patientsMonitor;
     private HashMap<ShPatientReference, ShPatient> shPatients;
 
-    PatientObservationController(PatientsMonitor patientsMonitor) {
+    PatientObservationController(PatientsMonitor patientsMonitor, HealthServiceType healthServiceType) {
         this.patientsMonitor = patientsMonitor;
-        // FIXME: HARDCODED SERVICE!
-        this.healthService = HealthServiceProducer.getService(HealthServiceType.FHIR);
+        this.healthService = HealthServiceProducer.getService(healthServiceType);
         this.observations = new HashMap<>();
     }
 

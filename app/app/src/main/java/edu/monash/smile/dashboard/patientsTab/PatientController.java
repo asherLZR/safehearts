@@ -24,9 +24,8 @@ class PatientController extends Subject{
     private HashMap<ShPatientReference, List<QuantitativeObservation>> observations;
     private HealthService healthService;
 
-    PatientController() {
-        // FIXME: HARDCODED SERVICE!
-        this.healthService = HealthServiceProducer.getService(HealthServiceType.FHIR);
+    PatientController(HealthServiceType healthServiceType) {
+        this.healthService = HealthServiceProducer.getService(healthServiceType);
         this.shPatientReferences = new HashSet<>();
         this.observations = new HashMap<>();
     }

@@ -17,6 +17,7 @@ import java.util.Objects;
 
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
+import edu.monash.smile.data.HealthServiceType;
 import edu.monash.smile.observerPattern.Observer;
 import edu.monash.smile.polling.Poll;
 import edu.monash.smile.polling.PollCallback;
@@ -27,10 +28,12 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
     private PatientObservationController patientObservationController;
     private ProgressBar progressBar;
     private Poll poll;
+    private HealthServiceType healthServiceType;
 
-    public StatusFragment(PatientsMonitor patientsMonitor, Poll poll) {
-        this.patientObservationController = new PatientObservationController(patientsMonitor);
+    public StatusFragment(PatientsMonitor patientsMonitor, Poll poll, HealthServiceType healthServiceType) {
         this.poll = poll;
+        this.healthServiceType = healthServiceType;
+        this.patientObservationController = new PatientObservationController(patientsMonitor, this.healthServiceType);
     }
 
     @Override
@@ -41,12 +44,12 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
         this.progressBar = rootView.findViewById(R.id.loadingWheel);
 
         // Set up status card list view
-        statusCardAdapter = new StatusCardAdapter(Objects.requireNonNull(getContext()), new ArrayList<>());
+        this.statusCardAdapter = new StatusCardAdapter(Objects.requireNonNull(getContext()), new ArrayList<>());
         ListView statusCardListView = rootView.findViewById(R.id.statusCardListView);
-        statusCardListView.setAdapter(statusCardAdapter);
+        statusCardListView.setAdapter(this.statusCardAdapter);
 
         // Listen to data events
-        patientObservationController.attach(this);
+        this.patientObservationController.attach(this);
         this.poll.addCallback(this);
 
         return rootView;

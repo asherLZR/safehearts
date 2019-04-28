@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
+import edu.monash.smile.data.HealthServiceType;
 import edu.monash.smile.observerPattern.Observer;
 import edu.monash.smile.polling.Poll;
 import edu.monash.smile.polling.PollCallback;
@@ -30,13 +31,14 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
     private PatientsMonitor patientsMonitor;
     private PatientController patientController;
     private Poll poll;
+    private HealthServiceType healthServiceType;
 
     private ProgressBar progressBar;
 
-    public PatientFragment(PatientsMonitor patientsMonitor, Poll poll) {
+    public PatientFragment(PatientsMonitor patientsMonitor, Poll poll, HealthServiceType healthServiceType) {
         this.patientsMonitor = patientsMonitor;
-        this.patientController = new PatientController();
         this.poll = poll;
+        this.healthServiceType = healthServiceType;
     }
 
     @Override
@@ -46,6 +48,7 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
         if (getArguments().containsKey(PRACTITIONER_ID)) {
             this.practitionerId = getArguments().getInt(PRACTITIONER_ID);
         }
+        this.patientController = new PatientController(this.healthServiceType);
     }
 
     @Override

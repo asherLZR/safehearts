@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.HealthServiceType;
 import edu.monash.smile.data.safeheartsModel.ObservationType;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
@@ -19,9 +20,11 @@ import edu.monash.smile.preferences.SharedPreferencesHelper;
 public class PatientsMonitor {
     private Map<ObservationType, Set<String>> monitoredPatients = new HashMap<>();
     private Context context;
+    private HealthServiceType healthServiceType;
 
-    PatientsMonitor(Context context) {
+    PatientsMonitor(Context context, HealthServiceType healthServiceType) {
         this.context = context;
+        this.healthServiceType = healthServiceType;
         restoreMonitoredPatientsList();
     }
 
@@ -33,8 +36,7 @@ public class PatientsMonitor {
         }
 
         for (String patientId : Objects.requireNonNull(monitoredPatients.get(type))) {
-            // FIXME: HARDCODED SERVICE!
-            results.add(new ShPatientReference(patientId, HealthServiceType.FHIR));
+            results.add(new ShPatientReference(patientId, this.healthServiceType));
         }
 
         return results;

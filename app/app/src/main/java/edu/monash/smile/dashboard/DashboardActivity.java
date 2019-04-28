@@ -9,15 +9,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.patientsTab.PatientFragment;
 import edu.monash.smile.dashboard.statusTab.StatusFragment;
+import edu.monash.smile.data.HealthService;
+import edu.monash.smile.data.HealthServiceType;
 import edu.monash.smile.polling.Poll;
 import edu.monash.smile.preferences.SharedPreferencesHelper;
 
 
 public class DashboardActivity extends AppCompatActivity {
+    private static final int POLL_INTERVAL = 360000;
+    private final HealthServiceType HEALTH_SERVICE_TYPE = HealthServiceType.FHIR;
+
     private PatientFragment patientFragment = null;
     private StatusFragment statusFragment = null;
-
-    private static final int POLL_INTERVAL = 360000;
     private Poll poll = new Poll(POLL_INTERVAL);
 
     @Override
@@ -32,9 +35,9 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void initialiseFragments(){
-        PatientsMonitor patientsMonitor = new PatientsMonitor(this.getApplicationContext());
-        this.statusFragment = new StatusFragment(patientsMonitor, this.poll);
-        this.patientFragment = new PatientFragment(patientsMonitor, this.poll);
+        PatientsMonitor patientsMonitor = new PatientsMonitor(this.getApplicationContext(), HEALTH_SERVICE_TYPE);
+        this.statusFragment = new StatusFragment(patientsMonitor, this.poll, HEALTH_SERVICE_TYPE);
+        this.patientFragment = new PatientFragment(patientsMonitor, this.poll, HEALTH_SERVICE_TYPE);
         this.patientFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager()
                 .beginTransaction()
