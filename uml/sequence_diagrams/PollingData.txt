@@ -1,0 +1,56 @@
+title Safehearts Polling Data
+actor "Practitioner" as PR
+participant "mainActivity: MainActivity" as MA
+participant "dashboardActivity: DashboardActivity" as DA
+participant "patientFragment: PatientFragment" as PF
+participant "statusFragment: StatusFragment" as SF
+participant "poll: Poll" as P
+participant "patientController: PatientController" as PC
+participant "patientObservationController: PatientObservationController" as POC
+
+PR->MA: tap "Set Practitioner" button
+activate MA
+MA->DA: startActivity(Intent)
+deactivate MA
+activate DA
+DA->PF: createPatientFragment(PatientMonitor, Poll)
+activate PF
+PF->P: addCallback(this::callback)
+activate P
+P-->>PF: callback()
+deactivate P
+group start AsyncTask and call PatientController
+PF->>PC: setUp(String)
+activate PC
+PC->PC: fetchPatientsFromService(String)
+PC->PC: notifyObservers();
+deactivate PC
+PC-->>PF: complete async task
+end
+PF-->>DA: fragment created
+deactivate PF
+DA->SF: createStatusFragment(PatientMonitor, Poll, Context)
+activate SF
+SF->P: addCallback(this::callback)
+P-->>SF: callback()
+group start AsyncTask and call PatientObservationController
+SF->>POC: call async setUp(String)
+activate POC
+POC->POC: loadPatientData()
+POC->POC: notifyObservers();
+POC-->>SF: complete async task
+deactivate POC
+end
+SF-->>DA: fragment created
+deactivate SF
+DA->P: initialisePolling()
+deactivate DA
+activate P
+loop until Poll is destroyed or stopRepeatingTask() removes all callbacks
+P->P: wait 1hr
+P-->>PF: callback()
+ref over PF: start AsyncTask and call PatientController
+P-->>SF: callback()
+ref over SF: start AsyncTask and call PatientObservationController
+end
+deactivate P
