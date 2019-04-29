@@ -10,31 +10,31 @@ participant "patientObservationController: PatientObservationController" as POC
 
 PR->MA: tap "Set Practitioner" button
 activate MA
-MA->DA: startActivity(Intent)
+MA->DA: startActivity(intent)
 deactivate MA
 activate DA
-DA->PF: createPatientFragment(PatientMonitor, Poll)
+DA->PF: createPatientFragment(patientMonitor, poll)
 activate PF
 PF->P: addCallback(this::callback)
 activate P
 P-->>PF: callback()
 deactivate P
 group start AsyncTask and call PatientController
-PF->>PC: setUp(String)
+PF->>PC: setUp(practitionerId)
 activate PC
-PC->PC: fetchPatientsFromService(String)
+PC->PC: fetchPatientsFromService(practitionerId)
 PC->PC: notifyObservers();
 deactivate PC
 PC-->>PF: complete async task
 end
 PF-->>DA: fragment created
 deactivate PF
-DA->SF: createStatusFragment(PatientMonitor, Poll, Context)
+DA->SF: createStatusFragment(patientMonitor, poll, context)
 activate SF
 SF->P: addCallback(this::callback)
 P-->>SF: callback()
 group start AsyncTask and call PatientObservationController
-SF->>POC: call async setUp(String)
+SF->>POC: call async setUp()
 activate POC
 POC->POC: loadPatientData()
 POC->POC: notifyObservers();
