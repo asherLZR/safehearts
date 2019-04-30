@@ -1,0 +1,27 @@
+title Toggling monitoring of a patient's cholesterol
+
+actor "Practitioner" as Practitioner
+participant "listView: ListView" as ListView
+participant "patientFragment: PatientFragment" as PatientFragment
+participant "adapter: PatientAdapter" as PatientAdapter
+participant "monitor: PatientMonitor" as PatientMonitor
+participant "spHelper: SharedPreferencesHelper" as SharedPreferencesHelper
+
+ListView<-PatientAdapter:Display patients of Practitioner
+
+alt Monitor patient
+
+Practitioner->ListView:Tap inactivated toggle to\nmonitor patient's cholesterol
+ListView->PatientAdapter:Send tap event
+PatientAdapter->PatientMonitor:monitorPatient(p,\nObservationType.CHOLESTEROL)
+PatientMonitor->PatientMonitor:Track patient for cholesterol
+PatientMonitor->SharedPreferencesHelper:Persist monitored patients
+else Unmonitor patient
+
+Practitioner->ListView:Tap activated toggle to\ndemonitor patient's cholesterol
+ListView->PatientAdapter:Send tap event
+PatientAdapter->PatientMonitor:unmonitorPatient(p,\nObservationType.CHOLESTEROL)
+PatientMonitor->PatientMonitor:Remove patient tracking for cholesterol
+PatientMonitor->SharedPreferencesHelper:Persist monitored patients
+end
+

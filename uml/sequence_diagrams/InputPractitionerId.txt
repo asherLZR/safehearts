@@ -1,0 +1,20 @@
+title Entering a practitioner's ID
+
+actor Practitioner
+participant "mainActivity: MainActivity" as MainActivity
+participant "dashboardActivity: DashboardActivity" as DashboardActivity
+participant "patientFragment: PatientFragment" as PatientFragment
+
+activate MainActivity
+Practitioner->MainActivity:Input practitioner ID
+MainActivity->MainActivity:Store practitioner ID in bundle
+note right of MainActivity:The bundle stores information for\ncross activity communication
+MainActivity->DashboardActivity:startActivity(bundle)
+deactivate MainActivity
+
+activate DashboardActivity
+DashboardActivity->DashboardActivity:initialiseFragments()
+
+activate PatientFragment
+DashboardActivity->PatientFragment:beginTransaction()
+note left of PatientFragment:This fragment displays the\npatient list
