@@ -5,9 +5,15 @@ participant "listView: ListView" as ListView
 participant "patientFragment: PatientFragment" as PatientFragment
 participant "adapter: PatientAdapter" as PatientAdapter
 participant "monitor: PatientMonitor" as PatientMonitor
-participant "spHelper: SharedPreferencesHelper" as SharedPreferencesHelper
+participant "<<static> \n SharedPreferencesHelper" as SharedPreferencesHelper
 
 ListView<-PatientAdapter:Display patients of Practitioner
+
+activate ListView
+activate PatientFragment
+activate PatientAdapter
+activate PatientMonitor
+
 
 alt Monitor patient
 
