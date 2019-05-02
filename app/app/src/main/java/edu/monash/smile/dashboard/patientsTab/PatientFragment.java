@@ -153,7 +153,7 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
 
         getActivity().runOnUiThread(() -> {
             patientAdapter.updatePatients(patientController.getShPatients());
-            patientAdapter.notifyDataSetInvalidated();
+            patientAdapter.notifyDataSetChanged();
         });
     }
 }
