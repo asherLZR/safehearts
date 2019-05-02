@@ -46,6 +46,7 @@ class FhirService extends HealthService {
                 .where(new ReferenceClientParam("participant")
                         .hasId("Practitioner/" + practitionerId))
                 .returnBundle(Bundle.class)
+                .count(10000)           // needed to bypass default page count returned
                 .execute();
 
         // Retain unique patients the practitioner has seen
