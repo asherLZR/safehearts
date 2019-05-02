@@ -64,14 +64,9 @@ public class PatientArrayAdapter extends ArrayAdapter<ShPatient> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View patientListItem = convertView;
-
-        if (patientListItem == null) {
-            patientListItem = LayoutInflater.from(getContext()).inflate(
-                    R.layout.item_patient_row, parent, false
-            );
-        }
-
+        View patientListItem = LayoutInflater.from(getContext()).inflate(
+                R.layout.item_patient_row, parent, false
+        );
         ShPatientReference shPatientReference = patients.get(position).getReference();
 
         // Display patient name
