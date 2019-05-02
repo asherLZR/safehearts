@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import edu.monash.smile.R;
@@ -43,9 +43,15 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
         this.progressBar = rootView.findViewById(R.id.loadingWheel);
 
         // Set up status card list view
-        this.statusCardAdapter = new StatusCardAdapter(Objects.requireNonNull(getContext()), new ArrayList<>());
-        ListView statusCardListView = rootView.findViewById(R.id.statusCardListView);
-        statusCardListView.setAdapter(this.statusCardAdapter);
+//        this.statusCardAdapter = new StatusCardAdapter(Objects.requireNonNull(getContext()), new ArrayList<>());
+        this.statusCardAdapter = new StatusCardAdapter();
+        RecyclerView statusRecycler = rootView.findViewById(R.id.statusRecycler);
+        statusRecycler.setHasFixedSize(true);
+
+//        ListView statusCardListView = rootView.findViewById(R.id.statusCardListView);
+        statusRecycler.setAdapter(this.statusCardAdapter);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(Objects.requireNonNull(this.getActivity()));
+        statusRecycler.setLayoutManager(layoutManager);
 
         // Listen to data events
         this.patientObservationController.attach(this);

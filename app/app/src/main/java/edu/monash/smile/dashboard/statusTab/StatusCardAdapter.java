@@ -1,48 +1,39 @@
 package edu.monash.smile.dashboard.statusTab;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.monash.smile.R;
 import edu.monash.smile.data.safeheartsModel.ObservedPatient;
 import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
 
-public class StatusCardAdapter extends ArrayAdapter<ObservedPatient> {
+public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.StatusViewHolder>{
     private List<ObservedPatient> observedPatients;
 
     /**
      * The status card is a summary of the patient's health, shown in the dashboard.
      * It displays information about the patient's tracked observations.
      */
-    StatusCardAdapter(@NonNull Context context, List<ObservedPatient> observedPatients) {
-        super(context, 0, observedPatients);
-        this.observedPatients = observedPatients;
+    StatusCardAdapter(){
+        this.observedPatients = new ArrayList<>();
     }
 
     /**
-     * Called when the underlying data source changes (e.g. when new patients are observed)
-     * @param observedPatients the observed patients to show in this list
+     * Inflates the card layout for the ViewHolder.
      */
-    void updateObservedPatients(List<ObservedPatient> observedPatients) {
-        this.observedPatients = observedPatients;
-    }
-
-    /**
-     * The number of views to show.
-     * @return count of patients
-     */
+    @NonNull
     @Override
-    public int getCount() {
-        return observedPatients.size();
+    public StatusViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.status_card, viewGroup, false); //CardView inflated as RecyclerView list item
+        return new StatusViewHolder(v);
     }
 
     /**
@@ -51,33 +42,50 @@ public class StatusCardAdapter extends ArrayAdapter<ObservedPatient> {
      * - Patient ID
      * - Patient observation (description and value)
      */
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View statusCardView = convertView;
-
-        if (statusCardView == null) {
-            statusCardView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.item_status_card, parent, false
-            );
-        }
-
+    public void onBindViewHolder(@NonNull StatusViewHolder holder, int position) {
         ObservedPatient cardPatient = observedPatients.get(position);
-
         QuantitativeObservation viewedObservation = cardPatient.getObservations().get(0);
+        holder.statusCardHeading.setText(cardPatient.getPatientName());
+        holder.patientTextView.setText(cardPatient.getShPatientReference().getFullReference());
+        holder.statusCardDescription.setText(viewedObservation.getDescription());
+        holder.statusCardValue.setText(viewedObservation.getValue());
+    }
 
-        TextView statusCardHeading = statusCardView.findViewById(R.id.statusCardHeading);
-        statusCardHeading.setText(cardPatient.getPatientName());
+    /**
+     * The number of views to show.
+     * @return count of patients
+     */
+    @Override
+    public int getItemCount() {
+        return this.observedPatients.size();
+    }
 
-        TextView patientTextView = statusCardView.findViewById(R.id.patientIdView);
-        patientTextView.setText(cardPatient.getShPatientReference().getFullReference());
+    /**
+     * Representation of each individual card stored.
+     */
+    static class StatusViewHolder extends RecyclerView.ViewHolder{
+        View itemView;
+        TextView statusCardHeading;
+        TextView patientTextView;
+        TextView statusCardDescription;
+        TextView statusCardValue;
 
-        TextView statusCardDescription = statusCardView.findViewById(R.id.statusCardDescription);
-        statusCardDescription.setText(viewedObservation.getDescription());
+        StatusViewHolder(@NonNull View itemView) {
+            super(itemView);
+            this.itemView = itemView;
+            this.statusCardHeading = itemView.findViewById(R.id.statusCardHeading);
+            this.patientTextView = itemView.findViewById(R.id.patientIdView);
+            this.statusCardDescription = itemView.findViewById(R.id.statusCardDescription);
+            this.statusCardValue = itemView.findViewById(R.id.statusCardValue);
+        }
+    }
 
-        TextView statusCardValue = statusCardView.findViewById(R.id.statusCardValue);
-        statusCardValue.setText(viewedObservation.getValue());
-
-        return statusCardView;
+    /**
+     * Called when the underlying data source changes (e.g. when new patients are observed)
+     * @param observedPatients the observed patients to show in this list
+     */
+    void updateObservedPatients(List<ObservedPatient> observedPatients) {
+        this.observedPatients = observedPatients;
     }
 }
