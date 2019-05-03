@@ -1,19 +1,19 @@
 package edu.monash.smile.dashboard.patientsTab;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
+import java.util.Objects;
 
 import edu.monash.smile.MainActivity;
 import edu.monash.smile.R;
@@ -35,20 +35,13 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
      * Displays the patient details.
      * @param patientsMonitor The controller that handles selection of patients and their observation types
      * @param poll The poll that handles new data notifications
-     * @param context The Android context
      */
     public PatientFragment(
             PatientsMonitor patientsMonitor,
-            Poll poll,
-            Context context
+            Poll poll
     ) {
         this.poll = poll;
-        // Set up patient list view
-        this.patientAdapter = new PatientArrayAdapter(
-                context,
-                new ArrayList<>(),
-                patientsMonitor
-        );
+        this.patientAdapter = new PatientArrayAdapter(patientsMonitor);
         this.patientController = new PatientController();
     }
 
@@ -73,9 +66,14 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_patient, container, false);
         this.progressBar = rootView.findViewById(R.id.loadingWheel);
+        this.progressBar.bringToFront();
 
-        ListView patientListView = rootView.findViewById(R.id.patientListView);
-        patientListView.setAdapter(patientAdapter);
+        // Set up status card view
+        RecyclerView patientRecycler = rootView.findViewById(R.id.patientRecycler);
+        patientRecycler.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(Objects.requireNonNull(this.getActivity()));
+        patientRecycler.setLayoutManager(layoutManager);
+        patientRecycler.setAdapter(this.patientAdapter);
 
         // Listen to data events
         patientController.attach(this);

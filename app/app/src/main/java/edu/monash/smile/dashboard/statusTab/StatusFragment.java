@@ -41,17 +41,15 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
         View rootView = inflater.inflate(R.layout.fragment_status, container, false);
 
         this.progressBar = rootView.findViewById(R.id.loadingWheel);
+        this.progressBar.bringToFront();
 
-        // Set up status card list view
-//        this.statusCardAdapter = new StatusCardAdapter(Objects.requireNonNull(getContext()), new ArrayList<>());
+        // Set up status card view
         this.statusCardAdapter = new StatusCardAdapter();
         RecyclerView statusRecycler = rootView.findViewById(R.id.statusRecycler);
         statusRecycler.setHasFixedSize(true);
-
-//        ListView statusCardListView = rootView.findViewById(R.id.statusCardListView);
-        statusRecycler.setAdapter(this.statusCardAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(Objects.requireNonNull(this.getActivity()));
         statusRecycler.setLayoutManager(layoutManager);
+        statusRecycler.setAdapter(this.statusCardAdapter);
 
         // Listen to data events
         this.patientObservationController.attach(this);

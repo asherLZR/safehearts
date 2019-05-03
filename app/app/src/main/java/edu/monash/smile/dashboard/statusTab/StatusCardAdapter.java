@@ -53,7 +53,7 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.St
     }
 
     /**
-     * The number of views to show.
+     * The number of possible views there are.
      * @return count of patients
      */
     @Override
