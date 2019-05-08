@@ -1,6 +1,9 @@
 package edu.monash.smile.data;
 
+import android.util.Log;
+
 import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.DateTimeType;
 import org.hl7.fhir.dstu3.model.Encounter;
 import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.Observation;
@@ -8,7 +11,11 @@ import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Quantity;
 import org.hl7.fhir.dstu3.model.Reference;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +34,7 @@ import static edu.monash.smile.data.HealthServiceType.FHIR;
 
 class FhirService extends HealthService {
     final private IGenericClient client;
+    final static private int TIME_SERIES_LENGTH = 100;
 
     FhirService(String url) {
         super(FHIR);
@@ -93,25 +101,20 @@ class FhirService extends HealthService {
         return shPatients;
     }
 
-    /**
-     * Reads all historical observations for a given type (e.g. CHOLESTEROL), for a patient
-     *
-     * @param shPatientReference The ID of the patient
-     * @param type               The type of the observation
-     * @return A list with all observations for the given type
-     */
-    @Override
-    public List<QuantitativeObservation> readPatientQuantitativeObservations(
+    private List<Observation> readObservations(
             ShPatientReference shPatientReference,
-            ObservationType type
-    ) {
+            ObservationType type,
+            int count
+    ){
         // Request an observation for a patient
         Bundle b = this.client.search().forResource(Observation.class)
                 .where(new ReferenceClientParam("subject")
                         .hasId(shPatientReference.getId()))
                 .where(new TokenClientParam("code")
                         .exactly()
-                        .code(observationCodeToFhirCode(type)))
+                        .code(observationCodeToFhirCode(type))
+                )
+                .count(count)
                 .returnBundle(Bundle.class)
                 .execute();
 
@@ -122,14 +125,63 @@ class FhirService extends HealthService {
             observations.add((Observation) e.getResource());
         }
 
+        return observations;
+    }
+
+    /**
+     * Reads all historical observations for a given type (e.g. CHOLESTEROL), for a patient
+     *
+     * @param shPatientReference The ID of the patient
+     * @param type               The type of the observation
+     * @return A list with all observations for the given type
+     */
+    @Override
+    public List<QuantitativeObservation> readTimeSeriesObservations(
+            ShPatientReference shPatientReference,
+            ObservationType type
+    ) {
+        List<Observation> observations = readObservations(shPatientReference, type, TIME_SERIES_LENGTH);
         List<QuantitativeObservation> quantitativeObservations = new ArrayList<>(observations.size());
 
         // Extracts information about the information into a QuantitativeObservation
         for (Observation o : observations) {
             String description = o.getCode().getText();
             Quantity quantity = (Quantity) o.getValue();
+            Date effectiveDateTime = o.getEffectiveDateTimeType().getValue();
             String result = quantity.getValue() + " " + quantity.getUnit();
-            quantitativeObservations.add(new QuantitativeObservation(result, description));
+            quantitativeObservations.add(new QuantitativeObservation(
+                    result,
+                    description,
+                    effectiveDateTime));
+        }
+
+        return quantitativeObservations;
+    }
+
+    /**
+     * Reads only the latest historical observations for a given type (e.g. CHOLESTEROL), for a patient
+     *
+     * @param shPatientReference The ID of the patient
+     * @param type               The type of the observation
+     * @return A list with all observations for the given type
+     */
+    public List<QuantitativeObservation> readLatestObservation(
+            ShPatientReference shPatientReference,
+            ObservationType type
+    ) {
+        List<Observation> observations = readObservations(shPatientReference, type, 1);
+        List<QuantitativeObservation> quantitativeObservations = new ArrayList<>(observations.size());
+
+        // Extracts information about the information into a QuantitativeObservation
+        for (Observation o : observations) {
+            String description = o.getCode().getText();
+            Quantity quantity = (Quantity) o.getValue();
+            Date effectiveDateTime = o.getEffectiveDateTimeType().getValue();
+            String result = quantity.getValue() + " " + quantity.getUnit();
+            quantitativeObservations.add(new QuantitativeObservation(
+                    result,
+                    description,
+                    effectiveDateTime));
         }
 
         return quantitativeObservations;
@@ -141,9 +193,15 @@ class FhirService extends HealthService {
      * @return FHIR code representing the observation type
      */
     private String observationCodeToFhirCode(ObservationType type) {
-        if (type == ObservationType.CHOLESTEROL) {
-            return "2093-3";
+        switch (type){
+            case CHOLESTEROL:
+                return "2093-3";
+            case BLOOD_PRESSURE:
+                return "55284-4";
+            case TOBACCO_USE:
+                return "72166-2";
+            default:
+                return null;
         }
-        return null;
     }
 }

@@ -1,19 +1,22 @@
 package edu.monash.smile.data.safeheartsModel;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class QuantitativeObservation {
     final private String value;
     final private String description;
+    final private Date dateObserved;
 
     /**
      * A single observation of a patient.
      * @param value The metric recorded in the observation
      * @param description A description of the observation
      */
-    public QuantitativeObservation(String value, String description) {
+    public QuantitativeObservation(String value, String description, Date dateObserved) {
         this.value = value;
         this.description = description;
+        this.dateObserved = dateObserved;
     }
 
     public String getValue() {
@@ -22,6 +25,10 @@ public class QuantitativeObservation {
 
     public String getDescription() {
         return description;
+    }
+
+    public Date getDateObserved(){
+        return dateObserved;
     }
 
     @Override

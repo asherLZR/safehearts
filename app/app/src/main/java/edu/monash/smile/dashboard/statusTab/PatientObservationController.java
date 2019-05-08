@@ -51,7 +51,7 @@ class PatientObservationController extends Subject {
                 patientsMonitor.getMonitoredPatientsByType(ObservationType.CHOLESTEROL)
         ) {
             List<QuantitativeObservation> results = healthService
-                    .readPatientQuantitativeObservations(patient, ObservationType.CHOLESTEROL);
+                    .readLatestObservation(patient, ObservationType.CHOLESTEROL);
             // Currently using all results for the patient
             if (results.size() != 0) {
                 observations.put(patient, results);

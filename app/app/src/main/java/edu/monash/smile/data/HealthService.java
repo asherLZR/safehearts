@@ -31,7 +31,19 @@ public abstract class HealthService {
      * @param type               The type of the observation
      * @return A list with all observations for the given type
      */
-    public abstract List<QuantitativeObservation> readPatientQuantitativeObservations(
+    public abstract List<QuantitativeObservation> readTimeSeriesObservations(
+            ShPatientReference shPatientReference,
+            ObservationType type
+    );
+
+    /**
+     * Reads only the latest historical observations for a given type (e.g. CHOLESTEROL), for a patient
+     *
+     * @param shPatientReference The ID of the patient
+     * @param type               The type of the observation
+     * @return A list with all observations for the given type
+     */
+    public abstract List<QuantitativeObservation> readLatestObservation(
             ShPatientReference shPatientReference,
             ObservationType type
     );
