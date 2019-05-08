@@ -5,6 +5,7 @@ import java.util.Objects;
 
 public class QuantitativeObservation {
     final private String value;
+    final private String unit;
     final private String description;
     final private Date dateObserved;
 
@@ -13,10 +14,11 @@ public class QuantitativeObservation {
      * @param value The metric recorded in the observation
      * @param description A description of the observation
      */
-    public QuantitativeObservation(String value, String description, Date dateObserved) {
+    public QuantitativeObservation(String value, String unit, String description, Date dateObserved) {
         this.value = value;
         this.description = description;
         this.dateObserved = dateObserved;
+        this.unit = unit;
     }
 
     public String getValue() {
@@ -25,6 +27,10 @@ public class QuantitativeObservation {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getUnit() {
+        return unit;
     }
 
     public Date getDateObserved(){

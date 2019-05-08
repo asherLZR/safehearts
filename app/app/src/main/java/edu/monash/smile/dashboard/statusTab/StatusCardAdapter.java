@@ -50,6 +50,7 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.St
         holder.patientTextView.setText(cardPatient.getShPatientReference().getFullReference());
         holder.statusCardDescription.setText(viewedObservation.getDescription());
         holder.statusCardValue.setText(viewedObservation.getValue());
+        holder.unitTextView.setText(viewedObservation.getUnit());
     }
 
     /**
@@ -70,6 +71,7 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.St
         TextView patientTextView;
         TextView statusCardDescription;
         TextView statusCardValue;
+        TextView unitTextView;
 
         StatusViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,6 +80,7 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.St
             this.patientTextView = itemView.findViewById(R.id.patientIdView);
             this.statusCardDescription = itemView.findViewById(R.id.statusCardDescription);
             this.statusCardValue = itemView.findViewById(R.id.statusCardValue);
+            this.unitTextView = itemView.findViewById(R.id.unitView);
         }
     }
 

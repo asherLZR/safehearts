@@ -62,12 +62,15 @@ public class DashboardActivity extends AppCompatActivity {
             if (id == R.id.my_patients) {
                 getSupportFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
                         .hide(statusFragment)
-                        .show(patientFragment).commit();
+                        .show(patientFragment)
+                        .commit();
                 return true;
             } else if (id == R.id.dashboard) {
                 getSupportFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
                         .show(statusFragment)
                         .hide(patientFragment)
                         .commit();

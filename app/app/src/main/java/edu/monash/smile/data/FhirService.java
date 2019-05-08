@@ -12,6 +12,8 @@ import org.hl7.fhir.dstu3.model.Quantity;
 import org.hl7.fhir.dstu3.model.Reference;
 
 import java.lang.reflect.Array;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -148,9 +150,11 @@ class FhirService extends HealthService {
             String description = o.getCode().getText();
             Quantity quantity = (Quantity) o.getValue();
             Date effectiveDateTime = o.getEffectiveDateTimeType().getValue();
-            String result = quantity.getValue() + " " + quantity.getUnit();
+            String result = quantity.getValue().setScale(0, RoundingMode.CEILING) + "";
+            String unit = quantity.getUnit();
             quantitativeObservations.add(new QuantitativeObservation(
                     result,
+                    unit,
                     description,
                     effectiveDateTime));
         }
@@ -177,9 +181,11 @@ class FhirService extends HealthService {
             String description = o.getCode().getText();
             Quantity quantity = (Quantity) o.getValue();
             Date effectiveDateTime = o.getEffectiveDateTimeType().getValue();
-            String result = quantity.getValue() + " " + quantity.getUnit();
+            String result = quantity.getValue().setScale(0, RoundingMode.CEILING) + "";
+            String unit = quantity.getUnit();
             quantitativeObservations.add(new QuantitativeObservation(
                     result,
+                    unit,
                     description,
                     effectiveDateTime));
         }

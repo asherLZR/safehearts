@@ -11,9 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/colorPrimary"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        android:background="@color/cardview_light_background"
+        app:itemIconTint="@color/bottom_nav_state_colors"
+        app:itemTextColor="@color/bottom_nav_state_colors"
         app:menu="@menu/main_menu" />
 
 </FrameLayout>
