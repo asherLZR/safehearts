@@ -3,7 +3,7 @@ package edu.monash.smile.data.safeheartsModel.observation;
 import java.util.Date;
 import java.util.Objects;
 
-abstract class Observation {
+public abstract class ShObservation {
     final private String description;
     final private Date dateObserved;
 
@@ -11,7 +11,7 @@ abstract class Observation {
      * A single observation of a patient.
      * @param description A description of the observation
      */
-    Observation(String description, Date dateObserved) {
+    ShObservation(String description, Date dateObserved) {
         this.description = description;
         this.dateObserved = dateObserved;
     }

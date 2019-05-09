@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
-abstract class QuantitativeObservation extends Observation {
+abstract class QuantitativeObservation extends ShObservation {
     final private BigDecimal value;
     final private String unit;
     final private String description;

@@ -4,8 +4,8 @@ import java.util.List;
 
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 
-public class ObservedPatient {
-    private List<CholesterolObservation> observations;
+public class ObservedPatient<T> {
+    private List<T> observations;
     private ShPatientReference shPatientReference;
     private String patientName;
 
@@ -13,7 +13,7 @@ public class ObservedPatient {
      * A detailed patient linked with its observations and ID.
      */
     public ObservedPatient(
-            List<CholesterolObservation> observations,
+            List<T> observations,
             ShPatientReference shPatientReference,
             String patientName
     ) {
@@ -22,7 +22,7 @@ public class ObservedPatient {
         this.patientName = patientName;
     }
 
-    public List<CholesterolObservation> getObservations() {
+    public List<T> getObservations() {
         return observations;
     }
 

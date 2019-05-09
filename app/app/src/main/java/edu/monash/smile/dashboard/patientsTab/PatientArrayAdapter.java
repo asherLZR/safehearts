@@ -15,9 +15,9 @@ import java.util.List;
 
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
-import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
+import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 
 public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapter.PatientViewHolder> {
     private List<ShPatient> patients;
@@ -55,6 +55,7 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
                 shPatientReference.getId(),
                 ObservationType.CHOLESTEROL
         ));
+
         // Handles selection of the chip, by delegating to the patients' monitor
         holder.cholesterolChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -64,6 +65,11 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
             }
         });
 
+        // Display patient filter for SMOKING
+        holder.smokingChip.setChecked(patientsMonitor.isPatientMonitored(
+                shPatientReference.getId(),
+                ObservationType.SMOKING
+        ));
         holder.smokingChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 patientsMonitor.monitorPatient(shPatientReference.getId(), ObservationType.SMOKING);

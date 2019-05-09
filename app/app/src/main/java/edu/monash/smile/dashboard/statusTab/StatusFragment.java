@@ -134,9 +134,14 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
         }
 
         getActivity().runOnUiThread(() -> {
-            statusCardAdapter.updateObservedPatients(
-                    patientObservationController.getObservedPatients()
+            statusCardAdapter.updateCholesterolPatients(
+                    patientObservationController.getObservedCholesterolPatients()
             );
+
+            statusCardAdapter.updateSmokingPatients(
+                    patientObservationController.getObservedSmokingPatients()
+            );
+
             statusCardAdapter.notifyDataSetChanged();
         });
     }
