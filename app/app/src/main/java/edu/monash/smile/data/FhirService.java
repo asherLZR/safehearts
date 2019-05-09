@@ -101,7 +101,9 @@ class FhirService extends HealthService {
             int count
     ) {
         // Request an observation for a patient
-        Bundle b = this.client.search().forResource(Observation.class)
+        Bundle b = this.client
+                .search()
+                .forResource(Observation.class)
                 .where(new ReferenceClientParam("subject")
                         .hasId(shPatientReference.getId()))
                 .where(new TokenClientParam("code")
@@ -114,7 +116,6 @@ class FhirService extends HealthService {
 
         List<Observation> observations = new ArrayList<>();
 
-        // Maps from bundle entry into a specific observation
         for (Bundle.BundleEntryComponent e : b.getEntry()) {
             observations.add((Observation) e.getResource());
         }
@@ -123,66 +124,36 @@ class FhirService extends HealthService {
     }
 
     /**
-     * Reads all historical observations for a given type (e.g. CHOLESTEROL), for a patient
+     * Reads only the latest historical observations for a given type (e.g. CHOLESTEROL), for a patient
      *
-     * @param shPatientReference The ID of the patient
-     * @param type               The type of the observation
+     * @param reference The ID of the patient
      * @return A list with all observations for the given type
      */
-    @Override
-    public List<CholesterolObservation> readTimeSeriesObservations(
-            ShPatientReference shPatientReference,
-            ObservationType type
-    ) {
-        List<Observation> observations = readObservations(shPatientReference, type, TIME_SERIES_LENGTH);
-        List<CholesterolObservation> CholesterolObservations = new ArrayList<>(observations.size());
+    public List<CholesterolObservation> readCholesterol(ShPatientReference reference) {
+        List<Observation> observations = readObservations(reference, ObservationType.CHOLESTEROL, 1);
 
-        // Extracts information about the information into a CholesterolObservation
+        List<CholesterolObservation> results = new ArrayList<>();
+
         for (Observation o : observations) {
-            Quantity quantity = (Quantity) o.getValue();
-            // TODO: Remove duplicate code
-            CholesterolObservations.add(
-                    new CholesterolObservation(
-                            quantity.getValue(), // Value
-                            quantity.getUnit(), // Unit
-                            o.getCode().getText(), // Description
-                            o.getEffectiveDateTimeType().getValue() // Date observed
-                    )
-            );
+            results.add(convertToCholesterolObservation(o));
         }
 
-        return CholesterolObservations;
+        return results;
     }
 
     /**
-     * Reads only the latest historical observations for a given type (e.g. CHOLESTEROL), for a patient
-     *
-     * @param shPatientReference The ID of the patient
-     * @param type               The type of the observation
-     * @return A list with all observations for the given type
+     * Extracts information from FHIR into a CholesterolObservation
+     * @param observation An observation from the FHIR library
+     * @return A CholesterolObservation
      */
-    public List<CholesterolObservation> readLatestObservation(
-            ShPatientReference shPatientReference,
-            ObservationType type
-    ) {
-        List<Observation> observations = readObservations(shPatientReference, type, 1);
-        List<CholesterolObservation> CholesterolObservations = new ArrayList<>(observations.size());
-
-        // Extracts information about the information into a CholesterolObservation
-        for (Observation o : observations) {
-            Quantity quantity = (Quantity) o.getValue();
-
-            // TODO: Remove duplicate code
-            CholesterolObservations.add(new CholesterolObservation(
-                            quantity.getValue(), // Value
-                            quantity.getUnit(), // Unit
-                            o.getCode().getText(), // Description
-                            o.getEffectiveDateTimeType().getValue() // Date observed
-                    )
-            );
-        }
-
-        return CholesterolObservations;
+    private CholesterolObservation convertToCholesterolObservation(Observation observation) {
+        Quantity quantity = (Quantity) observation.getValue();
+        return new CholesterolObservation(
+                quantity.getValue(), // Value
+                quantity.getUnit(), // Unit
+                observation.getCode().getText(), // Description
+                observation.getEffectiveDateTimeType().getValue() // Date observed
+        );
     }
 
     /**

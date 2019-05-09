@@ -50,8 +50,7 @@ class PatientObservationController extends Subject {
                 ShPatientReference patient :
                 patientsMonitor.getMonitoredPatientsByType(ObservationType.CHOLESTEROL)
         ) {
-            List<CholesterolObservation> results = healthService
-                    .readLatestObservation(patient, ObservationType.CHOLESTEROL);
+            List<CholesterolObservation> results = healthService.readCholesterol(patient);
             // Currently using all results for the patient
             if (results.size() != 0) {
                 observations.put(patient, results);
