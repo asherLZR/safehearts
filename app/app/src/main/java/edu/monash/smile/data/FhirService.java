@@ -1,6 +1,7 @@
 package edu.monash.smile.data;
 
 import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Encounter;
 import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.Observation;
@@ -22,6 +23,7 @@ import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
+import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
 
 import static edu.monash.smile.data.HealthServiceType.FHIR;
 
@@ -121,6 +123,33 @@ class FhirService extends HealthService {
         }
 
         return observations;
+    }
+
+    @Override
+    public List<SmokingObservation> readSmokingStatus(ShPatientReference reference) {
+        List<Observation> observations = readObservations(reference, ObservationType.TOBACCO_USE, 1);
+
+        List<SmokingObservation> results = new ArrayList<>();
+
+        for (Observation o : observations) {
+            results.add(convertToSmokingObservation(o));
+        }
+
+        return results;
+    }
+
+    /**
+     * Extracts information from FHIR into a SmokingObservation
+     * @param observation An observation from the FHIR library
+     * @return A SmokingObservation
+     */
+    private SmokingObservation convertToSmokingObservation(Observation observation) {
+        CodeableConcept codeableConcept = observation.getValueCodeableConcept();
+        return new SmokingObservation(
+                codeableConcept.getText(), // Unit
+                observation.getCode().getText(), // Description
+                observation.getEffectiveDateTimeType().getValue() // Date observed
+        );
     }
 
     /**
