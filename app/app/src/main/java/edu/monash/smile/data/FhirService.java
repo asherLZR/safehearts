@@ -10,6 +10,7 @@ import org.hl7.fhir.dstu3.model.Quantity;
 import org.hl7.fhir.dstu3.model.Reference;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,9 +22,12 @@ import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
+import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservation;
 import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
+import edu.monash.smile.data.safeheartsModel.observation.DiastolicObservation;
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
+import edu.monash.smile.data.safeheartsModel.observation.SystolicObservation;
 
 import static edu.monash.smile.data.HealthServiceType.FHIR;
 
@@ -123,6 +127,50 @@ class FhirService extends HealthService {
         }
 
         return observations;
+    }
+
+    @Override
+    public List<BloodPressureObservation> readBloodPressureTimeSeries(ShPatientReference reference) {
+        List<Observation> observations = readObservations(reference, ObservationType.BLOOD_PRESSURE, TIME_SERIES_LENGTH);
+
+        List<BloodPressureObservation> results = new ArrayList<>();
+
+        for (Observation o : observations) {
+            results.add(convertToBloodPressureObservation(o));
+        }
+
+        return results;
+    }
+
+    private BloodPressureObservation convertToBloodPressureObservation(Observation observation) {
+        List<Observation.ObservationComponentComponent> components = observation.getComponent();
+
+        Date date = observation.getEffectiveDateTimeType().getValue();
+
+        Observation.ObservationComponentComponent fhirSystolic = components.get(1);
+        Quantity systolicQuantity = (Quantity) fhirSystolic.getValue();
+        SystolicObservation systolicObservation = new SystolicObservation(
+                systolicQuantity.getValue(),
+                systolicQuantity.getUnit(),
+                fhirSystolic.getCode().getText(),
+                date
+        );
+
+        Observation.ObservationComponentComponent fhirDiastolic = components.get(0);
+        Quantity diastolicQuantity = (Quantity) fhirSystolic.getValue();
+        DiastolicObservation diastolicObservation = new DiastolicObservation(
+                diastolicQuantity.getValue(),
+                diastolicQuantity.getUnit(),
+                fhirDiastolic.getCode().getText(),
+                date
+        );
+
+        return new BloodPressureObservation(
+                systolicObservation,
+                diastolicObservation,
+                "Blood pressure",
+                date // Date observed
+        );
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
+import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservation;
 import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
 import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
 
@@ -23,6 +24,14 @@ public abstract class HealthService {
      * @return A set of unique patient IDs that the practitioner has seen
      */
     public abstract Set<ShPatientReference> loadPatientReferences(int practitionerId);
+
+    /**
+     * Reads only the time series of blood pressure for a patient
+     *
+     * @param reference The ID of the patient
+     * @return A list with all observations for the given type
+     */
+    public abstract List<BloodPressureObservation> readBloodPressureTimeSeries(ShPatientReference reference);
 
     /**
      * Reads only the latest historical observations for CHOLESTEROL for a patient
