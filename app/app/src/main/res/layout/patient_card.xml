@@ -19,12 +19,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/cholesterolChip"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cholesterol" />
+        <LinearLayout
+            android:paddingTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cholesterolChip"
+                android:layout_marginEnd="4dp"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                card_view:chipBackgroundColor="@color/colorCholesterolChip"
+                android:text="Cholesterol" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/smokingChip"
+                android:layout_marginEnd="4dp"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                card_view:chipBackgroundColor="@color/colorSmokingChip"
+                android:text="Smoking" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

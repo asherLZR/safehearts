@@ -63,6 +63,14 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
                 patientsMonitor.unmonitorPatient(shPatientReference.getId(), ObservationType.CHOLESTEROL);
             }
         });
+
+        holder.smokingChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                patientsMonitor.monitorPatient(shPatientReference.getId(), ObservationType.SMOKING);
+            } else {
+                patientsMonitor.unmonitorPatient(shPatientReference.getId(), ObservationType.SMOKING);
+            }
+        });
     }
 
     /**
@@ -81,12 +89,14 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
         View itemView;
         TextView patientName;
         Chip cholesterolChip;
+        Chip smokingChip;
 
         public PatientViewHolder(@NonNull View itemView) {
             super(itemView);
             this.itemView = itemView;
             this.patientName = itemView.findViewById(R.id.patientName);
             this.cholesterolChip = itemView.findViewById(R.id.cholesterolChip);
+            this.smokingChip = itemView.findViewById(R.id.smokingChip);
         }
     }
 

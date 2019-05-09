@@ -127,7 +127,7 @@ class FhirService extends HealthService {
 
     @Override
     public List<SmokingObservation> readSmokingStatus(ShPatientReference reference) {
-        List<Observation> observations = readObservations(reference, ObservationType.TOBACCO_USE, 1);
+        List<Observation> observations = readObservations(reference, ObservationType.SMOKING, 1);
 
         List<SmokingObservation> results = new ArrayList<>();
 
@@ -197,7 +197,7 @@ class FhirService extends HealthService {
                 return "2093-3";
             case BLOOD_PRESSURE:
                 return "55284-4";
-            case TOBACCO_USE:
+            case SMOKING:
                 return "72166-2";
             default:
                 return null;

@@ -6,5 +6,5 @@ package edu.monash.smile.data.safeheartsModel.observation;
 public enum ObservationType {
     CHOLESTEROL,
     BLOOD_PRESSURE,
-    TOBACCO_USE
+    SMOKING
 }
