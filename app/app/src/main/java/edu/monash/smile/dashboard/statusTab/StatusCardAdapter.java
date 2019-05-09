@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.monash.smile.R;
-import edu.monash.smile.data.safeheartsModel.ObservedPatient;
-import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
+import edu.monash.smile.data.safeheartsModel.observation.ObservedPatient;
+import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
 
 public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.StatusViewHolder>{
     private List<ObservedPatient> observedPatients;
@@ -45,11 +45,11 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.St
     @Override
     public void onBindViewHolder(@NonNull StatusViewHolder holder, int position) {
         ObservedPatient cardPatient = observedPatients.get(position);
-        QuantitativeObservation viewedObservation = cardPatient.getObservations().get(0);
+        CholesterolObservation viewedObservation = cardPatient.getObservations().get(0);
         holder.statusCardHeading.setText(cardPatient.getPatientName());
         holder.patientTextView.setText(cardPatient.getShPatientReference().getFullReference());
         holder.statusCardDescription.setText(viewedObservation.getDescription());
-        holder.statusCardValue.setText(viewedObservation.getValue());
+        holder.statusCardValue.setText(viewedObservation.getValue().toPlainString());
         holder.unitTextView.setText(viewedObservation.getUnit());
     }
 

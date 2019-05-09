@@ -15,7 +15,7 @@ import java.util.List;
 
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
-import edu.monash.smile.data.safeheartsModel.ObservationType;
+import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 

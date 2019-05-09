@@ -1,4 +1,4 @@
-package edu.monash.smile.data.safeheartsModel;
+package edu.monash.smile.data.safeheartsModel.observation;
 
 /**
  * The type of observation (e.g. weight or cholesterol)

@@ -9,15 +9,15 @@ import edu.monash.smile.dashboard.DashboardActivity;
 import edu.monash.smile.dashboard.PatientsMonitor;
 import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.HealthServiceProducer;
-import edu.monash.smile.data.safeheartsModel.ObservationType;
-import edu.monash.smile.data.safeheartsModel.ObservedPatient;
-import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
+import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
+import edu.monash.smile.data.safeheartsModel.observation.ObservedPatient;
+import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.observerPattern.Subject;
 
 class PatientObservationController extends Subject {
-    private HashMap<ShPatientReference, List<QuantitativeObservation>> observations;
+    private HashMap<ShPatientReference, List<CholesterolObservation>> observations;
     private HealthService healthService;
     private PatientsMonitor patientsMonitor;
     private HashMap<ShPatientReference, ShPatient> shPatients;
@@ -50,7 +50,7 @@ class PatientObservationController extends Subject {
                 ShPatientReference patient :
                 patientsMonitor.getMonitoredPatientsByType(ObservationType.CHOLESTEROL)
         ) {
-            List<QuantitativeObservation> results = healthService
+            List<CholesterolObservation> results = healthService
                     .readLatestObservation(patient, ObservationType.CHOLESTEROL);
             // Currently using all results for the patient
             if (results.size() != 0) {

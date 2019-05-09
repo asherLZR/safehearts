@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import edu.monash.smile.data.HealthServiceType;
-import edu.monash.smile.data.safeheartsModel.ObservationType;
+import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.preferences.SharedPreferencesHelper;
 

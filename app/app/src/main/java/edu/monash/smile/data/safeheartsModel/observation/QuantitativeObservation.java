@@ -1,40 +1,32 @@
-package edu.monash.smile.data.safeheartsModel;
+package edu.monash.smile.data.safeheartsModel.observation;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
-public class QuantitativeObservation {
-    final private String value;
+abstract class QuantitativeObservation extends Observation {
+    final private BigDecimal value;
     final private String unit;
     final private String description;
-    final private Date dateObserved;
 
     /**
      * A single observation of a patient.
      * @param value The metric recorded in the observation
      * @param description A description of the observation
      */
-    public QuantitativeObservation(String value, String unit, String description, Date dateObserved) {
+    public QuantitativeObservation(BigDecimal value, String unit, String description, Date dateObserved) {
+        super(description, dateObserved);
         this.value = value;
         this.description = description;
-        this.dateObserved = dateObserved;
         this.unit = unit;
     }
 
-    public String getValue() {
+    public BigDecimal getValue() {
         return value;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public String getUnit() {
         return unit;
-    }
-
-    public Date getDateObserved(){
-        return dateObserved;
     }
 
     @Override
@@ -54,6 +46,6 @@ public class QuantitativeObservation {
 
     @Override
     public int hashCode() {
-        return Objects.hash(value, description);
+        return Objects.hash(super.hashCode(), value, unit);
     }
 }

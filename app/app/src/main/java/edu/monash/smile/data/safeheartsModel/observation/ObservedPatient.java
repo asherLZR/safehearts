@@ -1,9 +1,11 @@
-package edu.monash.smile.data.safeheartsModel;
+package edu.monash.smile.data.safeheartsModel.observation;
 
 import java.util.List;
 
+import edu.monash.smile.data.safeheartsModel.ShPatientReference;
+
 public class ObservedPatient {
-    private List<QuantitativeObservation> observations;
+    private List<CholesterolObservation> observations;
     private ShPatientReference shPatientReference;
     private String patientName;
 
@@ -11,7 +13,7 @@ public class ObservedPatient {
      * A detailed patient linked with its observations and ID.
      */
     public ObservedPatient(
-            List<QuantitativeObservation> observations,
+            List<CholesterolObservation> observations,
             ShPatientReference shPatientReference,
             String patientName
     ) {
@@ -20,7 +22,7 @@ public class ObservedPatient {
         this.patientName = patientName;
     }
 
-    public List<QuantitativeObservation> getObservations() {
+    public List<CholesterolObservation> getObservations() {
         return observations;
     }
 

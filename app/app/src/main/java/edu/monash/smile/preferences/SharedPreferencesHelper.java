@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import edu.monash.smile.data.safeheartsModel.ObservationType;
+import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 
 public class SharedPreferencesHelper {

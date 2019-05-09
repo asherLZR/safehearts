@@ -1,9 +1,6 @@
 package edu.monash.smile.data;
 
-import android.util.Log;
-
 import org.hl7.fhir.dstu3.model.Bundle;
-import org.hl7.fhir.dstu3.model.DateTimeType;
 import org.hl7.fhir.dstu3.model.Encounter;
 import org.hl7.fhir.dstu3.model.HumanName;
 import org.hl7.fhir.dstu3.model.Observation;
@@ -11,13 +8,7 @@ import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.dstu3.model.Quantity;
 import org.hl7.fhir.dstu3.model.Reference;
 
-import java.lang.reflect.Array;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,10 +18,10 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import ca.uhn.fhir.rest.gclient.TokenClientParam;
-import edu.monash.smile.data.safeheartsModel.ObservationType;
-import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
+import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
+import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 
 import static edu.monash.smile.data.HealthServiceType.FHIR;
 
@@ -74,13 +65,14 @@ class FhirService extends HealthService {
     /**
      * Creates a mapping of patient references (IDs) to specific patients.
      * This is used to discover patient details based on their ID.
+     *
      * @param references the patient IDs to find the patient details of
      * @return a mapping from the ID to the patient details
      */
     @Override
-    public HashMap<ShPatientReference, ShPatient> getAllPatients(Set<ShPatientReference> references){
+    public HashMap<ShPatientReference, ShPatient> getAllPatients(Set<ShPatientReference> references) {
         HashMap<ShPatientReference, ShPatient> shPatients = new HashMap<>();
-        for (ShPatientReference reference: references){
+        for (ShPatientReference reference : references) {
             Bundle patientBundle = this.client.search().forResource(Patient.class)
                     .where(Patient.RES_ID.exactly().identifier(reference.getId()))
                     .returnBundle(Bundle.class)
@@ -94,11 +86,11 @@ class FhirService extends HealthService {
 
             shPatients.put(reference,
                     new ShPatient(reference,
-                    humanName.getPrefixAsSingleString() + " " +
-                            humanName.getGivenAsSingleString() + " " +
-                            humanName.getFamily(),
-                    patient.getBirthDate()
-            ));
+                            humanName.getPrefixAsSingleString() + " " +
+                                    humanName.getGivenAsSingleString() + " " +
+                                    humanName.getFamily(),
+                            patient.getBirthDate()
+                    ));
         }
         return shPatients;
     }
@@ -107,7 +99,7 @@ class FhirService extends HealthService {
             ShPatientReference shPatientReference,
             ObservationType type,
             int count
-    ){
+    ) {
         // Request an observation for a patient
         Bundle b = this.client.search().forResource(Observation.class)
                 .where(new ReferenceClientParam("subject")
@@ -138,28 +130,28 @@ class FhirService extends HealthService {
      * @return A list with all observations for the given type
      */
     @Override
-    public List<QuantitativeObservation> readTimeSeriesObservations(
+    public List<CholesterolObservation> readTimeSeriesObservations(
             ShPatientReference shPatientReference,
             ObservationType type
     ) {
         List<Observation> observations = readObservations(shPatientReference, type, TIME_SERIES_LENGTH);
-        List<QuantitativeObservation> quantitativeObservations = new ArrayList<>(observations.size());
+        List<CholesterolObservation> CholesterolObservations = new ArrayList<>(observations.size());
 
-        // Extracts information about the information into a QuantitativeObservation
+        // Extracts information about the information into a CholesterolObservation
         for (Observation o : observations) {
-            String description = o.getCode().getText();
             Quantity quantity = (Quantity) o.getValue();
-            Date effectiveDateTime = o.getEffectiveDateTimeType().getValue();
-            String result = quantity.getValue().setScale(0, RoundingMode.CEILING) + "";
-            String unit = quantity.getUnit();
-            quantitativeObservations.add(new QuantitativeObservation(
-                    result,
-                    unit,
-                    description,
-                    effectiveDateTime));
+            // TODO: Remove duplicate code
+            CholesterolObservations.add(
+                    new CholesterolObservation(
+                            quantity.getValue(), // Value
+                            quantity.getUnit(), // Unit
+                            o.getCode().getText(), // Description
+                            o.getEffectiveDateTimeType().getValue() // Date observed
+                    )
+            );
         }
 
-        return quantitativeObservations;
+        return CholesterolObservations;
     }
 
     /**
@@ -169,37 +161,38 @@ class FhirService extends HealthService {
      * @param type               The type of the observation
      * @return A list with all observations for the given type
      */
-    public List<QuantitativeObservation> readLatestObservation(
+    public List<CholesterolObservation> readLatestObservation(
             ShPatientReference shPatientReference,
             ObservationType type
     ) {
         List<Observation> observations = readObservations(shPatientReference, type, 1);
-        List<QuantitativeObservation> quantitativeObservations = new ArrayList<>(observations.size());
+        List<CholesterolObservation> CholesterolObservations = new ArrayList<>(observations.size());
 
-        // Extracts information about the information into a QuantitativeObservation
+        // Extracts information about the information into a CholesterolObservation
         for (Observation o : observations) {
-            String description = o.getCode().getText();
             Quantity quantity = (Quantity) o.getValue();
-            Date effectiveDateTime = o.getEffectiveDateTimeType().getValue();
-            String result = quantity.getValue().setScale(0, RoundingMode.CEILING) + "";
-            String unit = quantity.getUnit();
-            quantitativeObservations.add(new QuantitativeObservation(
-                    result,
-                    unit,
-                    description,
-                    effectiveDateTime));
+
+            // TODO: Remove duplicate code
+            CholesterolObservations.add(new CholesterolObservation(
+                            quantity.getValue(), // Value
+                            quantity.getUnit(), // Unit
+                            o.getCode().getText(), // Description
+                            o.getEffectiveDateTimeType().getValue() // Date observed
+                    )
+            );
         }
 
-        return quantitativeObservations;
+        return CholesterolObservations;
     }
 
     /**
      * An internal class that maps from the ObservationType to the internal FHIR code string
+     *
      * @param type the observation type
      * @return FHIR code representing the observation type
      */
     private String observationCodeToFhirCode(ObservationType type) {
-        switch (type){
+        switch (type) {
             case CHOLESTEROL:
                 return "2093-3";
             case BLOOD_PRESSURE:

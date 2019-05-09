@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import edu.monash.smile.data.safeheartsModel.ObservationType;
-import edu.monash.smile.data.safeheartsModel.QuantitativeObservation;
+import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
+import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 
@@ -31,7 +31,7 @@ public abstract class HealthService {
      * @param type               The type of the observation
      * @return A list with all observations for the given type
      */
-    public abstract List<QuantitativeObservation> readTimeSeriesObservations(
+    public abstract List<CholesterolObservation> readTimeSeriesObservations(
             ShPatientReference shPatientReference,
             ObservationType type
     );
@@ -43,7 +43,7 @@ public abstract class HealthService {
      * @param type               The type of the observation
      * @return A list with all observations for the given type
      */
-    public abstract List<QuantitativeObservation> readLatestObservation(
+    public abstract List<CholesterolObservation> readLatestObservation(
             ShPatientReference shPatientReference,
             ObservationType type
     );
