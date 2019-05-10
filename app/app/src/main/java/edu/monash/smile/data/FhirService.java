@@ -1,5 +1,7 @@
 package edu.monash.smile.data;
 
+import android.util.Log;
+
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Encounter;
@@ -157,7 +159,7 @@ class FhirService extends HealthService {
         );
 
         Observation.ObservationComponentComponent fhirDiastolic = components.get(0);
-        Quantity diastolicQuantity = (Quantity) fhirSystolic.getValue();
+        Quantity diastolicQuantity = (Quantity) fhirDiastolic.getValue();
         DiastolicObservation diastolicObservation = new DiastolicObservation(
                 diastolicQuantity.getValue(),
                 diastolicQuantity.getUnit(),

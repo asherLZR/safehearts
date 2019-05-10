@@ -11,6 +11,7 @@ import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.HealthServiceProducer;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
+import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservation;
 import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 import edu.monash.smile.data.safeheartsModel.observation.ObservedPatient;
@@ -20,6 +21,7 @@ import edu.monash.smile.observerPattern.Subject;
 class PatientObservationController extends Subject {
     private HashMap<ShPatientReference, List<CholesterolObservation>> cholesterolObservations = new HashMap<>();
     private HashMap<ShPatientReference, List<SmokingObservation>> smokingObservations = new HashMap<>();
+    private HashMap<ShPatientReference, List<BloodPressureObservation>> bloodPressureObservations = new HashMap<>();
     private HealthService healthService;
     private PatientsMonitor patientsMonitor;
     private HashMap<ShPatientReference, ShPatient> shPatients;
@@ -46,6 +48,7 @@ class PatientObservationController extends Subject {
         // Remove stale patient data (if any)
         cholesterolObservations.clear();
         smokingObservations.clear();
+        bloodPressureObservations.clear();
 
         // Get data for ALL patients (the assignment only needs data for the selected subset)
         for (
@@ -65,6 +68,16 @@ class PatientObservationController extends Subject {
             List<SmokingObservation> smokingResult = healthService.readSmokingStatus(patient);
             if (smokingResult.size() != 0) {
                 smokingObservations.put(patient, smokingResult);
+            }
+        }
+
+        for (
+                ShPatientReference patient :
+                patientsMonitor.getMonitoredPatientsByType(ObservationType.BLOOD_PRESSURE)
+        ) {
+            List<BloodPressureObservation> bloodPressureResult = healthService.readBloodPressureTimeSeries(patient);
+            if (bloodPressureResult.size() != 0) {
+                bloodPressureObservations.put(patient, bloodPressureResult);
             }
         }
 
@@ -95,6 +108,19 @@ class PatientObservationController extends Subject {
         for (ShPatientReference p : smokingObservations.keySet()) {
             observedPatients.add(new ObservedPatient<SmokingObservation>(
                     smokingObservations.get(p),
+                    p,
+                    Objects.requireNonNull(shPatients.get(p)).getName()));
+        }
+
+        return observedPatients;
+    }
+
+    List<ObservedPatient<BloodPressureObservation>> getObservedBloodPressurePatients() {
+        List<ObservedPatient<BloodPressureObservation>> observedPatients = new ArrayList<>();
+
+        for (ShPatientReference p : bloodPressureObservations.keySet()) {
+            observedPatients.add(new ObservedPatient<BloodPressureObservation>(
+                    bloodPressureObservations.get(p),
                     p,
                     Objects.requireNonNull(shPatients.get(p)).getName()));
         }

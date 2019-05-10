@@ -5,4 +5,5 @@
     <color name="colorAccent">#05DAC5</color>
     <color name="colorCholesterolChip">#7CE2FC</color>
     <color name="colorSmokingChip">#F7CEFF</color>
+    <color name="colorBloodChip">#7CE2FC</color>
 </resources>

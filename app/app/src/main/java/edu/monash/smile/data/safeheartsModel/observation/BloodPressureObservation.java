@@ -12,11 +12,11 @@ public class BloodPressureObservation extends ShObservation {
         this.diastolicObservation = diastolicObservation;
     }
 
-    public QuantitativeObservation getSystolicObservation() {
+    public SystolicObservation getSystolicObservation() {
         return systolicObservation;
     }
 
-    public QuantitativeObservation getDiastolicObservation() {
+    public DiastolicObservation getDiastolicObservation() {
         return diastolicObservation;
     }
 }

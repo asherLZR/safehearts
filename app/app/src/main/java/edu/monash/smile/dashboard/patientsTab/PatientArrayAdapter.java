@@ -50,31 +50,34 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
         ShPatientReference shPatientReference = patients.get(position).getReference();
         // Display patient name
         holder.patientName.setText(patients.get(position).getName());
-        // Display patient filter for CHOLESTEROL
-        holder.cholesterolChip.setChecked(patientsMonitor.isPatientMonitored(
-                shPatientReference.getId(),
-                ObservationType.CHOLESTEROL
-        ));
 
-        // Handles selection of the chip, by delegating to the patients' monitor
-        holder.cholesterolChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                patientsMonitor.monitorPatient(shPatientReference.getId(), ObservationType.CHOLESTEROL);
-            } else {
-                patientsMonitor.unmonitorPatient(shPatientReference.getId(), ObservationType.CHOLESTEROL);
+        for (ObservationType type : ObservationType.values()){
+            switch (type){
+                case SMOKING:
+                    setChipOnType(shPatientReference, type, holder.smokingChip);
+                    break;
+                case CHOLESTEROL:
+                    setChipOnType(shPatientReference, type, holder.cholesterolChip);
+                    break;
+                case BLOOD_PRESSURE:
+                    setChipOnType(shPatientReference, type, holder.bloodPressureChip);
             }
-        });
+        }
+    }
 
-        // Display patient filter for SMOKING
-        holder.smokingChip.setChecked(patientsMonitor.isPatientMonitored(
+    private void setChipOnType(ShPatientReference shPatientReference,
+                               ObservationType type,
+                               Chip chip){
+        chip.setChecked(patientsMonitor.isPatientMonitored(
                 shPatientReference.getId(),
-                ObservationType.SMOKING
+                type
         ));
-        holder.smokingChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        // Handles selection of the chip, by delegating to the patients' monitor
+        chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                patientsMonitor.monitorPatient(shPatientReference.getId(), ObservationType.SMOKING);
+                patientsMonitor.monitorPatient(shPatientReference.getId(), type);
             } else {
-                patientsMonitor.unmonitorPatient(shPatientReference.getId(), ObservationType.SMOKING);
+                patientsMonitor.unmonitorPatient(shPatientReference.getId(), type);
             }
         });
     }
@@ -96,6 +99,7 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
         TextView patientName;
         Chip cholesterolChip;
         Chip smokingChip;
+        Chip bloodPressureChip;
 
         public PatientViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,6 +107,7 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
             this.patientName = itemView.findViewById(R.id.patientName);
             this.cholesterolChip = itemView.findViewById(R.id.cholesterolChip);
             this.smokingChip = itemView.findViewById(R.id.smokingChip);
+            this.bloodPressureChip = itemView.findViewById(R.id.bloodPressureChip);
         }
     }
 
