@@ -24,9 +24,9 @@ import edu.monash.smile.data.safeheartsModel.observation.QuantitativeObservation
 import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
 
 public class StatusCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static int CHOLESTEROL_VIEW = 0;
-    private static int SMOKING_VIEW = 1;
-    private static int BLOOD_PRESSURE_VIEW = 2;
+    private static int SINGLE_NUMERICAL_VIEW = 0;
+    private static int SINGLE_STRING_VIEW = 1;
+    private static int TIME_SERIES_VIEW = 2;
     private List<ObservedPatient<CholesterolObservation>> cholesterolPatients;
     private List<ObservedPatient<SmokingObservation>> smokingPatients;
     private List<ObservedPatient<BloodPressureObservation>> bloodPressurePatients;
@@ -47,16 +47,16 @@ public class StatusCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        if (viewType == CHOLESTEROL_VIEW) {
+        if (viewType == SINGLE_NUMERICAL_VIEW) {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.single_value_numerical_card, viewGroup, false); //CardView inflated as RecyclerView list item
             return new SingleValueNumericalViewHolder(v);
-        } else if (viewType == SMOKING_VIEW) {
+        } else if (viewType == SINGLE_STRING_VIEW) {
             View v = LayoutInflater.from(
                     viewGroup.getContext()).inflate(R.layout.single_value_string_card,
                     viewGroup,
                     false);
             return new SingleValueStringViewHolder(v);
-        } else if (viewType == BLOOD_PRESSURE_VIEW) {
+        } else if (viewType == TIME_SERIES_VIEW) {
             View v = LayoutInflater.from(
                     viewGroup.getContext()).inflate(R.layout.time_series_card,
                     viewGroup,
@@ -69,11 +69,11 @@ public class StatusCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemViewType(int position) {
         if (position < cholesterolPatients.size()) {
-            return CHOLESTEROL_VIEW;
+            return SINGLE_NUMERICAL_VIEW;
         } else if (position < (cholesterolPatients.size() + smokingPatients.size())){
-            return SMOKING_VIEW;
+            return SINGLE_STRING_VIEW;
         }
-        return BLOOD_PRESSURE_VIEW;
+        return TIME_SERIES_VIEW;
     }
 
     /**
@@ -85,22 +85,22 @@ public class StatusCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof SingleValueNumericalViewHolder) {
-            SingleValueNumericalViewHolder cholesterolHolder = (SingleValueNumericalViewHolder) holder;
+            SingleValueNumericalViewHolder numericalViewHolder = (SingleValueNumericalViewHolder) holder;
             ObservedPatient<CholesterolObservation> cardPatient = cholesterolPatients.get(position);
             CholesterolObservation viewedObservation = cardPatient.getObservations().get(0);
-            cholesterolHolder.numericalCardHeading.setText(cardPatient.getPatientName());
-            cholesterolHolder.numericalCardSubheading.setText(cardPatient.getShPatientReference().getFullReference());
-            cholesterolHolder.numericalCardDescription.setText(viewedObservation.getDescription());
-            cholesterolHolder.numericalCardValue.setText(viewedObservation.getValue().toPlainString());
-            cholesterolHolder.numericalCardUnit.setText(viewedObservation.getUnit());
+            numericalViewHolder.numericalCardHeading.setText(cardPatient.getPatientName());
+            numericalViewHolder.numericalCardSubheading.setText(cardPatient.getShPatientReference().getFullReference());
+            numericalViewHolder.numericalCardDescription.setText(viewedObservation.getDescription());
+            numericalViewHolder.numericalCardValue.setText(viewedObservation.getValue().toPlainString());
+            numericalViewHolder.numericalCardUnit.setText(viewedObservation.getUnit());
         } else if (holder instanceof SingleValueStringViewHolder) {
-            SingleValueStringViewHolder smokingHolder = (SingleValueStringViewHolder) holder;
+            SingleValueStringViewHolder stringViewHolder = (SingleValueStringViewHolder) holder;
             ObservedPatient<SmokingObservation> cardPatient = smokingPatients.get(
                     position - cholesterolPatients.size() // Offset by number of cholesterol cards
             );
-            smokingHolder.stringCardHeading.setText(cardPatient.getPatientName());
-            smokingHolder.stringCardSubheading.setText(cardPatient.getShPatientReference().getFullReference());
-            smokingHolder.stringCardStatus.setText(cardPatient.getObservations().get(0).getSmokingStatus());
+            stringViewHolder.stringCardHeading.setText(cardPatient.getPatientName());
+            stringViewHolder.stringCardSubheading.setText(cardPatient.getShPatientReference().getFullReference());
+            stringViewHolder.stringCardStatus.setText(cardPatient.getObservations().get(0).getSmokingStatus());
         } else if (holder instanceof TimeSeriesViewHolder){
             TimeSeriesViewHolder timeSeriesViewHolder = (TimeSeriesViewHolder) holder;
             ObservedPatient<BloodPressureObservation> cardPatient = bloodPressurePatients.get(

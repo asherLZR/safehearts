@@ -3,7 +3,7 @@
     <color name="colorPrimary">#0C0084</color>
     <color name="colorPrimaryDark">#0C0084</color>
     <color name="colorAccent">#05DAC5</color>
-    <color name="colorCholesterolChip">#7CE2FC</color>
-    <color name="colorSmokingChip">#F7CEFF</color>
+    <color name="colorChip1">#7CE2FC</color>
+    <color name="colorChip2">#F7CEFF</color>
     <color name="colorBloodChip">#7CE2FC</color>
 </resources>

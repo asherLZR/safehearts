@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,23 +52,29 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
         // Display patient name
         holder.patientName.setText(patients.get(position).getName());
 
-        for (ObservationType type : ObservationType.values()){
-            switch (type){
-                case SMOKING:
-                    setChipOnType(shPatientReference, type, holder.smokingChip);
-                    break;
-                case CHOLESTEROL:
-                    setChipOnType(shPatientReference, type, holder.cholesterolChip);
-                    break;
-                case BLOOD_PRESSURE:
-                    setChipOnType(shPatientReference, type, holder.bloodPressureChip);
-            }
+        ChipGroup chipGroup = holder.chipGroup;
+        ObservationType[] types = ObservationType.values();
+        for (int i=0; i < types.length; i ++){
+            ObservationType type = types[i];
+            Chip chip = new Chip(holder.itemView.getContext());
+            setChipOnType(shPatientReference, type, chip, i);
+            chipGroup.addView(chip);
         }
+        chipGroup.setSingleSelection(false);
     }
 
     private void setChipOnType(ShPatientReference shPatientReference,
                                ObservationType type,
-                               Chip chip){
+                               Chip chip,
+                               int alternatingIndex){
+        chip.setText(type.toString().toLowerCase().replace("_", " "));
+        chip.setClickable(true);
+        chip.setCheckable(true);
+        if (alternatingIndex % 2 == 0){
+            chip.setChipBackgroundColorResource(R.color.colorChip1);
+        }else{
+            chip.setChipBackgroundColorResource(R.color.colorChip2);
+        }
         chip.setChecked(patientsMonitor.isPatientMonitored(
                 shPatientReference.getId(),
                 type
@@ -97,17 +104,13 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
     static class PatientViewHolder extends RecyclerView.ViewHolder{
         View itemView;
         TextView patientName;
-        Chip cholesterolChip;
-        Chip smokingChip;
-        Chip bloodPressureChip;
+        ChipGroup chipGroup;
 
         public PatientViewHolder(@NonNull View itemView) {
             super(itemView);
             this.itemView = itemView;
             this.patientName = itemView.findViewById(R.id.patientName);
-            this.cholesterolChip = itemView.findViewById(R.id.cholesterolChip);
-            this.smokingChip = itemView.findViewById(R.id.smokingChip);
-            this.bloodPressureChip = itemView.findViewById(R.id.bloodPressureChip);
+            this.chipGroup = itemView.findViewById(R.id.chip_group);
         }
     }
 
