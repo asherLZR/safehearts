@@ -18,7 +18,7 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/cholesterolCardHeading"
+            android:id="@+id/string_heading"
             style="@style/TextAppearance.AppCompat.Body2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/patientIdView"
+            android:id="@+id/string_subheading"
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
             card_view:layout_constraintEnd_toEndOf="@+id/barrier"
             card_view:layout_constraintHorizontal_bias="0.0"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/cholesterolCardHeading"
+            card_view:layout_constraintTop_toBottomOf="@+id/string_heading"
             card_view:layout_constraintVertical_bias="0.0" />
 
         <androidx.constraintlayout.widget.Barrier
@@ -53,20 +53,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             card_view:barrierDirection="start"
-            card_view:constraint_referenced_ids="cholesterolCardDescription,cholesterolCardValue,unitView" />
+            card_view:constraint_referenced_ids="numerical_description, numerical_value, numerical_unit" />
 
         <TextView
-            android:id="@+id/cholesterolCardDescription"
+            android:id="@+id/numerical_description"
             style="@style/TextAppearance.AppCompat.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SomeDescription"
-            card_view:layout_constraintBottom_toTopOf="@+id/cholesterolCardValue"
+            card_view:layout_constraintBottom_toTopOf="@+id/numerical_value"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/cholesterolCardValue"
+            android:id="@+id/numerical_value"
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,13 +75,13 @@
             android:text="180"
             android:textSize="36sp"
             android:textStyle="bold"
-            card_view:layout_constraintBottom_toTopOf="@+id/unitView"
+            card_view:layout_constraintBottom_toTopOf="@+id/numerical_unit"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toEndOf="@+id/barrier"
-            card_view:layout_constraintTop_toBottomOf="@+id/cholesterolCardDescription" />
+            card_view:layout_constraintTop_toBottomOf="@+id/numerical_description" />
 
         <TextView
-            android:id="@+id/unitView"
+            android:id="@+id/numerical_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -91,7 +91,7 @@
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toEndOf="@+id/barrier"
-            card_view:layout_constraintTop_toBottomOf="@+id/cholesterolCardValue" />
+            card_view:layout_constraintTop_toBottomOf="@+id/string_status" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

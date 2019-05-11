@@ -13,6 +13,6 @@ class AlertViewHolder extends RecyclerView.ViewHolder {
 
     AlertViewHolder(@NonNull View v) {
         super(v);
-        this.patientTextView = v.findViewById(R.id.patientIdView);
+        this.patientTextView = v.findViewById(R.id.string_subheading);
     }
 }
