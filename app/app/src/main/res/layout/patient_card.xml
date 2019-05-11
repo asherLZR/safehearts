@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="8dp"
-        card_view:layout_constraintBottom_toTopOf="@+id/cholesterolChip"
-        card_view:layout_constraintTop_toTopOf="@+id/cholesterolChip">
+        card_view:layout_constraintBottom_toTopOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/patientName"
@@ -36,44 +36,6 @@
             tools:layout_conversion_wrapHeight="51"
             tools:layout_conversion_wrapWidth="296" />
 
-
-        <!--<com.google.android.material.chip.Chip-->
-            <!--android:id="@+id/cholesterolChip"-->
-            <!--style="@style/Widget.MaterialComponents.Chip.Filter"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Cholesterol"-->
-            <!--card_view:chipBackgroundColor="@color/colorCholesterolChip"-->
-            <!--card_view:layout_constraintEnd_toStartOf="@+id/smokingChip"-->
-            <!--card_view:layout_constraintHorizontal_bias="0.5"-->
-            <!--card_view:layout_constraintHorizontal_chainStyle="packed"-->
-            <!--card_view:layout_constraintStart_toStartOf="parent"-->
-            <!--tools:layout_editor_absoluteY="90dp" />-->
-
-        <!--<com.google.android.material.chip.Chip-->
-            <!--android:id="@+id/smokingChip"-->
-            <!--style="@style/Widget.MaterialComponents.Chip.Filter"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Smoking"-->
-            <!--card_view:chipBackgroundColor="@color/colorSmokingChip"-->
-            <!--card_view:layout_constraintEnd_toStartOf="@+id/bloodPressureChip"-->
-            <!--card_view:layout_constraintHorizontal_bias="0.5"-->
-            <!--card_view:layout_constraintStart_toEndOf="@+id/cholesterolChip"-->
-            <!--tools:layout_editor_absoluteY="90dp" />-->
-
-        <!--<com.google.android.material.chip.Chip-->
-            <!--android:id="@+id/bloodPressureChip"-->
-            <!--style="@style/Widget.MaterialComponents.Chip.Filter"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Blood Pressure"-->
-            <!--card_view:chipBackgroundColor="@color/colorBloodChip"-->
-            <!--card_view:layout_constraintEnd_toEndOf="parent"-->
-            <!--card_view:layout_constraintHorizontal_bias="0.5"-->
-            <!--card_view:layout_constraintStart_toEndOf="@+id/smokingChip"-->
-            <!--tools:layout_editor_absoluteY="90dp" />-->
-
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chip_group"
             android:layout_width="0dp"
@@ -82,7 +44,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            card_view:layout_constraintBottom_toBottomOf="@+id/smokingChip"
+            card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/patientName" />
