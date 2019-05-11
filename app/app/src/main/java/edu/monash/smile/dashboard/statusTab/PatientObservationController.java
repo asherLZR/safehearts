@@ -13,8 +13,11 @@ import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservation;
 import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
+import edu.monash.smile.data.safeheartsModel.observation.ObservationCollection;
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 import edu.monash.smile.data.safeheartsModel.observation.ObservedPatient;
+import edu.monash.smile.data.safeheartsModel.observation.QuantityVariableType;
+import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
 import edu.monash.smile.observerPattern.Subject;
 
@@ -84,13 +87,21 @@ class PatientObservationController extends Subject {
         this.shPatients = healthService.getAllPatients(this.patientsMonitor.getAllMonitoredPatients());
     }
 
+    List<ObservationCollection> getAllObservationCollections(){
+        List<ObservationCollection> observationCollectionList = new ArrayList<>();
+        observationCollectionList.add(getObservedCholesterolPatients());
+        observationCollectionList.add(getObservedSmokingPatients());
+        observationCollectionList.add(getObservedBloodPressurePatients());
+        return observationCollectionList;
+    }
+
     /**
      * Links each patient to its cholesterolObservations.
      *
      * @return A list of patients with their metrics (e.g. a patient and CHOLESTEROL readings)
      */
-    List<ObservedPatient<CholesterolObservation>> getObservedCholesterolPatients() {
-        List<ObservedPatient<CholesterolObservation>> observedPatients = new ArrayList<>();
+    private ObservationCollection getObservedCholesterolPatients() {
+        List<ObservedPatient> observedPatients = new ArrayList<>();
 
         for (ShPatientReference p : cholesterolObservations.keySet()) {
             observedPatients.add(new ObservedPatient<CholesterolObservation>(
@@ -99,11 +110,13 @@ class PatientObservationController extends Subject {
                     Objects.requireNonNull(shPatients.get(p)).getName()));
         }
 
-        return observedPatients;
+        return new ObservationCollection(
+                ObservationType.CHOLESTEROL,
+                observedPatients);
     }
 
-    List<ObservedPatient<SmokingObservation>> getObservedSmokingPatients() {
-        List<ObservedPatient<SmokingObservation>> observedPatients = new ArrayList<>();
+    private ObservationCollection getObservedSmokingPatients() {
+        List<ObservedPatient> observedPatients = new ArrayList<>();
 
         for (ShPatientReference p : smokingObservations.keySet()) {
             observedPatients.add(new ObservedPatient<SmokingObservation>(
@@ -112,11 +125,13 @@ class PatientObservationController extends Subject {
                     Objects.requireNonNull(shPatients.get(p)).getName()));
         }
 
-        return observedPatients;
+        return new ObservationCollection(
+                ObservationType.SMOKING,
+                observedPatients);
     }
 
-    List<ObservedPatient<BloodPressureObservation>> getObservedBloodPressurePatients() {
-        List<ObservedPatient<BloodPressureObservation>> observedPatients = new ArrayList<>();
+    private ObservationCollection getObservedBloodPressurePatients() {
+        List<ObservedPatient> observedPatients = new ArrayList<>();
 
         for (ShPatientReference p : bloodPressureObservations.keySet()) {
             observedPatients.add(new ObservedPatient<BloodPressureObservation>(
@@ -125,6 +140,8 @@ class PatientObservationController extends Subject {
                     Objects.requireNonNull(shPatients.get(p)).getName()));
         }
 
-        return observedPatients;
+        return new ObservationCollection(
+                ObservationType.BLOOD_PRESSURE,
+                observedPatients);
     }
 }

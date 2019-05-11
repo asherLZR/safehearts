@@ -19,38 +19,37 @@ import edu.monash.smile.R;
 import edu.monash.smile.charting.LineChartHelper;
 import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservation;
 import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
+import edu.monash.smile.data.safeheartsModel.observation.ObservationCollection;
 import edu.monash.smile.data.safeheartsModel.observation.ObservedPatient;
 import edu.monash.smile.data.safeheartsModel.observation.QuantitativeObservation;
+import edu.monash.smile.data.safeheartsModel.observation.QuantityVariableType;
+import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
 
-public class StatusCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static int SINGLE_NUMERICAL_VIEW = 0;
-    private static int SINGLE_STRING_VIEW = 1;
-    private static int TIME_SERIES_VIEW = 2;
-    private List<ObservedPatient<CholesterolObservation>> cholesterolPatients;
-    private List<ObservedPatient<SmokingObservation>> smokingPatients;
-    private List<ObservedPatient<BloodPressureObservation>> bloodPressurePatients;
+public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.StatusCardViewHolder> {
+    private static final int SINGLE_NUMERIC_VIEW = 0;
+    private static final int SINGLE_TEXT_VIEW = 1;
+    private static final int TIME_SERIES_VIEW = 2;
+    private List<ObservedPatient> observationCollectionList = new ArrayList<>();
 
     /**
      * The status card is a summary of the patient's health, shown in the dashboard.
      * It displays information about the patient's tracked observations.
      */
-    StatusCardAdapter() {
-        this.cholesterolPatients = new ArrayList<>();
-        this.smokingPatients = new ArrayList<>();
-        this.bloodPressurePatients = new ArrayList<>();
-    }
+    StatusCardAdapter() {}
 
     /**
      * Inflates the card layout for the ViewHolder.
      */
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        if (viewType == SINGLE_NUMERICAL_VIEW) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.single_value_numerical_card, viewGroup, false); //CardView inflated as RecyclerView list item
+    public StatusCardViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        if (viewType == SINGLE_NUMERIC_VIEW) {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.single_value_numerical_card,
+                    viewGroup,
+                    false); //CardView inflated as RecyclerView list item
             return new SingleValueNumericalViewHolder(v);
-        } else if (viewType == SINGLE_STRING_VIEW) {
+        } else if (viewType == SINGLE_TEXT_VIEW) {
             View v = LayoutInflater.from(
                     viewGroup.getContext()).inflate(R.layout.single_value_string_card,
                     viewGroup,
@@ -68,12 +67,19 @@ public class StatusCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemViewType(int position) {
-        if (position < cholesterolPatients.size()) {
-            return SINGLE_NUMERICAL_VIEW;
-        } else if (position < (cholesterolPatients.size() + smokingPatients.size())){
-            return SINGLE_STRING_VIEW;
+        ShObservation shObservation = (ShObservation) this.observationCollectionList.get(position)
+                .getObservations().get(0);
+        QuantityVariableType quantityVariableType = shObservation.getQuantityVariableType();
+        switch (quantityVariableType){
+            case SINGLE_NUMERIC:
+                return SINGLE_NUMERIC_VIEW;
+            case SINGLE_TEXT:
+                return SINGLE_TEXT_VIEW;
+            case TIME_SERIES:
+                return TIME_SERIES_VIEW;
+            default:
+                throw new IllegalArgumentException("Unhandled quantity variable type" + quantityVariableType);
         }
-        return TIME_SERIES_VIEW;
     }
 
     /**
@@ -83,50 +89,50 @@ public class StatusCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      * - Patient observation (description and value)
      */
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull StatusCardViewHolder holder, int position) {
+        ObservedPatient cardPatient = this.observationCollectionList.get(position);
+        holder.cardHeading.setText(cardPatient.getPatientName());
+        holder.cardSubheading.setText(cardPatient.getShPatientReference().getFullReference());
+        ShObservation observationInstance = (ShObservation) cardPatient.getObservations().get(0);   // used to compare types
+
         if (holder instanceof SingleValueNumericalViewHolder) {
             SingleValueNumericalViewHolder numericalViewHolder = (SingleValueNumericalViewHolder) holder;
-            ObservedPatient<CholesterolObservation> cardPatient = cholesterolPatients.get(position);
-            CholesterolObservation viewedObservation = cardPatient.getObservations().get(0);
-            numericalViewHolder.numericalCardHeading.setText(cardPatient.getPatientName());
-            numericalViewHolder.numericalCardSubheading.setText(cardPatient.getShPatientReference().getFullReference());
-            numericalViewHolder.numericalCardDescription.setText(viewedObservation.getDescription());
-            numericalViewHolder.numericalCardValue.setText(viewedObservation.getValue().toPlainString());
-            numericalViewHolder.numericalCardUnit.setText(viewedObservation.getUnit());
+            if (observationInstance instanceof CholesterolObservation){
+                CholesterolObservation viewedObservation = (CholesterolObservation) observationInstance;
+                numericalViewHolder.numericalCardDescription.setText(viewedObservation.getDescription());
+                numericalViewHolder.numericalCardValue.setText(viewedObservation.getValue().toPlainString());
+                numericalViewHolder.numericalCardUnit.setText(viewedObservation.getUnit());
+            }
         } else if (holder instanceof SingleValueStringViewHolder) {
             SingleValueStringViewHolder stringViewHolder = (SingleValueStringViewHolder) holder;
-            ObservedPatient<SmokingObservation> cardPatient = smokingPatients.get(
-                    position - cholesterolPatients.size() // Offset by number of cholesterol cards
-            );
-            stringViewHolder.stringCardHeading.setText(cardPatient.getPatientName());
-            stringViewHolder.stringCardSubheading.setText(cardPatient.getShPatientReference().getFullReference());
-            stringViewHolder.stringCardStatus.setText(cardPatient.getObservations().get(0).getSmokingStatus());
+            if (observationInstance instanceof SmokingObservation){
+                SmokingObservation viewedObservation = (SmokingObservation) observationInstance;
+                stringViewHolder.stringCardStatus.setText(viewedObservation.getSmokingStatus());
+            }
         } else if (holder instanceof TimeSeriesViewHolder){
             TimeSeriesViewHolder timeSeriesViewHolder = (TimeSeriesViewHolder) holder;
-            ObservedPatient<BloodPressureObservation> cardPatient = bloodPressurePatients.get(
-                    position - cholesterolPatients.size() - smokingPatients.size() // Offset by number of cholesterol cards
-            );
-            timeSeriesViewHolder.timeSeriesCardHeading.setText(cardPatient.getPatientName());
-            timeSeriesViewHolder.timeSeriesCardSubheading.setText(cardPatient.getShPatientReference().getFullReference());
-            LineChartHelper lineChartHelper = new LineChartHelper(timeSeriesViewHolder.lineChart);
-            List<BloodPressureObservation> o = cardPatient.getObservations();
-            List<QuantitativeObservation> systolicObservations = o.stream()
-                    .map(BloodPressureObservation::getSystolicObservation)
-                    .collect(Collectors.toList());
-            List<QuantitativeObservation> diastolicObservations = o.stream()
-                    .map(BloodPressureObservation::getDiastolicObservation)
-                    .collect(Collectors.toList());
-            lineChartHelper.createLineDataSet(
-                    systolicObservations,
-                    "Systolic Blood Pressure",
-                    Color.BLUE
-            );
-            lineChartHelper.createLineDataSet(
-                    diastolicObservations,
-                    "Diastolic Blood Pressure",
-                    Color.BLACK
-            );
-            lineChartHelper.plot();
+
+            if (observationInstance instanceof BloodPressureObservation){
+                List<BloodPressureObservation> o = (List<BloodPressureObservation>) cardPatient.getObservations();
+                LineChartHelper lineChartHelper = new LineChartHelper(timeSeriesViewHolder.lineChart);
+                List<QuantitativeObservation> systolicObservations = o.stream()
+                        .map(BloodPressureObservation::getSystolicObservation)
+                        .collect(Collectors.toList());
+                List<QuantitativeObservation> diastolicObservations = o.stream()
+                        .map(BloodPressureObservation::getDiastolicObservation)
+                        .collect(Collectors.toList());
+                lineChartHelper.createLineDataSet(
+                        systolicObservations,
+                        "Systolic Blood Pressure",
+                        Color.BLUE
+                );
+                lineChartHelper.createLineDataSet(
+                        diastolicObservations,
+                        "Diastolic Blood Pressure",
+                        Color.BLACK
+                );
+                lineChartHelper.plot();
+            }
         }
     }
 
@@ -137,74 +143,70 @@ public class StatusCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     @Override
     public int getItemCount() {
-        return this.cholesterolPatients.size() + this.smokingPatients.size() + this.bloodPressurePatients.size();
+        return this.observationCollectionList.size();
     }
 
-    /**
-     * Called when the underlying data source changes (e.g. when new patients are observed)
-     *
-     * @param cholesterolPatients the observed patients to show in this list
-     */
-    void updateCholesterolPatients(List<ObservedPatient<CholesterolObservation>> cholesterolPatients) {
-        this.cholesterolPatients = cholesterolPatients;
+//    /**
+//     * Called when the underlying data source changes (e.g. when new patients are observed)
+//     *
+//     * @param cholesterolPatients the observed patients to show in this list
+//     */
+
+    void updateAllMonitoredPatients(List<ObservationCollection> observationCollections){
+        this.observationCollectionList = new ArrayList<>();
+        for (ObservationCollection observationCollection : observationCollections){
+            List<ObservedPatient> observedPatientList = observationCollection.getObservations();
+            this.observationCollectionList.addAll(observedPatientList);
+        }
     }
 
-    void updateSmokingPatients(List<ObservedPatient<SmokingObservation>> smokingPatients) {
-        this.smokingPatients = smokingPatients;
-    }
+    static abstract class StatusCardViewHolder extends RecyclerView.ViewHolder {
+        View itemView;
+        TextView cardHeading;
+        TextView cardSubheading;
 
-    void updateBloodPressurePatients(List<ObservedPatient<BloodPressureObservation>> bloodPressurePatients) {
-        this.bloodPressurePatients = bloodPressurePatients;
+        StatusCardViewHolder(@NonNull View itemView) {
+            super(itemView);
+            this.itemView = itemView;
+        }
     }
 
     /**
      * Representation of each individual card stored.
      */
-    static class SingleValueNumericalViewHolder extends RecyclerView.ViewHolder {
-        View itemView;
-        TextView numericalCardHeading;
-        TextView numericalCardSubheading;
+    static class SingleValueNumericalViewHolder extends StatusCardViewHolder {
         TextView numericalCardDescription;
         TextView numericalCardValue;
         TextView numericalCardUnit;
 
         SingleValueNumericalViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.itemView = itemView;
-            this.numericalCardHeading = itemView.findViewById(R.id.string_heading);
-            this.numericalCardSubheading = itemView.findViewById(R.id.string_subheading);
+            this.cardHeading = itemView.findViewById(R.id.numerical_card_heading);
+            this.cardSubheading = itemView.findViewById(R.id.numerical_card_subheading);
             this.numericalCardDescription = itemView.findViewById(R.id.numerical_description);
             this.numericalCardValue = itemView.findViewById(R.id.numerical_value);
             this.numericalCardUnit = itemView.findViewById(R.id.numerical_unit);
         }
     }
 
-    static class SingleValueStringViewHolder extends RecyclerView.ViewHolder {
-        View itemView;
-        TextView stringCardHeading;
-        TextView stringCardSubheading;
+    static class SingleValueStringViewHolder extends StatusCardViewHolder {
         TextView stringCardStatus;
 
         SingleValueStringViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.itemView = itemView;
-            this.stringCardHeading = itemView.findViewById(R.id.string_heading);
-            this.stringCardSubheading = itemView.findViewById(R.id.string_subheading);
+            this.cardHeading = itemView.findViewById(R.id.string_heading);
+            this.cardSubheading = itemView.findViewById(R.id.string_subheading);
             this.stringCardStatus = itemView.findViewById(R.id.string_status);
         }
     }
 
-    static class TimeSeriesViewHolder extends RecyclerView.ViewHolder {
-        View itemView;
-        TextView timeSeriesCardHeading;
-        TextView timeSeriesCardSubheading;
+    static class TimeSeriesViewHolder extends StatusCardViewHolder {
         LineChart lineChart;
 
         TimeSeriesViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.itemView = itemView;
-            this.timeSeriesCardHeading = itemView.findViewById(R.id.timeseries_heading);
-            this.timeSeriesCardSubheading = itemView.findViewById(R.id.timeseries_subheading);
+            this.cardHeading = itemView.findViewById(R.id.timeseries_heading);
+            this.cardSubheading = itemView.findViewById(R.id.timeseries_subheading);
             this.lineChart = itemView.findViewById(R.id.line_chart);
         }
     }
