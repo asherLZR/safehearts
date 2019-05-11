@@ -5,9 +5,8 @@ import java.util.Date;
 public class SmokingObservation extends ShObservation {
     private final String smokingStatus;
 
-    public SmokingObservation(String smokingStatus, String description, Date dateObserved,
-                              QuantityVariableType quantityVariableType) {
-        super(description, dateObserved, quantityVariableType);
+    public SmokingObservation(String smokingStatus, String description, Date dateObserved) {
+        super(description, dateObserved, ObservationType.SMOKING);
         this.smokingStatus = smokingStatus;
     }
 

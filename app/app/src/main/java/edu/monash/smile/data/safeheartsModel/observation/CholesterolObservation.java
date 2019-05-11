@@ -13,9 +13,8 @@ public class CholesterolObservation extends QuantitativeObservation {
      * @param description  A description of the observation
      * @param dateObserved
      */
-    public CholesterolObservation(BigDecimal value, String unit, String description, Date dateObserved,
-                                  QuantityVariableType quantityVariableType) {
-        super(value, unit, description, dateObserved, quantityVariableType);
+    public CholesterolObservation(BigDecimal value, String unit, String description, Date dateObserved) {
+        super(value, unit, description, dateObserved, ObservationType.CHOLESTEROL);
     }
 
     @Override

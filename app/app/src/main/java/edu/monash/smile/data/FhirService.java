@@ -1,7 +1,5 @@
 package edu.monash.smile.data;
 
-import android.util.Log;
-
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Encounter;
@@ -28,7 +26,6 @@ import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservatio
 import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
 import edu.monash.smile.data.safeheartsModel.observation.DiastolicObservation;
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
-import edu.monash.smile.data.safeheartsModel.observation.QuantityVariableType;
 import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
 import edu.monash.smile.data.safeheartsModel.observation.SystolicObservation;
 
@@ -156,8 +153,7 @@ class FhirService extends HealthService {
                 systolicQuantity.getValue(),
                 systolicQuantity.getUnit(),
                 fhirSystolic.getCode().getText(),
-                date,
-                QuantityVariableType.TIME_SERIES
+                date
         );
 
         Observation.ObservationComponentComponent fhirDiastolic = components.get(0);
@@ -166,16 +162,14 @@ class FhirService extends HealthService {
                 diastolicQuantity.getValue(),
                 diastolicQuantity.getUnit(),
                 fhirDiastolic.getCode().getText(),
-                date,
-                QuantityVariableType.TIME_SERIES
+                date
         );
 
         return new BloodPressureObservation(
                 systolicObservation,
                 diastolicObservation,
                 "Blood pressure",
-                date, // Date observed
-                QuantityVariableType.TIME_SERIES
+                date // Date observed
         );
     }
 
@@ -202,8 +196,7 @@ class FhirService extends HealthService {
         return new SmokingObservation(
                 codeableConcept.getText(), // Unit
                 observation.getCode().getText(), // Description
-                observation.getEffectiveDateTimeType().getValue(), // Date observed
-                QuantityVariableType.SINGLE_TEXT
+                observation.getEffectiveDateTimeType().getValue() // Date observed
         );
     }
 
@@ -236,8 +229,7 @@ class FhirService extends HealthService {
                 quantity.getValue(), // Value
                 quantity.getUnit(), // Unit
                 observation.getCode().getText(), // Description
-                observation.getEffectiveDateTimeType().getValue(), // Date observed
-                QuantityVariableType.SINGLE_NUMERIC
+                observation.getEffectiveDateTimeType().getValue() // Date observed
         );
     }
 

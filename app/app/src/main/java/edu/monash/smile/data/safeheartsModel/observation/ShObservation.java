@@ -6,16 +6,16 @@ import java.util.Objects;
 public abstract class ShObservation {
     final private String description;
     final private Date dateObserved;
-    final private QuantityVariableType quantityVariableType;
+    final private ObservationType observationType;
 
     /**
      * A single observation of a patient.
      * @param description A description of the observation
      */
-    ShObservation(String description, Date dateObserved, QuantityVariableType quantityVariableType) {
+    ShObservation(String description, Date dateObserved, ObservationType observationType) {
         this.description = description;
         this.dateObserved = dateObserved;
-        this.quantityVariableType = quantityVariableType;
+        this.observationType = observationType;
     }
 
     public Date getDateObserved() {
@@ -26,8 +26,8 @@ public abstract class ShObservation {
         return description;
     }
 
-    public QuantityVariableType getQuantityVariableType() {
-        return quantityVariableType;
+    public ObservationType getObservationType() {
+        return observationType;
     }
 
     @Override
