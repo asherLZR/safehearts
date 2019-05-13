@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#0C0084</color>
-    <color name="colorPrimaryDark">#0C0084</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#05DAC5</color>
     <color name="colorChip1">#7CE2FC</color>
     <color name="colorChip2">#F7CEFF</color>
-    <color name="colorBloodChip">#7CE2FC</color>
 </resources>
