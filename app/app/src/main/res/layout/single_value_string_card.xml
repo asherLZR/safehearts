@@ -59,11 +59,11 @@
         <TextView
             android:id="@+id/string_status"
             style="@style/TextAppearance.AppCompat.Body1"
-            android:layout_width="0px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
             android:text="Some Test String Status"
             android:textSize="16sp"
             android:textStyle="bold"
