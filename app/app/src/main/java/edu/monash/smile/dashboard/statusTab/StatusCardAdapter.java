@@ -4,19 +4,19 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.mikephil.charting.charts.LineChart;
-
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.monash.smile.R;
-import edu.monash.smile.charting.LineChartHelper;
+import edu.monash.smile.charting.ObservationLineChart;
 import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservation;
 import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
@@ -65,6 +65,10 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
         }
     }
 
+    /**
+     * Based on the type of the observation found, determines the kind of view used to display
+     * that data.
+     */
     @Override
     public int getItemViewType(int position) {
         ShObservation shObservation = (ShObservation) this.observationCollectionList.get(position)
@@ -114,24 +118,31 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
             TimeSeriesViewHolder timeSeriesViewHolder = (TimeSeriesViewHolder) holder;
             if (observationType == ObservationType.BLOOD_PRESSURE){
                 List<BloodPressureObservation> o = (List<BloodPressureObservation>) cardPatient.getObservations();
-                LineChartHelper lineChartHelper = new LineChartHelper(timeSeriesViewHolder.lineChart);
+                BigDecimal systolic = o.get(0).getSystolicObservation().getValue();
+                BigDecimal diastolic = o.get(0).getDiastolicObservation().getValue();
+                if (systolic.intValue() > 180 || diastolic.intValue() > 120){
+                    ((TimeSeriesViewHolder) holder).alert.setVisibility(View.VISIBLE);
+                }else{
+                    ((TimeSeriesViewHolder) holder).alert.setVisibility(View.GONE);
+                }
+                ObservationLineChart observationLineChart = new ObservationLineChart(timeSeriesViewHolder.lineChart);
                 List<QuantitativeObservation> systolicObservations = o.stream()
                         .map(BloodPressureObservation::getSystolicObservation)
                         .collect(Collectors.toList());
                 List<QuantitativeObservation> diastolicObservations = o.stream()
                         .map(BloodPressureObservation::getDiastolicObservation)
                         .collect(Collectors.toList());
-                lineChartHelper.createLineDataSet(
+                observationLineChart.createLineDataSet(
                         systolicObservations,
                         "Systolic Blood Pressure",
                         Color.BLUE
                 );
-                lineChartHelper.createLineDataSet(
+                observationLineChart.createLineDataSet(
                         diastolicObservations,
                         "Diastolic Blood Pressure",
                         Color.BLACK
                 );
-                lineChartHelper.plot();
+                observationLineChart.plot();
             }
         }
     }
@@ -155,6 +166,10 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
         this.observationCollectionList = observationCollection;
     }
 
+    /**
+     * A generalised version of the view holder to provide common features between all status
+     * cards.
+     */
     static abstract class BaseCardViewHolder extends RecyclerView.ViewHolder {
         View itemView;
         TextView cardHeading;
@@ -167,7 +182,8 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
     }
 
     /**
-     * Representation of each individual card stored.
+     * Representation of each individual card stored. This deals specifically with displaying
+     * data that has only one numerical value to display.
      */
     static class SingleValueNumericalViewHolder extends BaseCardViewHolder {
         TextView numericalCardDescription;
@@ -184,6 +200,10 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
         }
     }
 
+    /**
+     * Representation of each individual card stored. This deals specifically with displaying
+     * data that has only one textual value to display.
+     */
     static class SingleValueStringViewHolder extends BaseCardViewHolder {
         TextView stringCardStatus;
 
@@ -195,14 +215,20 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
         }
     }
 
+    /**
+     * Representation of each individual card stored. This deals specifically with displaying
+     * data that may be represented on a continuous scale.
+     */
     static class TimeSeriesViewHolder extends BaseCardViewHolder {
-        LineChart lineChart;
+        com.github.mikephil.charting.charts.LineChart lineChart;
+        ImageView alert;
 
         TimeSeriesViewHolder(@NonNull View itemView) {
             super(itemView);
             this.cardHeading = itemView.findViewById(R.id.timeseries_heading);
             this.cardSubheading = itemView.findViewById(R.id.timeseries_subheading);
             this.lineChart = itemView.findViewById(R.id.line_chart);
+            this.alert = itemView.findViewById(R.id.alertImg);
         }
     }
 }
