@@ -19,6 +19,7 @@ public class ObservationLineChart {
 
     /**
      * A convenience class which allows the plotting of time-series observations graphs.
+     * @param lineChart LineChart view to be updated
      */
     public ObservationLineChart(com.github.mikephil.charting.charts.LineChart lineChart){
         this.lineChart = lineChart;
@@ -26,6 +27,7 @@ public class ObservationLineChart {
 
     /**
      * Sorts all entries by their x-values to ensure logical plot by time.
+     * @param entries the list of graphing entries for a dataset
      */
     private static void sortEntriesOnXValue(List<Entry> entries){
         Collections.sort(entries, (o1, o2) -> Math.round(o1.getX() - o2.getX()));
@@ -45,6 +47,9 @@ public class ObservationLineChart {
     /**
      * Creates 1 dataset object and stores in an array of datasets. Each dataset represents one
      * line in the final chart.
+     * @param quantitativeObservations a list of QuantitativeObservation to be plotted
+     * @param label the label for the dataset
+     * @param colour colour of the dataset's line
      */
     public void createLineDataSet(
             List<QuantitativeObservation> quantitativeObservations,
