@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.mikephil.charting.charts.LineChart;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +35,8 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
      * The status card is a summary of the patient's health, shown in the dashboard.
      * It displays information about the patient's tracked observations.
      */
-    StatusCardAdapter() {}
+    StatusCardAdapter() {
+    }
 
     /**
      * Inflates the card layout for the ViewHolder.
@@ -41,7 +44,7 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
     @NonNull
     @Override
     public BaseCardViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        switch (viewType){
+        switch (viewType) {
             case SINGLE_NUMERIC_VIEW:
                 View singleNumericView = LayoutInflater.from(
                         viewGroup.getContext()).inflate(R.layout.single_value_numerical_card,
@@ -74,7 +77,7 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
         ShObservation shObservation = (ShObservation) this.observationCollectionList.get(position)
                 .getObservations().get(0);
         ObservationType observationType = shObservation.getObservationType();
-        switch (observationType){
+        switch (observationType) {
             case CHOLESTEROL:
                 return SINGLE_NUMERIC_VIEW;
             case SMOKING:
@@ -95,37 +98,45 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
     @Override
     public void onBindViewHolder(@NonNull BaseCardViewHolder holder, int position) {
         ObservedPatient cardPatient = this.observationCollectionList.get(position);
-        holder.cardHeading.setText(cardPatient.getPatientName());
-        holder.cardSubheading.setText(cardPatient.getShPatientReference().getFullReference());
+
+        holder.setUpTitle(
+                cardPatient.getPatientName(),
+                cardPatient.getShPatientReference().getFullReference()
+        );
+
         ShObservation observationInstance = ((ShObservation) cardPatient.getObservations().get(0));   // used to compare types
         ObservationType observationType = observationInstance.getObservationType();
 
         if (holder instanceof SingleValueNumericalViewHolder) {
             SingleValueNumericalViewHolder numericalViewHolder = (SingleValueNumericalViewHolder) holder;
-            if (observationType == ObservationType.CHOLESTEROL){
-                CholesterolObservation viewedObservation = (CholesterolObservation) observationInstance;
-                numericalViewHolder.numericalCardDescription.setText(viewedObservation.getDescription());
-                numericalViewHolder.numericalCardValue.setText(viewedObservation.getValue().toPlainString());
-                numericalViewHolder.numericalCardUnit.setText(viewedObservation.getUnit());
+            if (observationType == ObservationType.CHOLESTEROL) {
+                CholesterolObservation observation = (CholesterolObservation) observationInstance;
+                numericalViewHolder.setUpView(
+                        observation.getDescription(),
+                        observation.getValue().toPlainString(),
+                        observation.getUnit()
+                );
             }
         } else if (holder instanceof SingleValueStringViewHolder) {
             SingleValueStringViewHolder stringViewHolder = (SingleValueStringViewHolder) holder;
-            if (observationType == ObservationType.SMOKING){
-                SmokingObservation viewedObservation = (SmokingObservation) observationInstance;
-                stringViewHolder.stringCardStatus.setText(viewedObservation.getSmokingStatus());
+            if (observationType == ObservationType.SMOKING) {
+                SmokingObservation observation = (SmokingObservation) observationInstance;
+                stringViewHolder.setUpView(observation.getSmokingStatus());
             }
-        } else if (holder instanceof TimeSeriesViewHolder){
+        } else if (holder instanceof TimeSeriesViewHolder) {
             TimeSeriesViewHolder timeSeriesViewHolder = (TimeSeriesViewHolder) holder;
-            if (observationType == ObservationType.BLOOD_PRESSURE){
+            if (observationType == ObservationType.BLOOD_PRESSURE) {
                 List<BloodPressureObservation> o = (List<BloodPressureObservation>) cardPatient.getObservations();
                 BigDecimal systolic = o.get(0).getSystolicObservation().getValue();
                 BigDecimal diastolic = o.get(0).getDiastolicObservation().getValue();
-                if (systolic.intValue() > 180 || diastolic.intValue() > 120){
-                    ((TimeSeriesViewHolder) holder).showAlert();
-                }else{
-                    ((TimeSeriesViewHolder) holder).hideAlert();
+
+                if (systolic.intValue() > 180 || diastolic.intValue() > 120) {
+                    timeSeriesViewHolder.showAlert();
+                } else {
+                    timeSeriesViewHolder.hideAlert();
                 }
-                ObservationLineChart observationLineChart = new ObservationLineChart(timeSeriesViewHolder.lineChart);
+
+                ObservationLineChart observationLineChart = new ObservationLineChart(timeSeriesViewHolder.getLineChartView());
                 List<QuantitativeObservation> systolicObservations = o.stream()
                         .map(BloodPressureObservation::getSystolicObservation)
                         .collect(Collectors.toList());
@@ -162,7 +173,7 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
      *
      * @param observationCollection a list of all the observed patients to show in this list
      */
-    void updateAllMonitoredPatients(List<ObservedPatient> observationCollection){
+    void updateAllMonitoredPatients(List<ObservedPatient> observationCollection) {
         this.observationCollectionList = observationCollection;
     }
 
@@ -172,12 +183,19 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
      */
     static abstract class BaseCardViewHolder extends RecyclerView.ViewHolder {
         View itemView;
-        TextView cardHeading;
-        TextView cardSubheading;
+        private TextView cardHeading;
+        private TextView cardSubheading;
 
-        BaseCardViewHolder(@NonNull View itemView) {
+        BaseCardViewHolder(@NonNull View itemView, int cardHeadingId, int cardSubheadingId) {
             super(itemView);
+            this.cardHeading = itemView.findViewById(cardHeadingId);
+            this.cardSubheading = itemView.findViewById(cardSubheadingId);
             this.itemView = itemView;
+        }
+
+        void setUpTitle(String heading, String subheading) {
+            cardHeading.setText(heading);
+            cardSubheading.setText(subheading);
         }
     }
 
@@ -186,17 +204,21 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
      * data that has only one numerical value to display.
      */
     static class SingleValueNumericalViewHolder extends BaseCardViewHolder {
-        TextView numericalCardDescription;
-        TextView numericalCardValue;
-        TextView numericalCardUnit;
+        private TextView numericalCardDescription;
+        private TextView numericalCardValue;
+        private TextView numericalCardUnit;
 
         SingleValueNumericalViewHolder(@NonNull View itemView) {
-            super(itemView);
-            this.cardHeading = itemView.findViewById(R.id.numerical_card_heading);
-            this.cardSubheading = itemView.findViewById(R.id.numerical_card_subheading);
+            super(itemView, R.id.numerical_card_heading, R.id.numerical_card_subheading);
             this.numericalCardDescription = itemView.findViewById(R.id.numerical_description);
             this.numericalCardValue = itemView.findViewById(R.id.numerical_value);
             this.numericalCardUnit = itemView.findViewById(R.id.numerical_unit);
+        }
+
+        void setUpView(String description, String cardValue, String cardUnit) {
+            numericalCardDescription.setText(description);
+            numericalCardValue.setText(cardValue);
+            numericalCardUnit.setText(cardUnit);
         }
     }
 
@@ -205,13 +227,15 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
      * data that has only one textual value to display.
      */
     static class SingleValueStringViewHolder extends BaseCardViewHolder {
-        TextView stringCardStatus;
+        private TextView stringCardStatus;
 
         SingleValueStringViewHolder(@NonNull View itemView) {
-            super(itemView);
-            this.cardHeading = itemView.findViewById(R.id.string_heading);
-            this.cardSubheading = itemView.findViewById(R.id.string_subheading);
+            super(itemView, R.id.string_heading, R.id.string_subheading);
             this.stringCardStatus = itemView.findViewById(R.id.string_status);
+        }
+
+        void setUpView(String status) {
+            stringCardStatus.setText(status);
         }
     }
 
@@ -220,15 +244,17 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
      * data that may be represented on a continuous scale.
      */
     static class TimeSeriesViewHolder extends BaseCardViewHolder {
-        com.github.mikephil.charting.charts.LineChart lineChart;
-        ImageView alert;
+        private com.github.mikephil.charting.charts.LineChart lineChart;
+        private ImageView alert;
 
         TimeSeriesViewHolder(@NonNull View itemView) {
-            super(itemView);
-            this.cardHeading = itemView.findViewById(R.id.timeseries_heading);
-            this.cardSubheading = itemView.findViewById(R.id.timeseries_subheading);
+            super(itemView, R.id.timeseries_heading, R.id.timeseries_subheading);
             this.lineChart = itemView.findViewById(R.id.line_chart);
             this.alert = itemView.findViewById(R.id.alertImg);
+        }
+
+        LineChart getLineChartView() {
+            return lineChart;
         }
 
         void showAlert() {
