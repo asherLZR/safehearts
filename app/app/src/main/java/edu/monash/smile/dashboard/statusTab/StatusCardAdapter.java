@@ -12,10 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.LineChart;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import edu.monash.smile.R;
 import edu.monash.smile.charting.ObservationLineChart;
@@ -29,7 +27,7 @@ import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
 
 public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.BaseCardViewHolder> {
     private static final int SINGLE_NUMERIC_VIEW = 0, SINGLE_TEXT_VIEW = 1, TIME_SERIES_VIEW = 2;
-    private List<ObservedPatient> observationCollectionList = new ArrayList<>();
+    private List<ObservedPatient<? extends ShObservation>> observationCollectionList = new ArrayList<>();
 
     /**
      * The status card is a summary of the patient's health, shown in the dashboard.
@@ -74,10 +72,11 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
      */
     @Override
     public int getItemViewType(int position) {
-        ShObservation shObservation = (ShObservation) this.observationCollectionList.get(position)
-                .getObservations().get(0);
-        ObservationType observationType = shObservation.getObservationType();
-        switch (observationType) {
+        ObservationType type = observationCollectionList
+                .get(position)
+                .getObservationType();
+
+        switch (type) {
             case CHOLESTEROL:
                 return SINGLE_NUMERIC_VIEW;
             case SMOKING:
@@ -85,7 +84,7 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
             case BLOOD_PRESSURE:
                 return TIME_SERIES_VIEW;
             default:
-                throw new IllegalArgumentException("Unhandled observation type: " + observationType);
+                throw new IllegalArgumentException("Unhandled observation type: " + type);
         }
     }
 
@@ -97,15 +96,15 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
      */
     @Override
     public void onBindViewHolder(@NonNull BaseCardViewHolder holder, int position) {
-        ObservedPatient cardPatient = this.observationCollectionList.get(position);
+        ObservedPatient<? extends ShObservation> cardPatient = this.observationCollectionList.get(position);
 
         holder.setUpTitle(
                 cardPatient.getPatientName(),
                 cardPatient.getShPatientReference().getFullReference()
         );
 
-        ShObservation observationInstance = ((ShObservation) cardPatient.getObservations().get(0));   // used to compare types
-        ObservationType observationType = observationInstance.getObservationType();
+        ShObservation observationInstance = cardPatient.getObservations().get(0);
+        ObservationType observationType = cardPatient.getObservationType();
 
         if (holder instanceof SingleValueNumericalViewHolder) {
             SingleValueNumericalViewHolder numericalViewHolder = (SingleValueNumericalViewHolder) holder;
@@ -126,23 +125,27 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
         } else if (holder instanceof TimeSeriesViewHolder) {
             TimeSeriesViewHolder timeSeriesViewHolder = (TimeSeriesViewHolder) holder;
             if (observationType == ObservationType.BLOOD_PRESSURE) {
-                List<BloodPressureObservation> o = (List<BloodPressureObservation>) cardPatient.getObservations();
-                BigDecimal systolic = o.get(0).getSystolicObservation().getValue();
-                BigDecimal diastolic = o.get(0).getDiastolicObservation().getValue();
+                List<? extends ShObservation> observations = cardPatient.getObservations();
+                List<QuantitativeObservation> systolicObservations = new ArrayList<>();
+                List<QuantitativeObservation> diastolicObservations = new ArrayList<>();
 
-                if (systolic.intValue() > 180 || diastolic.intValue() > 120) {
-                    timeSeriesViewHolder.showAlert();
-                } else {
-                    timeSeriesViewHolder.hideAlert();
+                for (int i = 0; i < observations.size(); i++) {
+                    BloodPressureObservation observation = (BloodPressureObservation) observations.get(i);
+                    QuantitativeObservation systolic = observation.getSystolicObservation();
+                    QuantitativeObservation diastolic = observation.getDiastolicObservation();
+
+                    // If at any point in time, the patient exceeds normal thresholds, display an alert
+                    if (systolic.getValue().intValue() > 180 || diastolic.getValue().intValue() > 120) {
+                        timeSeriesViewHolder.showAlert();
+                    } else {
+                        timeSeriesViewHolder.hideAlert();
+                    }
+
+                    systolicObservations.add(systolic);
+                    diastolicObservations.add(diastolic);
                 }
 
                 ObservationLineChart observationLineChart = new ObservationLineChart(timeSeriesViewHolder.getLineChartView());
-                List<QuantitativeObservation> systolicObservations = o.stream()
-                        .map(BloodPressureObservation::getSystolicObservation)
-                        .collect(Collectors.toList());
-                List<QuantitativeObservation> diastolicObservations = o.stream()
-                        .map(BloodPressureObservation::getDiastolicObservation)
-                        .collect(Collectors.toList());
                 observationLineChart.createLineDataSet(
                         systolicObservations,
                         "Systolic Blood Pressure",
@@ -173,7 +176,7 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
      *
      * @param observationCollection a list of all the observed patients to show in this list
      */
-    void updateAllMonitoredPatients(List<ObservedPatient> observationCollection) {
+    void updateAllMonitoredPatients(List<ObservedPatient<? extends ShObservation>> observationCollection) {
         this.observationCollectionList = observationCollection;
     }
 

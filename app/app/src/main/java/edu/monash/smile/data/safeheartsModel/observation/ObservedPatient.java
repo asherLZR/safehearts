@@ -4,7 +4,7 @@ import java.util.List;
 
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 
-public class ObservedPatient<T> {
+public class ObservedPatient<T extends ShObservation> {
     private List<T> observations;
     private ShPatientReference shPatientReference;
     private String patientName;
@@ -24,6 +24,14 @@ public class ObservedPatient<T> {
 
     public List<T> getObservations() {
         return observations;
+    }
+
+    public ObservationType getObservationType() {
+        if (observations.size() == 0) {
+            throw new IllegalStateException("Observed patient has no observations");
+        }
+
+        return observations.get(0).getObservationType();
     }
 
     public ShPatientReference getShPatientReference() {
