@@ -121,9 +121,9 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
                 BigDecimal systolic = o.get(0).getSystolicObservation().getValue();
                 BigDecimal diastolic = o.get(0).getDiastolicObservation().getValue();
                 if (systolic.intValue() > 180 || diastolic.intValue() > 120){
-                    ((TimeSeriesViewHolder) holder).alert.setVisibility(View.VISIBLE);
+                    ((TimeSeriesViewHolder) holder).showAlert();
                 }else{
-                    ((TimeSeriesViewHolder) holder).alert.setVisibility(View.GONE);
+                    ((TimeSeriesViewHolder) holder).hideAlert();
                 }
                 ObservationLineChart observationLineChart = new ObservationLineChart(timeSeriesViewHolder.lineChart);
                 List<QuantitativeObservation> systolicObservations = o.stream()
@@ -229,6 +229,14 @@ public class StatusCardAdapter extends RecyclerView.Adapter<StatusCardAdapter.Ba
             this.cardSubheading = itemView.findViewById(R.id.timeseries_subheading);
             this.lineChart = itemView.findViewById(R.id.line_chart);
             this.alert = itemView.findViewById(R.id.alertImg);
+        }
+
+        void showAlert() {
+            alert.setVisibility(View.VISIBLE);
+        }
+
+        void hideAlert() {
+            alert.setVisibility(View.GONE);
         }
     }
 }
