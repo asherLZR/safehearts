@@ -1,6 +1,6 @@
 package edu.monash.smile.dashboard.statusTab;
 
-import android.app.Activity;
+import android.view.LayoutInflater;
 
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter;
 
@@ -13,18 +13,18 @@ import edu.monash.smile.dashboard.statusTab.adapterDelegates.TimeSeriesListItemA
 import edu.monash.smile.data.safeheartsModel.observation.ObservedPatient;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
-public class StatusCardAdapter extends ListDelegationAdapter<List<ObservedPatient<? extends ShObservation>>> {
+class StatusCardAdapter extends ListDelegationAdapter<List<ObservedPatient<? extends ShObservation>>> {
     private List<ObservedPatient<? extends ShObservation>> observationCollectionList = new ArrayList<>();
 
     /**
      * The status card is a summary of the patient's health, shown in the dashboard.
      * It displays information about the patient's tracked observations.
      */
-    StatusCardAdapter(Activity activity) {
+    StatusCardAdapter(LayoutInflater inflater) {
         delegatesManager
-                .addDelegate(new SingleNumericListItemAdapterDelegate(activity))
-                .addDelegate(new SingleStatusListItemAdapterDelegate(activity))
-                .addDelegate(new TimeSeriesListItemAdapterDelegate(activity));
+                .addDelegate(new SingleNumericListItemAdapterDelegate(inflater))
+                .addDelegate(new SingleStatusListItemAdapterDelegate(inflater))
+                .addDelegate(new TimeSeriesListItemAdapterDelegate(inflater));
 
         setItems(observationCollectionList);
     }

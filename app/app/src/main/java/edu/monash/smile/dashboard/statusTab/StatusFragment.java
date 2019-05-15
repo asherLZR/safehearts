@@ -44,7 +44,7 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
         this.progressBar.bringToFront();
 
         // Set up status card view
-        this.statusCardAdapter = new StatusCardAdapter(this.getActivity());
+        this.statusCardAdapter = new StatusCardAdapter(inflater);
         RecyclerView statusRecycler = rootView.findViewById(R.id.statusRecycler);
         statusRecycler.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(Objects.requireNonNull(this.getActivity()));

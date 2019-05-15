@@ -1,7 +1,6 @@
 package edu.monash.smile.dashboard.statusTab.adapterDelegates;
 
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +25,8 @@ import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 public class TimeSeriesListItemAdapterDelegate extends AbsListItemAdapterDelegate<ObservedPatient<ShObservation>, ObservedPatient<? extends ShObservation>, TimeSeriesListItemAdapterDelegate.TimeSeriesViewHolder> {
     private LayoutInflater inflater;
 
-    public TimeSeriesListItemAdapterDelegate(Activity activity) {
-        inflater = activity.getLayoutInflater();
+    public TimeSeriesListItemAdapterDelegate(LayoutInflater inflater) {
+        this.inflater = inflater;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package edu.monash.smile.dashboard.statusTab.adapterDelegates;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +19,8 @@ import edu.monash.smile.data.safeheartsModel.observation.StatusObservation;
 public class SingleStatusListItemAdapterDelegate extends AbsListItemAdapterDelegate<ObservedPatient<StatusObservation>, ObservedPatient<? extends ShObservation>, SingleStatusListItemAdapterDelegate.SingleValueStringViewHolder> {
     private LayoutInflater inflater;
 
-    public SingleStatusListItemAdapterDelegate(Activity activity) {
-        inflater = activity.getLayoutInflater();
+    public SingleStatusListItemAdapterDelegate(LayoutInflater inflater) {
+        this.inflater = inflater;
     }
 
     @Override
