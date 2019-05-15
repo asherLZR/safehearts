@@ -1,7 +1,6 @@
 package edu.monash.smile.dashboard.statusTab.adapterDelegates;
 
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +11,10 @@ import androidx.annotation.NonNull;
 import com.github.mikephil.charting.charts.LineChart;
 import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.monash.smile.R;
-import edu.monash.smile.charting.ObservationLineChart;
-import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservation;
-import edu.monash.smile.data.safeheartsModel.observation.ObservedPatient;
-import edu.monash.smile.data.safeheartsModel.observation.QuantitativeObservation;
+import edu.monash.smile.dashboard.statusTab.ObservedPatient;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
 public class TimeSeriesListItemAdapterDelegate extends AbsListItemAdapterDelegate<ObservedPatient<ShObservation>, ObservedPatient<? extends ShObservation>, TimeSeriesListItemAdapterDelegate.TimeSeriesViewHolder> {
@@ -46,48 +41,19 @@ public class TimeSeriesListItemAdapterDelegate extends AbsListItemAdapterDelegat
                 item.getPatientName(),
                 item.getShPatientReference().getFullReference()
         );
-
-        List<? extends ShObservation> observations = item.getObservations();
-        List<QuantitativeObservation> systolicObservations = new ArrayList<>();
-        List<QuantitativeObservation> diastolicObservations = new ArrayList<>();
-
-        for (int i = 0; i < observations.size(); i++) {
-            BloodPressureObservation observation = (BloodPressureObservation) observations.get(i);
-            QuantitativeObservation systolic = observation.getSystolicObservation();
-            QuantitativeObservation diastolic = observation.getDiastolicObservation();
-            // If at any point in time, the patient exceeds normal thresholds, display an alert
-            if (systolic.getValue().intValue() > 180 || diastolic.getValue().intValue() > 120) {
-                holder.showAlert();
-            } else {
-                holder.hideAlert();
-            }
-
-            systolicObservations.add(systolic);
-            diastolicObservations.add(diastolic);
+        if (item.alertIf()){
+            holder.showAlert();
+        }else{
+            holder.hideAlert();
         }
-
-        ObservationLineChart observationLineChart = new ObservationLineChart(holder.getLineChartView());
-
-        observationLineChart.createLineDataSet(
-                systolicObservations,
-                "Systolic Blood Pressure",
-                Color.BLUE
-        );
-
-        observationLineChart.createLineDataSet(
-                diastolicObservations,
-                "Diastolic Blood Pressure",
-                Color.BLACK
-        );
-
-        observationLineChart.plot();
+        item.chart(holder);
     }
 
     /**
      * Representation of each individual card stored. This deals specifically with displaying
      * data that may be represented on a continuous scale.
      */
-    static class TimeSeriesViewHolder extends BaseCardViewHolder {
+    public static class TimeSeriesViewHolder extends BaseCardViewHolder {
         private com.github.mikephil.charting.charts.LineChart lineChart;
         private ImageView alert;
 
@@ -97,7 +63,7 @@ public class TimeSeriesListItemAdapterDelegate extends AbsListItemAdapterDelegat
             this.alert = itemView.findViewById(R.id.alertImg);
         }
 
-        LineChart getLineChartView() {
+        public LineChart getLineChartView() {
             return lineChart;
         }
 

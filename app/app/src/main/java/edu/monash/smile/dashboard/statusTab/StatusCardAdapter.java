@@ -10,7 +10,6 @@ import java.util.List;
 import edu.monash.smile.dashboard.statusTab.adapterDelegates.SingleNumericListItemAdapterDelegate;
 import edu.monash.smile.dashboard.statusTab.adapterDelegates.SingleStatusListItemAdapterDelegate;
 import edu.monash.smile.dashboard.statusTab.adapterDelegates.TimeSeriesListItemAdapterDelegate;
-import edu.monash.smile.data.safeheartsModel.observation.ObservedPatient;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
 class StatusCardAdapter extends ListDelegationAdapter<List<ObservedPatient<? extends ShObservation>>> {
