@@ -1,4 +1,4 @@
-package edu.monash.smile.dashboard.statusTab.observedPatient.alertable;
+package edu.monash.smile.dashboard.statusTab.observedPatient.alertStrategy;
 
 import java.util.List;
 

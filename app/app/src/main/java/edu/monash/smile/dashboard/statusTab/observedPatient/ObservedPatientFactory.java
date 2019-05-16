@@ -2,12 +2,12 @@ package edu.monash.smile.dashboard.statusTab.observedPatient;
 
 import java.util.List;
 
-import edu.monash.smile.dashboard.statusTab.observedPatient.alertable.AlertStrategy;
-import edu.monash.smile.dashboard.statusTab.observedPatient.alertable.BloodPressureAlertStrategy;
-import edu.monash.smile.dashboard.statusTab.observedPatient.alertable.NoAlertStrategy;
-import edu.monash.smile.dashboard.statusTab.observedPatient.chartable.BloodPressureChartStrategy;
-import edu.monash.smile.dashboard.statusTab.observedPatient.chartable.ChartStrategy;
-import edu.monash.smile.dashboard.statusTab.observedPatient.chartable.NoChartStrategy;
+import edu.monash.smile.dashboard.statusTab.observedPatient.alertStrategy.AlertStrategy;
+import edu.monash.smile.dashboard.statusTab.observedPatient.alertStrategy.BloodPressureAlertStrategy;
+import edu.monash.smile.dashboard.statusTab.observedPatient.alertStrategy.NoAlertStrategy;
+import edu.monash.smile.dashboard.statusTab.observedPatient.chartStrategy.BloodPressureChartStrategy;
+import edu.monash.smile.dashboard.statusTab.observedPatient.chartStrategy.ChartStrategy;
+import edu.monash.smile.dashboard.statusTab.observedPatient.chartStrategy.NoChartStrategy;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;

@@ -1,4 +1,4 @@
-package edu.monash.smile.dashboard.statusTab.observedPatient.chartable;
+package edu.monash.smile.dashboard.statusTab.observedPatient.chartStrategy;
 
 import android.graphics.Color;
 

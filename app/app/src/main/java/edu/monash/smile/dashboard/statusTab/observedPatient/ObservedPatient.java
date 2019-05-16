@@ -3,8 +3,8 @@ package edu.monash.smile.dashboard.statusTab.observedPatient;
 import java.util.List;
 
 import edu.monash.smile.dashboard.statusTab.adapterDelegates.TimeSeriesListItemAdapterDelegate;
-import edu.monash.smile.dashboard.statusTab.observedPatient.alertable.AlertStrategy;
-import edu.monash.smile.dashboard.statusTab.observedPatient.chartable.ChartStrategy;
+import edu.monash.smile.dashboard.statusTab.observedPatient.alertStrategy.AlertStrategy;
+import edu.monash.smile.dashboard.statusTab.observedPatient.chartStrategy.ChartStrategy;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
