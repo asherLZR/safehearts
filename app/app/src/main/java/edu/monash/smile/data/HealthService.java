@@ -8,6 +8,8 @@ import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservation;
 import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
+import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
+import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
 
 public abstract class HealthService {
@@ -24,6 +26,18 @@ public abstract class HealthService {
      * @return A set of unique patient IDs that the practitioner has seen
      */
     public abstract Set<ShPatientReference> loadPatientReferences(int practitionerId);
+
+    /**
+     * Reads any observation of a particular patient, specified by type.
+     *
+     * @param observationType The type of the observation to be read
+     * @param reference The ID of the patient
+     * @return A list with all observations for the given type
+     */
+    public abstract List<? extends ShObservation> readObservationsByType(
+            ObservationType observationType,
+            ShPatientReference reference
+    );
 
     /**
      * Reads only the time series of blood pressure for a patient

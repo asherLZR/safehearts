@@ -26,6 +26,7 @@ import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservatio
 import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
 import edu.monash.smile.data.safeheartsModel.observation.DiastolicObservation;
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
+import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
 import edu.monash.smile.data.safeheartsModel.observation.SystolicObservation;
 
@@ -66,6 +67,27 @@ class FhirService extends HealthService {
         }
 
         return references;
+    }
+
+    /**
+     * Reads any observation of a particular patient, specified by type.
+     *
+     * @param observationType The type of the observation to be read
+     * @param reference The ID of the patient
+     * @return A list with all observations for the given type
+     */
+    @Override
+    public List<? extends ShObservation> readObservationsByType(ObservationType observationType, ShPatientReference reference) {
+        switch (observationType){
+            case CHOLESTEROL:
+                return readCholesterol(reference);
+            case SMOKING:
+                return readSmokingStatus(reference);
+            case BLOOD_PRESSURE:
+                return readBloodPressureTimeSeries(reference);
+            default:
+                throw new IllegalArgumentException("Illegal observation type");
+        }
     }
 
     /**
