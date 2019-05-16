@@ -8,6 +8,12 @@ public class ShPatientReference {
     private final String id;
     private HealthServiceType healthServiceType;
 
+    /**
+     * A unique ID of the patient.
+     *
+     * @param id   The ID from a HealthService.
+     * @param type The generator of the ID (e.g. the FHIR service)
+     */
     public ShPatientReference(String id, HealthServiceType type) {
         this.id = id;
         this.healthServiceType = type;
@@ -17,7 +23,10 @@ public class ShPatientReference {
         return id;
     }
 
-    // Unique key of the format "HealthServiceType/ID"
+    /**
+     * Gets the patient's reference.
+     * @return A unique key of the format "HealthServiceType/ID"
+     */
     public String getFullReference() {
         assert this.healthServiceType != null;
         return this.healthServiceType + "/" + this.id;

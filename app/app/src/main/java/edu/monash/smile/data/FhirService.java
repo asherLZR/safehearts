@@ -116,8 +116,7 @@ class FhirService extends HealthService {
                     new ShPatient(reference,
                             humanName.getPrefixAsSingleString() + " " +
                                     humanName.getGivenAsSingleString() + " " +
-                                    humanName.getFamily(),
-                            patient.getBirthDate()
+                                    humanName.getFamily()
                     ));
         }
         return shPatients;
@@ -151,6 +150,12 @@ class FhirService extends HealthService {
         return observations;
     }
 
+    /**
+     * Reads the time series of blood pressure for a patient
+     *
+     * @param reference The ID of the patient
+     * @return A list with all observations for the given type
+     */
     @Override
     public List<BloodPressureObservation> readBloodPressureTimeSeries(ShPatientReference reference) {
         List<Observation> observations = readObservations(reference, ObservationType.BLOOD_PRESSURE, TIME_SERIES_LENGTH);
@@ -164,6 +169,12 @@ class FhirService extends HealthService {
         return results;
     }
 
+    /**
+     * Extracts information from FHIR into a BloodPressureObservation.
+     *
+     * @param observation An observation from the FHIR library
+     * @return A BloodPressureObservation
+     */
     private BloodPressureObservation convertToBloodPressureObservation(Observation observation) {
         List<Observation.ObservationComponentComponent> components = observation.getComponent();
 
@@ -195,6 +206,12 @@ class FhirService extends HealthService {
         );
     }
 
+    /**
+     * Reads only the latest historical observations for smoking for a patient
+     *
+     * @param reference The ID of the patient
+     * @return A list with all observations for the given type
+     */
     @Override
     public List<SmokingObservation> readSmokingStatus(ShPatientReference reference) {
         List<Observation> observations = readObservations(reference, ObservationType.SMOKING, 1);
@@ -209,7 +226,7 @@ class FhirService extends HealthService {
     }
 
     /**
-     * Extracts information from FHIR into a SmokingObservation
+     * Extracts information from FHIR into a SmokingObservation.
      * @param observation An observation from the FHIR library
      * @return A SmokingObservation
      */
@@ -223,8 +240,7 @@ class FhirService extends HealthService {
     }
 
     /**
-     * Reads only the latest historical observations for a given type (e.g. CHOLESTEROL), for a patient
-     *
+     * Reads only the latest historical observations for cholesterol.
      * @param reference The ID of the patient
      * @return A list with all observations for the given type
      */
@@ -241,7 +257,7 @@ class FhirService extends HealthService {
     }
 
     /**
-     * Extracts information from FHIR into a CholesterolObservation
+     * Extracts information from FHIR into a CholesterolObservation.
      * @param observation An observation from the FHIR library
      * @return A CholesterolObservation
      */
@@ -256,9 +272,8 @@ class FhirService extends HealthService {
     }
 
     /**
-     * An internal class that maps from the ObservationType to the internal FHIR code string
-     *
-     * @param type the observation type
+     * An internal class that maps from the ObservationType to the internal FHIR code.
+     * @param type The observation type
      * @return FHIR code representing the observation type
      */
     private String observationCodeToFhirCode(ObservationType type) {

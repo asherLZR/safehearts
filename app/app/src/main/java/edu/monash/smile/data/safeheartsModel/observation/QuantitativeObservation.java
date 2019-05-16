@@ -14,8 +14,8 @@ public abstract class QuantitativeObservation extends ShObservation {
      * @param value The metric recorded in the observation
      * @param description A description of the observation
      */
-    public QuantitativeObservation(BigDecimal value, String unit, String description, Date dateObserved,
-                                   ObservationType observationType) {
+    QuantitativeObservation(BigDecimal value, String unit, String description, Date dateObserved,
+                            ObservationType observationType) {
         super(description, dateObserved, observationType);
         this.value = value;
         this.description = description;

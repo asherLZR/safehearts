@@ -40,7 +40,7 @@ public abstract class HealthService {
     );
 
     /**
-     * Reads only the time series of blood pressure for a patient
+     * Reads the time series of blood pressure for a patient
      *
      * @param reference The ID of the patient
      * @return A list with all observations for the given type
