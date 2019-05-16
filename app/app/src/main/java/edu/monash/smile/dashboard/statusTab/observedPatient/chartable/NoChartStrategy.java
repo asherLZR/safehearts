@@ -8,10 +8,10 @@ import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 /**
  * Always does nothing with a Chart view.
  * */
-public class NoChart implements Chartable{
+public class NoChartStrategy implements ChartStrategy {
     @Override
-    public void chart(TimeSeriesListItemAdapterDelegate.TimeSeriesViewHolder timeSeriesViewHolder,
-                      List<? extends ShObservation> observations) {
+    public void buildChart(TimeSeriesListItemAdapterDelegate.TimeSeriesViewHolder timeSeriesViewHolder,
+                           List<? extends ShObservation> observations) {
 
     }
 }

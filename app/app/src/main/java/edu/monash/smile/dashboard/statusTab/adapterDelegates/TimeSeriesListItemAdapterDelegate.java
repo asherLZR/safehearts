@@ -41,12 +41,12 @@ public class TimeSeriesListItemAdapterDelegate extends AbsListItemAdapterDelegat
                 item.getPatientName(),
                 item.getShPatientReference().getFullReference()
         );
-        if (item.alertIf(item.getObservations())){
+        if (item.showAlert(item.getObservations())) {
             holder.showAlert();
         }else{
             holder.hideAlert();
         }
-        item.chart(holder, item.getObservations());
+        item.buildChart(holder, item.getObservations());
     }
 
     /**

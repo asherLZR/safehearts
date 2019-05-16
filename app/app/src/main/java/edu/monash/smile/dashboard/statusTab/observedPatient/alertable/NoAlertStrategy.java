@@ -7,9 +7,9 @@ import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 /**
  * Always returns false for alert state.
  * */
-public class NoAlert implements Alertable {
+public class NoAlertStrategy implements AlertStrategy {
     @Override
-    public boolean alertIf(List<? extends ShObservation> observations) {
+    public boolean isAlertRequired(List<? extends ShObservation> observations) {
         return false;
     }
 }

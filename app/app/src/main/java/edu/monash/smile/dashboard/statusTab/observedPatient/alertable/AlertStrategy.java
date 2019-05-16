@@ -7,6 +7,6 @@ import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 /**
  * Provides a condition to perform alerting on.
  * */
-public interface Alertable {
-    boolean alertIf(List<? extends ShObservation> observations);
+public interface AlertStrategy {
+    boolean isAlertRequired(List<? extends ShObservation> observations);
 }

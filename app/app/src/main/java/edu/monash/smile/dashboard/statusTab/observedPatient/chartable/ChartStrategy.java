@@ -6,8 +6,8 @@ import edu.monash.smile.dashboard.statusTab.adapterDelegates.TimeSeriesListItemA
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
 /**
- * Allows charting with a view holder that has a chart view.
+ * Allows charting with a view holder that has a buildChart view.
  * */
-public interface Chartable {
-    void chart(TimeSeriesViewHolder timeSeriesViewHolder, List<? extends ShObservation> observations);
+public interface ChartStrategy {
+    void buildChart(TimeSeriesViewHolder timeSeriesViewHolder, List<? extends ShObservation> observations);
 }
