@@ -8,6 +8,6 @@ public class DiastolicObservation extends QuantitativeObservation {
      * Model class for a diastolic measurement for blood pressure.
      */
     public DiastolicObservation(BigDecimal value, String unit, String description, Date dateObserved) {
-        super(value, unit, description, dateObserved, ObservationType.BLOOD_PRESSURE);
+        super(value, unit, description, dateObserved);
     }
 }

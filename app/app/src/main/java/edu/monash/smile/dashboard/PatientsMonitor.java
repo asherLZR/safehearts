@@ -15,8 +15,8 @@ import edu.monash.smile.preferences.SharedPreferencesHelper;
 
 public class PatientsMonitor {
     private Map<ObservationType, Set<String>> monitoredPatients = new HashMap<>();
-    private Context context;
-    private HealthServiceType healthServiceType;
+    private final Context context;
+    private final HealthServiceType healthServiceType;
 
     /**
      * Creates a controller for the tracking of patients by a specific observation type.

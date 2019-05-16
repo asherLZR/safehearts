@@ -6,14 +6,11 @@ import java.util.Set;
 
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
-import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservation;
-import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
-import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
 
 public abstract class HealthService {
-    HealthServiceType healthServiceType;
+    final HealthServiceType healthServiceType;
 
     HealthService(HealthServiceType healthServiceType){
         this.healthServiceType = healthServiceType;
@@ -38,30 +35,6 @@ public abstract class HealthService {
             ObservationType observationType,
             ShPatientReference reference
     );
-
-    /**
-     * Reads the time series of blood pressure for a patient
-     *
-     * @param reference The ID of the patient
-     * @return A list with all observations for the given type
-     */
-    public abstract List<BloodPressureObservation> readBloodPressureTimeSeries(ShPatientReference reference);
-
-    /**
-     * Reads only the latest historical observations for CHOLESTEROL for a patient
-     *
-     * @param reference The ID of the patient
-     * @return A list with all observations for the given type
-     */
-    public abstract List<CholesterolObservation> readCholesterol(ShPatientReference reference);
-
-    /**
-     * Reads only the latest historical observations for smoking for a patient
-     *
-     * @param reference The ID of the patient
-     * @return A list with all observations for the given type
-     */
-    public abstract List<SmokingObservation> readSmokingStatus(ShPatientReference reference);
 
     /**
      * Creates a mapping of patient references (IDs) to specific patients.

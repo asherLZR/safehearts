@@ -18,7 +18,7 @@ import edu.monash.smile.dashboard.statusTab.observedPatient.ObservedPatient;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
 public class TimeSeriesListItemAdapterDelegate extends AbsListItemAdapterDelegate<ObservedPatient<ShObservation>, ObservedPatient<? extends ShObservation>, TimeSeriesListItemAdapterDelegate.TimeSeriesViewHolder> {
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
 
     public TimeSeriesListItemAdapterDelegate(LayoutInflater inflater) {
         this.inflater = inflater;
@@ -54,8 +54,8 @@ public class TimeSeriesListItemAdapterDelegate extends AbsListItemAdapterDelegat
      * data that may be represented on a continuous scale.
      */
     public static class TimeSeriesViewHolder extends BaseCardViewHolder {
-        private com.github.mikephil.charting.charts.LineChart lineChart;
-        private ImageView alert;
+        private final com.github.mikephil.charting.charts.LineChart lineChart;
+        private final ImageView alert;
 
         TimeSeriesViewHolder(@NonNull View itemView) {
             super(itemView, R.id.timeseries_heading, R.id.timeseries_subheading);

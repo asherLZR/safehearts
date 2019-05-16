@@ -20,7 +20,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private PatientFragment patientFragment = null;
     private StatusFragment statusFragment = null;
-    private Poll poll = new Poll(POLL_INTERVAL);
+    private final Poll poll = new Poll(POLL_INTERVAL);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

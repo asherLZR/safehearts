@@ -9,11 +9,11 @@ import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
 public class ObservedPatient<T extends ShObservation> {
-    private List<T> observations;
-    private ShPatientReference shPatientReference;
-    private String patientName;
-    private AlertStrategy alertStrategy;
-    private ChartStrategy chartStrategy;
+    private final List<T> observations;
+    private final ShPatientReference shPatientReference;
+    private final String patientName;
+    private final AlertStrategy alertStrategy;
+    private final ChartStrategy chartStrategy;
 
 
     /**

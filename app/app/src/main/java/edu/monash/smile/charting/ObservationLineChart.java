@@ -14,8 +14,8 @@ import java.util.List;
 import edu.monash.smile.data.safeheartsModel.observation.QuantitativeObservation;
 
 public class ObservationLineChart {
-    private com.github.mikephil.charting.charts.LineChart lineChart;
-    private ArrayList<LineDataSet> lineDataSets = new ArrayList<>();
+    private final com.github.mikephil.charting.charts.LineChart lineChart;
+    private final ArrayList<LineDataSet> lineDataSets = new ArrayList<>();
 
     /**
      * A convenience class which allows the plotting of time-series observations graphs.

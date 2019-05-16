@@ -18,9 +18,9 @@ import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 import edu.monash.smile.observerPattern.Subject;
 
 class PatientObservationController extends Subject {
-    private HealthService healthService;
-    private PatientsMonitor patientsMonitor;
-    private List<ObservedPatient<? extends ShObservation>> observedPatients = new ArrayList<>();
+    private final HealthService healthService;
+    private final PatientsMonitor patientsMonitor;
+    private final List<ObservedPatient<? extends ShObservation>> observedPatients = new ArrayList<>();
 
     PatientObservationController(PatientsMonitor patientsMonitor) {
         this.patientsMonitor = patientsMonitor;

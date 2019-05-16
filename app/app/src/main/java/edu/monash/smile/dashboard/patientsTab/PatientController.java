@@ -16,7 +16,7 @@ import edu.monash.smile.observerPattern.Subject;
 class PatientController extends Subject{
     private Set<ShPatientReference> shPatientReferences;
     private HashMap<ShPatientReference, ShPatient> shPatients;
-    private HealthService healthService;
+    private final HealthService healthService;
 
     PatientController() {
         this.healthService = HealthServiceProducer.getService(DashboardActivity.HEALTH_SERVICE_TYPE);

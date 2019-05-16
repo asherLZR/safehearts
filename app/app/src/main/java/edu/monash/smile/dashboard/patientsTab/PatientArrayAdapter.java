@@ -22,7 +22,7 @@ import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 
 public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapter.PatientViewHolder> {
     private List<ShPatient> patients;
-    private PatientsMonitor patientsMonitor;
+    private final PatientsMonitor patientsMonitor;
 
     /**
      * Handles view to display a patient details, as well as toggles to track/untrack a patient by its type
@@ -108,9 +108,9 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
      * Representation of each individual card stored.
      */
     static class PatientViewHolder extends RecyclerView.ViewHolder{
-        View itemView;
-        TextView patientName;
-        ChipGroup chipGroup;
+        final View itemView;
+        final TextView patientName;
+        final ChipGroup chipGroup;
 
         PatientViewHolder(@NonNull View itemView) {
             super(itemView);

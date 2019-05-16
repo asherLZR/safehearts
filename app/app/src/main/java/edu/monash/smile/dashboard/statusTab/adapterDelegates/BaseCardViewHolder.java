@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
  * cards.
  */
 abstract class BaseCardViewHolder extends RecyclerView.ViewHolder {
-    private TextView cardHeading;
-    private TextView cardSubheading;
+    private final TextView cardHeading;
+    private final TextView cardSubheading;
 
     BaseCardViewHolder(@NonNull View itemView, int cardHeadingId, int cardSubheadingId) {
         super(itemView);

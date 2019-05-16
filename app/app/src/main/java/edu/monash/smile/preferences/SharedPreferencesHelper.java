@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
-import edu.monash.smile.data.safeheartsModel.ShPatient;
 
 public class SharedPreferencesHelper {
     /**
@@ -19,7 +18,6 @@ public class SharedPreferencesHelper {
      */
     private static final String SMILE_PREFERENCES = "smilePreferences";
     private static final String MONITORED_PATIENTS_KEY = "monitoredPatients";
-    private static final String ALL_PATIENTS_KEY = "allPatients";
 
     /**
      * Creates the SharedPreferences for the app.
@@ -74,19 +72,5 @@ public class SharedPreferencesHelper {
      */
     public static void removeAllSharedPreferences(Context context){
         getEditor(context).clear().commit();
-    }
-
-    // TODO: Method unused
-    public static void writeAllPatients(Context context, HashMap<String, ShPatient> patients){
-        SharedPreferences.Editor editor = getEditor(context);
-        editor.putString(ALL_PATIENTS_KEY, new Gson().toJson(patients));
-        editor.apply();
-    }
-
-    // TODO: Method unused
-    public static HashMap<String, ShPatient> readAllPatients(Context context){
-        SharedPreferences sharedPreferences = getSharedPreferences(context);
-        return new Gson().fromJson(sharedPreferences.getString(ALL_PATIENTS_KEY, ""),
-                new TypeToken<HashMap<String, ShPatient>>(){}.getType());
     }
 }

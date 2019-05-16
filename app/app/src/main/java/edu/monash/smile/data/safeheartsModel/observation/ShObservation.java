@@ -6,16 +6,14 @@ import java.util.Objects;
 public abstract class ShObservation {
     final private String description;
     final private Date dateObserved;
-    final private ObservationType observationType;
 
     /**
      * A single observation of a patient.
      * @param description A description of the observation
      */
-    ShObservation(String description, Date dateObserved, ObservationType observationType) {
+    ShObservation(String description, Date dateObserved) {
         this.description = description;
         this.dateObserved = dateObserved;
-        this.observationType = observationType;
     }
 
     public Date getDateObserved() {
@@ -24,10 +22,6 @@ public abstract class ShObservation {
 
     public String getDescription() {
         return description;
-    }
-
-    public ObservationType getObservationType() {
-        return observationType;
     }
 
     @Override

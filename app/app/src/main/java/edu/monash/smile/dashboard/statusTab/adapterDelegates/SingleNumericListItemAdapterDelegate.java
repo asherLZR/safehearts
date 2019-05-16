@@ -18,7 +18,7 @@ import edu.monash.smile.data.safeheartsModel.observation.QuantitativeObservation
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
 public class SingleNumericListItemAdapterDelegate extends AbsListItemAdapterDelegate<ObservedPatient<QuantitativeObservation>, ObservedPatient<? extends ShObservation>, SingleNumericListItemAdapterDelegate.SingleValueNumericalViewHolder> {
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
 
     public SingleNumericListItemAdapterDelegate(LayoutInflater inflater) {
         this.inflater = inflater;
@@ -56,9 +56,9 @@ public class SingleNumericListItemAdapterDelegate extends AbsListItemAdapterDele
      * data that has only one numerical value to display.
      */
     static class SingleValueNumericalViewHolder extends BaseCardViewHolder {
-        private TextView numericalCardDescription;
-        private TextView numericalCardValue;
-        private TextView numericalCardUnit;
+        private final TextView numericalCardDescription;
+        private final TextView numericalCardValue;
+        private final TextView numericalCardUnit;
 
         SingleValueNumericalViewHolder(@NonNull View itemView) {
             super(itemView, R.id.numerical_card_heading, R.id.numerical_card_subheading);

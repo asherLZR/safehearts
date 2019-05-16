@@ -14,7 +14,7 @@ public class BloodPressureObservation extends ShObservation {
                                     DiastolicObservation diastolicObservation,
                                     String description,
                                     Date dateObserved) {
-        super(description, dateObserved, ObservationType.BLOOD_PRESSURE);
+        super(description, dateObserved);
         this.systolicObservation = systolicObservation;
         this.diastolicObservation = diastolicObservation;
     }

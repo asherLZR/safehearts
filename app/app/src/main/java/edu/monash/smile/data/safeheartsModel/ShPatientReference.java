@@ -6,7 +6,7 @@ import edu.monash.smile.data.HealthServiceType;
 
 public class ShPatientReference {
     private final String id;
-    private HealthServiceType healthServiceType;
+    private final HealthServiceType healthServiceType;
 
     /**
      * A unique ID of the patient.

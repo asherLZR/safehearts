@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,9 +23,9 @@ import edu.monash.smile.polling.PollCallback;
 
 public class StatusFragment extends Fragment implements Observer, PollCallback {
     private StatusCardAdapter statusCardAdapter;
-    private PatientObservationController patientObservationController;
+    private final PatientObservationController patientObservationController;
     private ProgressBar progressBar;
-    private Poll poll;
+    private final Poll poll;
 
     /**
      * The status fragment shows monitors for tracked patients.
@@ -41,7 +42,7 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
      * Creates the view showing the list of status cards, and listens to new events.
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_status, container, false);
 
@@ -77,7 +78,7 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
      * controller is set up.
      */
     private static class ControllerSetUp extends AsyncTask<Void, Void, Void> {
-        private WeakReference<StatusFragment> fragment;
+        private final WeakReference<StatusFragment> fragment;
 
         private ControllerSetUp(StatusFragment fragment){
             this.fragment = new WeakReference<>(fragment);

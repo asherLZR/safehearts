@@ -25,9 +25,9 @@ import edu.monash.smile.polling.PollCallback;
 
 public class PatientFragment extends Fragment implements Observer, PollCallback {
     private int practitionerId;
-    private PatientArrayAdapter patientAdapter;
-    private PatientController patientController;
-    private Poll poll;
+    private final PatientArrayAdapter patientAdapter;
+    private final PatientController patientController;
+    private final Poll poll;
 
     private ProgressBar progressBar;
 
@@ -96,7 +96,7 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
      * controller is set up.
      */
     private static class ControllerSetUp extends AsyncTask<Void, Void, Void> {
-        private WeakReference<PatientFragment> fragment;
+        private final WeakReference<PatientFragment> fragment;
 
         private ControllerSetUp(PatientFragment fragment){
             this.fragment = new WeakReference<>(fragment);

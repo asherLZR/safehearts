@@ -156,8 +156,7 @@ class FhirService extends HealthService {
      * @param reference The ID of the patient
      * @return A list with all observations for the given type
      */
-    @Override
-    public List<BloodPressureObservation> readBloodPressureTimeSeries(ShPatientReference reference) {
+    private List<BloodPressureObservation> readBloodPressureTimeSeries(ShPatientReference reference) {
         List<Observation> observations = readObservations(reference, ObservationType.BLOOD_PRESSURE, TIME_SERIES_LENGTH);
 
         List<BloodPressureObservation> results = new ArrayList<>();
@@ -212,8 +211,7 @@ class FhirService extends HealthService {
      * @param reference The ID of the patient
      * @return A list with all observations for the given type
      */
-    @Override
-    public List<SmokingObservation> readSmokingStatus(ShPatientReference reference) {
+    private List<SmokingObservation> readSmokingStatus(ShPatientReference reference) {
         List<Observation> observations = readObservations(reference, ObservationType.SMOKING, 1);
 
         List<SmokingObservation> results = new ArrayList<>();
@@ -244,7 +242,7 @@ class FhirService extends HealthService {
      * @param reference The ID of the patient
      * @return A list with all observations for the given type
      */
-    public List<CholesterolObservation> readCholesterol(ShPatientReference reference) {
+    private List<CholesterolObservation> readCholesterol(ShPatientReference reference) {
         List<Observation> observations = readObservations(reference, ObservationType.CHOLESTEROL, 1);
 
         List<CholesterolObservation> results = new ArrayList<>();

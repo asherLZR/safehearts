@@ -5,10 +5,10 @@ import android.os.Handler;
 import java.util.ArrayList;
 
 public class Poll {
-    private Handler handler;
-    private int interval;
+    private final Handler handler;
+    private final int interval;
     private Runnable runnable;
-    private ArrayList<PollCallback> callbackList;
+    private final ArrayList<PollCallback> callbackList;
 
     /**
      * Creates a poll which calls all callbacks at regular intervals.

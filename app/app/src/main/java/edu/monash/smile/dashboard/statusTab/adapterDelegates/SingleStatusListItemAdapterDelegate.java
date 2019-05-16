@@ -17,7 +17,7 @@ import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 import edu.monash.smile.data.safeheartsModel.observation.StatusObservation;
 
 public class SingleStatusListItemAdapterDelegate extends AbsListItemAdapterDelegate<ObservedPatient<StatusObservation>, ObservedPatient<? extends ShObservation>, SingleStatusListItemAdapterDelegate.SingleValueStringViewHolder> {
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
 
     public SingleStatusListItemAdapterDelegate(LayoutInflater inflater) {
         this.inflater = inflater;
@@ -51,7 +51,7 @@ public class SingleStatusListItemAdapterDelegate extends AbsListItemAdapterDeleg
      * data that has only one textual value to display.
      */
     static class SingleValueStringViewHolder extends BaseCardViewHolder {
-        private TextView stringCardStatus;
+        private final TextView stringCardStatus;
 
         SingleValueStringViewHolder(@NonNull View itemView) {
             super(itemView, R.id.string_heading, R.id.string_subheading);
