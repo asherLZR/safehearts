@@ -12,7 +12,7 @@ import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate;
 import java.util.List;
 
 import edu.monash.smile.R;
-import edu.monash.smile.dashboard.statusTab.ObservedPatient;
+import edu.monash.smile.dashboard.statusTab.observedPatient.ObservedPatient;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 import edu.monash.smile.data.safeheartsModel.observation.StatusObservation;
 

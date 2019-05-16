@@ -7,15 +7,14 @@ import java.util.Objects;
 
 import edu.monash.smile.dashboard.DashboardActivity;
 import edu.monash.smile.dashboard.PatientsMonitor;
+import edu.monash.smile.dashboard.statusTab.observedPatient.ObservedPatient;
+import edu.monash.smile.dashboard.statusTab.observedPatient.ObservedPatientFactory;
 import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.HealthServiceProducer;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
-import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservation;
-import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
-import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
 import edu.monash.smile.observerPattern.Subject;
 
 class PatientObservationController extends Subject {

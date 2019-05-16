@@ -1,4 +1,4 @@
-package edu.monash.smile.dashboard.statusTab.chartable;
+package edu.monash.smile.dashboard.statusTab.observedPatient.chartable;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package edu.monash.smile.dashboard.statusTab;
+package edu.monash.smile.dashboard.statusTab.observedPatient;
 
 import android.graphics.Color;
 
@@ -7,18 +7,18 @@ import java.util.List;
 
 import edu.monash.smile.charting.ObservationLineChart;
 import edu.monash.smile.dashboard.statusTab.adapterDelegates.TimeSeriesListItemAdapterDelegate;
-import edu.monash.smile.dashboard.statusTab.alertable.Alertable;
-import edu.monash.smile.dashboard.statusTab.alertable.NoAlert;
-import edu.monash.smile.dashboard.statusTab.chartable.Chartable;
-import edu.monash.smile.dashboard.statusTab.chartable.NoChart;
+import edu.monash.smile.dashboard.statusTab.observedPatient.alertable.Alertable;
+import edu.monash.smile.dashboard.statusTab.observedPatient.alertable.NoAlert;
+import edu.monash.smile.dashboard.statusTab.observedPatient.chartable.Chartable;
+import edu.monash.smile.dashboard.statusTab.observedPatient.chartable.NoChart;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservation;
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 import edu.monash.smile.data.safeheartsModel.observation.QuantitativeObservation;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
-class ObservedPatientFactory {
-    static <T extends ShObservation> ObservedPatient<T> getObservedPatient(
+public class ObservedPatientFactory {
+    public static <T extends ShObservation> ObservedPatient<T> getObservedPatient(
             ObservationType type,
             List<T> observationList,
             ShPatientReference shPatientReference,
