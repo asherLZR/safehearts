@@ -26,8 +26,10 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Set up the layout for the dashboard screen
         setContentView(R.layout.activity_dashboard);
         setupBottomNavigation();
+
         if (savedInstanceState == null) {
             initialiseFragments();
         }

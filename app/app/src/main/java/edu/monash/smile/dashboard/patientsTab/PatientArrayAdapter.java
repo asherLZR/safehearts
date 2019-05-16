@@ -44,14 +44,15 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
     }
 
     /**
-     * Displays a patient at a given index
+     * Displays a patient at a given index.
      */
     @Override
     public void onBindViewHolder(@NonNull PatientArrayAdapter.PatientViewHolder holder, int position) {
         ShPatientReference shPatientReference = patients.get(position).getReference();
-        // Display patient name
+        // Display patient name.
         holder.patientName.setText(patients.get(position).getName());
 
+        // Dynamically create chips for each observation type.
         ChipGroup chipGroup = holder.chipGroup;
         ObservationType[] types = ObservationType.values();
         for (int i=0; i < types.length; i ++){
@@ -60,13 +61,15 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
             setChipOnType(shPatientReference, type, chip, i);
             chipGroup.addView(chip);
         }
+
         chipGroup.setSingleSelection(false);
     }
 
     private void setChipOnType(ShPatientReference shPatientReference,
                                ObservationType type,
                                Chip chip,
-                               int alternatingIndex){
+                               int alternatingIndex) {
+        // Set up UI of chip.
         chip.setText(type.toString().toLowerCase().replace("_", " "));
         chip.setClickable(true);
         chip.setCheckable(true);
@@ -75,11 +78,14 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
         }else{
             chip.setChipBackgroundColorResource(R.color.colorChip2);
         }
+
+        // Show checked chip if the patient is already monitored for the given type.
         chip.setChecked(patientsMonitor.isPatientMonitored(
                 shPatientReference.getId(),
                 type
         ));
-        // Handles selection of the chip, by delegating to the patients' monitor
+
+        // Handles selection of the chip, by delegating to the patient monitor.
         chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 patientsMonitor.monitorPatient(shPatientReference.getId(), type);
@@ -106,14 +112,13 @@ public class PatientArrayAdapter extends RecyclerView.Adapter<PatientArrayAdapte
         TextView patientName;
         ChipGroup chipGroup;
 
-        public PatientViewHolder(@NonNull View itemView) {
+        PatientViewHolder(@NonNull View itemView) {
             super(itemView);
             this.itemView = itemView;
             this.patientName = itemView.findViewById(R.id.patientName);
             this.chipGroup = itemView.findViewById(R.id.chip_group);
         }
     }
-
 
     /**
      * Called when the underlying data source changes (e.g. when new patients arrive)

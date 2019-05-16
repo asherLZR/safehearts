@@ -28,9 +28,11 @@ class PatientObservationController extends Subject {
     }
 
     /**
-     * Loads data about the patients and notifies observers when loading is complete.
+     * Loads data about the patients, then notifies observers when loading is complete.
      *
-     * Network operations need to run on a separate thread to avoid blocking the main thread.
+     * When using this method, keep in mind that network operations need to run on a separate
+     * thread to avoid blocking the main thread. Use AsyncTask to run this method in a background
+     * thread.
      */
     void setUp() {
         loadPatientData();
@@ -38,16 +40,16 @@ class PatientObservationController extends Subject {
     }
 
     /**
-     * Populates cholesterolObservations of the patients of the practitioner.
+     * Populates observations of the patients of the practitioner.
      */
     private void loadPatientData() {
-        // Remove stale patient data (if any)
+        // Remove stale patient data (if any).
         this.observedPatients.clear();
 
         HashMap<ShPatientReference, ShPatient> shPatients = healthService.getAllPatients(
                 this.patientsMonitor.getAllMonitoredPatients());
 
-        // Get data for ALL patients (the assignment only needs data for the selected subset)
+        // For each observation type, we fetch the latest data.
         for (ObservationType observationType : ObservationType.values()){
             for (
                     ShPatientReference patient :

@@ -34,7 +34,7 @@ public class ObservationLineChart {
     }
 
     /**
-     * Creates the line buildChart based on the data provided.
+     * Creates the line chart based on the data provided.
      */
     public void plot(){
         LineData lineData = new LineData(this.lineDataSets.toArray(new LineDataSet[lineDataSets.size()]));
@@ -45,8 +45,8 @@ public class ObservationLineChart {
     }
 
     /**
-     * Creates 1 dataset object and stores in an array of datasets. Each dataset represents one
-     * line in the final buildChart.
+     * Creates one dataset object and stores in an array of datasets. Each dataset represents one
+     * line in the final chart.
      * @param quantitativeObservations a list of QuantitativeObservation to be plotted
      * @param label the label for the dataset
      * @param colour colour of the dataset's line

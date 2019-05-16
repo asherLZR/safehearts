@@ -13,14 +13,25 @@ import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
 public class ObservedPatientFactory {
+    /**
+     * Creates a ObservedPatient based on the observation type.
+     * <p>
+     * Creation of ObservedPatient should use this factory, as it selects the correct strategies for displaying charting and alerts.
+     *
+     * @param type               The type of observation
+     * @param observations       The collected observations for the patient
+     * @param shPatientReference The patient reference
+     * @param patientName        The patient's full name
+     * @return An ObservedPatient
+     */
     public static <T extends ShObservation> ObservedPatient<T> getObservedPatient(
             ObservationType type,
-            List<T> observationList,
+            List<T> observations,
             ShPatientReference shPatientReference,
             String patientName
     ){
         return new ObservedPatient<>(
-                observationList,
+                observations,
                 shPatientReference,
                 patientName,
                 selectAlertStrategy(type),

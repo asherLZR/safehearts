@@ -5,8 +5,8 @@ import java.util.List;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
 /**
- * Provides a condition to perform alerting on.
- * */
+ * Strategy used to determine if an alert should be shown given the observations.
+ */
 public interface AlertStrategy {
     boolean isAlertRequired(List<? extends ShObservation> observations);
 }

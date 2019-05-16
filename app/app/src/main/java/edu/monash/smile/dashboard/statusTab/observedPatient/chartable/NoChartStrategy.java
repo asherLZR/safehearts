@@ -6,7 +6,7 @@ import edu.monash.smile.dashboard.statusTab.adapterDelegates.TimeSeriesListItemA
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
 /**
- * Always does nothing with a Chart view.
+ * Strategy to not build a chart.
  * */
 public class NoChartStrategy implements ChartStrategy {
     @Override

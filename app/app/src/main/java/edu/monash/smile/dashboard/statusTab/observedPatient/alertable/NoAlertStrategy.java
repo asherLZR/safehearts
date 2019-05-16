@@ -5,7 +5,7 @@ import java.util.List;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
 /**
- * Always returns false for alert state.
+ * Strategy to never show an alert.
  * */
 public class NoAlertStrategy implements AlertStrategy {
     @Override

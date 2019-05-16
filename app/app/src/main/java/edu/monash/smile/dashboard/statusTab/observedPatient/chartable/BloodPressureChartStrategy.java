@@ -11,6 +11,9 @@ import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservatio
 import edu.monash.smile.data.safeheartsModel.observation.QuantitativeObservation;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
+/**
+ * Strategy to create a line chart for blood pressure readings (both systolic and diastolic).
+ */
 public class BloodPressureChartStrategy implements ChartStrategy {
     @Override
     public void buildChart(TimeSeriesListItemAdapterDelegate.TimeSeriesViewHolder timeSeriesViewHolder, List<? extends ShObservation> observations) {

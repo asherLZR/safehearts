@@ -14,7 +14,7 @@ import edu.monash.smile.dashboard.statusTab.observedPatient.ObservedPatient;
 import edu.monash.smile.data.safeheartsModel.observation.ShObservation;
 
 class StatusCardAdapter extends ListDelegationAdapter<List<ObservedPatient<? extends ShObservation>>> {
-    private List<ObservedPatient<? extends ShObservation>> observationCollectionList = new ArrayList<>();
+    private List<ObservedPatient<? extends ShObservation>> observations = new ArrayList<>();
 
     /**
      * The status card is a summary of the patient's health, shown in the dashboard.
@@ -26,16 +26,16 @@ class StatusCardAdapter extends ListDelegationAdapter<List<ObservedPatient<? ext
                 .addDelegate(new SingleStatusListItemAdapterDelegate(inflater))
                 .addDelegate(new TimeSeriesListItemAdapterDelegate(inflater));
 
-        setItems(observationCollectionList);
+        setItems(observations);
     }
 
     /**
      * Called when the underlying data source changes (e.g. when new patients are observed)
      *
-     * @param observationCollection a list of all the observed patients to show in this list
+     * @param observations a list of all the observed patients to show in this list
      */
-    void updateAllMonitoredPatients(List<ObservedPatient<? extends ShObservation>> observationCollection) {
-        this.observationCollectionList = observationCollection;
-        setItems(observationCollectionList);
+    void updateAllMonitoredPatients(List<ObservedPatient<? extends ShObservation>> observations) {
+        this.observations = observations;
+        setItems(this.observations);
     }
 }

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.lang.ref.WeakReference;
-import java.util.Objects;
 
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.PatientsMonitor;
@@ -27,6 +26,12 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
     private ProgressBar progressBar;
     private Poll poll;
 
+    /**
+     * The status fragment shows monitors for tracked patients.
+     *
+     * @param patientsMonitor The patients monitor containing the patients to show monitors for.
+     * @param poll            A intervallic poll to refresh data hourly.
+     */
     public StatusFragment(PatientsMonitor patientsMonitor, Poll poll) {
         this.poll = poll;
         this.patientObservationController = new PatientObservationController(patientsMonitor);
@@ -47,7 +52,7 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
         this.statusCardAdapter = new StatusCardAdapter(inflater);
         RecyclerView statusRecycler = rootView.findViewById(R.id.statusRecycler);
         statusRecycler.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(Objects.requireNonNull(this.getActivity()));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         statusRecycler.setLayoutManager(layoutManager);
         statusRecycler.setAdapter(this.statusCardAdapter);
 
@@ -68,7 +73,7 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
     }
 
     /**
-     * Displays a loading screen while data is asynchronous fetched in the background when the
+     * Displays a loading screen while data is asynchronously loaded in the background when the
      * controller is set up.
      */
     private static class ControllerSetUp extends AsyncTask<Void, Void, Void> {
@@ -91,7 +96,7 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
         }
 
         /**
-         * Show the progress bar
+         * Show the progress bar.
          */
         @Override
         protected void onPreExecute() {
