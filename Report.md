@@ -27,9 +27,6 @@ We favoured **composition** over inheritance in `ObservedPatient` for the releva
 
 One drawback of composition however is due to its flexibility - it runs the risk of being difficult to understand if the behaviours are changed constantly at runtime.
 
-## Factory method pattern
-`ObservedPatient` objects are instantiated by the client through the `ObservedPatientFactory`. This increases **cohesion** within the package and absolves all clients from containing creation logic, including dependencies and object types, that may potentially change over time.
-
 ## Observer pattern
 ![](./markdown-assets/rsz_observers.png "Observer")
 ![](./markdown-assets/rsz_polling.png "Poll")
@@ -40,6 +37,8 @@ The benefit of this pattern is that the observer and the subject are **decoupled
 
 ## Simple factory idiom
 We have used the simple factory idiom to encapsulate the logic related to creating concrete classes from the rest of Smile (Sierra, Bates, Robson, & Freeman, 2004), such as `HealthServiceProducer` to create the concrete health service.
+
+`ObservedPatient` objects are instantiated by the client through the `ObservedPatientFactory`. This increases **cohesion** within the package and absolves all clients from containing creation logic, including dependencies and object types, that may potentially change over time.
 
 One negative is that more complex creational logic would be better suited for patterns such as the abstract factory pattern, however we believe the our approach is beneficial given the relative simplicity of the logic. The benefits of the simple factory idiom far outweigh this negative, given that the creational logic is not duplicated and the logic can be changed in one place (i.e. the code is DRY). 
 
