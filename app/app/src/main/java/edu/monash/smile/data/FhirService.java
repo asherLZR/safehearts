@@ -279,7 +279,7 @@ class FhirService extends HealthService {
      * @return A list with all observations for the given type
      */
     private List<BmiObservation> readBmiStatus(ShPatientReference reference) {
-        List<Observation> observations = readObservations(reference, ObservationType.BMI, 1);
+        List<Observation> observations = readObservations(reference, ObservationType.BMI, TIME_SERIES_LENGTH);
 
         List<BmiObservation> results = new ArrayList<>();
 

@@ -26,7 +26,9 @@ public class SingleNumericListItemAdapterDelegate extends AbsListItemAdapterDele
 
     @Override
     protected boolean isForViewType(@NonNull ObservedPatient<? extends ShObservation> item, @NonNull List<ObservedPatient<? extends ShObservation>> items, int position) {
-        return item.getObservations().get(0) instanceof QuantitativeObservation;
+        // Check observation is numeric and is single-valued.
+        return item.getObservations().get(0) instanceof QuantitativeObservation
+                && item.getObservations().size() == 1;
     }
 
     @NonNull
