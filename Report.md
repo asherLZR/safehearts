@@ -63,6 +63,12 @@ Nystrom, R. (2014). Game programming patterns. Genever Benning.
 
 Sierra, K., Bates, B., Robson, E., & Freeman, E. (2004, October). The Factory Pattern: Baking with OO Goodness - Head First Design Patterns. Retrieved May 16, 2019, from O’Reilly Safari website: https://www.oreilly.com/library/view/head-first-design/0596007124/ch04.html
 
+# Bonus Features
+## Graphical BMI Monitor and SQLite Service alongside FHIR
+![dashboard](./markdown-assets/rsz_bmi.png "BMI Feature")
+![dashboard](./markdown-assets/rsz_landing.png "Landing Page")
+![dashboard](./markdown-assets/rsz_sql.png "SQL Feature")
+
 \newpage
 
 # Appendix
@@ -83,18 +89,11 @@ Sierra, K., Bates, B., Robson, E., & Freeman, E. (2004, October). The Factory Pa
 ## External Libraries
 - [MPAndroid Chart](https://github.com/PhilJay/MPAndroidChart) for plotting Blood Pressure line charts.
 - [AdapterDelegates](https://github.com/sockeqwe/AdapterDelegates) for managing multiple CardHolders.
+- [SQLiteAssetHelper](https://github.com/jgilfelt/android-sqlite-asset-helper) for accessing pre-filled SQLite data.
 
 ## Building Smile
 1. Open project in Android Studio
 2. Run project in an Android emulator or device
-
-## Functional Description
-Our implementation of the SafeHeart application (known as **Smile**) presents a chosen practitioner with a list of all their associated patients, pulled from the [FHIR](http://www.hl7.org/FHIR/) server, allowing them to optionally add monitors to various observation types (e.g. Cholesterol). 
-
-![dashboard](./markdown-assets/rsz_dashboard.jpg "Dashboard Page")
-![patients](./markdown-assets/rsz_patients.jpg "Patients Page")
-
-These patient observations are presented to the practitioner on a dashboard, which refreshes its data (i.e. pulls new observations from the server) every hour.
 
 ## UML Diagrams
 - [Class Diagram](./uml/ClassDiagram.pdf)
@@ -103,3 +102,13 @@ These patient observations are presented to the practitioner on a dashboard, whi
     - [Input Practitioner ID](./uml/sequence_diagrams/InputPractitionerId.png)
     - [Polling Data from the Server](./uml/sequence_diagrams/PollingData.png)
     - [Toggling Patient Monitor](./uml/sequence_diagrams/TogglePatientMonitor.png)
+
+\newpage
+
+## Functional Description
+Our implementation of the SafeHeart application (known as **Smile**) presents a chosen practitioner with a list of all their associated patients, pulled from the [FHIR](http://www.hl7.org/FHIR/) server, allowing them to optionally add monitors to various observation types (e.g. Cholesterol). 
+
+![dashboard](./markdown-assets/rsz_dashboard.jpg "Dashboard Page")
+![patients](./markdown-assets/rsz_patients.jpg "Patients Page")
+
+These patient observations are presented to the practitioner on a dashboard, which refreshes its data (i.e. pulls new observations from the server) every hour.
