@@ -20,6 +20,10 @@ import edu.monash.smile.data.safeheartsModel.observation.SmokingObservation;
 import edu.monash.smile.data.sqlProvider.PatientFileProvider;
 import edu.monash.smile.data.sqlProvider.SchemePatientFile;
 
+/**
+ * A HealthService that pulls data from a pre-filled SQLite database in the app, for demonstration
+ * purposes. Some of the data here like CholesterolObservation measurement unit are hardcoded.
+ * */
 public class NotFhirService extends HealthService {
     private Context context;
 
@@ -28,6 +32,12 @@ public class NotFhirService extends HealthService {
         this.context = context;
     }
 
+    /**
+     * Loads all the patient IDs that a practitioner is responsible for.
+     *
+     * @param practitionerId The practitioner of interest
+     * @return A set of unique patient IDs that the practitioner has seen
+     */
     @Override
     public Set<ShPatientReference> loadPatientReferences(int practitionerId) {
         ContentResolver resolver = context.getContentResolver();
@@ -50,6 +60,13 @@ public class NotFhirService extends HealthService {
         return references;
     }
 
+    /**
+     * Reads any observation of a particular patient, specified by type.
+     *
+     * @param observationType The type of the observation to be read
+     * @param reference The ID of the patient
+     * @return A list with all observations for the given type
+     */
     @Override
     public List<? extends ShObservation> readObservationsByType(ObservationType observationType, ShPatientReference reference) {
         switch (observationType){
@@ -62,6 +79,11 @@ public class NotFhirService extends HealthService {
         }
     }
 
+    /**
+     * Returns a cursor for the patient with the given id.
+     * @param reference The ID of the patient
+     * @return A cursor to iterate through.
+     */
     private Cursor getCursorByPatientId(ShPatientReference reference){
         ContentResolver resolver = context.getContentResolver();
         String patientId = reference.getId();
@@ -73,6 +95,11 @@ public class NotFhirService extends HealthService {
                 null);
     }
 
+    /**
+     * Reads only the latest historical observations for cholesterol.
+     * @param reference The ID of the patient
+     * @return A list with all observations for the given type
+     */
     private List<CholesterolObservation> readCholesterol(ShPatientReference reference){
         List<CholesterolObservation> results = new ArrayList<>();
         Cursor cursor = getCursorByPatientId(reference);
@@ -93,6 +120,12 @@ public class NotFhirService extends HealthService {
         return results;
     }
 
+    /**
+     * Reads only the latest historical observations for smoking for a patient
+     *
+     * @param reference The ID of the patient
+     * @return A list with all observations for the given type
+     */
     private List<SmokingObservation> readSmokingStatus(ShPatientReference reference){
         List<SmokingObservation> results = new ArrayList<>();
 
@@ -109,6 +142,12 @@ public class NotFhirService extends HealthService {
         return results;
     }
 
+    /**
+     * Creates a mapping of patient references (IDs) to specific patients.
+     * This is used to discover patient details based on their ID.
+     * @param references the patient IDs to find the patient details of
+     * @return a mapping from the ID to the patient details
+     */
     @Override
     public HashMap<ShPatientReference, ShPatient> getAllPatients(Set<ShPatientReference> references) {
         HashMap<ShPatientReference, ShPatient> shPatients = new HashMap<>();

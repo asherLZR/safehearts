@@ -17,6 +17,10 @@ public class PatientFileProvider extends ContentProvider {
     private static final int PATIENT_FILE = 100;
     private static final int PATIENT_FILE_ID = 200;
 
+    /**
+     * Creates a UriMatcher to map URIs to their respective DB object type.
+     * @return The UriMatcher for the database
+     */
     private static UriMatcher createUriMatcher() {
         final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = SchemePatientFile.CONTENT_AUTHORITY;
@@ -33,6 +37,15 @@ public class PatientFileProvider extends ContentProvider {
         return true;
     }
 
+    /**
+     * Reads only the latest historical observations for cholesterol.
+     * @param uri URI for the data
+     * @param projection SQL projection (column selection) parameters
+     * @param selection SQL selection (row selection) query
+     * @param selectionArgs the arguments passed to the selection query
+     * @param sortOrder the order by which to sort the resultant rows
+     * @return The cursor for the query result
+     */
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
@@ -75,6 +88,11 @@ public class PatientFileProvider extends ContentProvider {
         return cursor;
     }
 
+    /**
+     * Converts a URI to a database object type.
+     * @param uri The URI to match to a type
+     * @return The type of the URI
+     */
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {

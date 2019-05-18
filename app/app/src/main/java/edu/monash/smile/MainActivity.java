@@ -64,23 +64,5 @@ public class MainActivity extends AppCompatActivity{
 
         Chip fhirChip = findViewById(R.id.fhirChip);
         fhirChip.setChecked(true);
-
-//        ChipGroup chipGroup = findViewById(R.id.choice_chip_group);
-//        chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(ChipGroup chipGroup, int i) {
-//                Chip chip = chipGroup.findViewById(i);
-//                if (chip != null) {
-//                    switch (chip.getId()) {
-//                        case R.id.fhirChip:
-//                            healthServiceType = HealthServiceType.FHIR;
-//                            Toast.makeText(getApplicationContext(), healthServiceType + " Selected", Toast.LENGTH_SHORT).show();
-//                        case R.id.sqlChip:
-//                            healthServiceType = HealthServiceType.SQL_NOT_FHIR;
-//                            Toast.makeText(getApplicationContext(), healthServiceType + " Selected", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//        });
     }
 }
