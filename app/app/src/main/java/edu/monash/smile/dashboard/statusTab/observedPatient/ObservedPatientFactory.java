@@ -6,6 +6,7 @@ import edu.monash.smile.dashboard.statusTab.observedPatient.alertStrategy.AlertS
 import edu.monash.smile.dashboard.statusTab.observedPatient.alertStrategy.BloodPressureAlertStrategy;
 import edu.monash.smile.dashboard.statusTab.observedPatient.alertStrategy.NoAlertStrategy;
 import edu.monash.smile.dashboard.statusTab.observedPatient.chartStrategy.BloodPressureChartStrategy;
+import edu.monash.smile.dashboard.statusTab.observedPatient.chartStrategy.BmiChartStrategy;
 import edu.monash.smile.dashboard.statusTab.observedPatient.chartStrategy.ChartStrategy;
 import edu.monash.smile.dashboard.statusTab.observedPatient.chartStrategy.NoChartStrategy;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
@@ -50,6 +51,8 @@ public class ObservedPatientFactory {
     private static ChartStrategy selectChartStrategy(ObservationType type) {
         if (type == ObservationType.BLOOD_PRESSURE) {
             return new BloodPressureChartStrategy();
+        } else if (type == ObservationType.BMI) {
+            return new BmiChartStrategy();
         }
 
         return new NoChartStrategy();

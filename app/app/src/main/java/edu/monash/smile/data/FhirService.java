@@ -23,6 +23,7 @@ import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import edu.monash.smile.data.safeheartsModel.ShPatient;
 import edu.monash.smile.data.safeheartsModel.ShPatientReference;
 import edu.monash.smile.data.safeheartsModel.observation.BloodPressureObservation;
+import edu.monash.smile.data.safeheartsModel.observation.BmiObservation;
 import edu.monash.smile.data.safeheartsModel.observation.CholesterolObservation;
 import edu.monash.smile.data.safeheartsModel.observation.DiastolicObservation;
 import edu.monash.smile.data.safeheartsModel.observation.ObservationType;
@@ -85,6 +86,8 @@ class FhirService extends HealthService {
                 return readSmokingStatus(reference);
             case BLOOD_PRESSURE:
                 return readBloodPressureTimeSeries(reference);
+            case BMI:
+                return readBmiStatus(reference);
             default:
                 throw new IllegalArgumentException("Illegal observation type");
         }
@@ -270,6 +273,42 @@ class FhirService extends HealthService {
     }
 
     /**
+     * Reads only the latest historical observations for smoking for a patient
+     *
+     * @param reference The ID of the patient
+     * @return A list with all observations for the given type
+     */
+    private List<BmiObservation> readBmiStatus(ShPatientReference reference) {
+        List<Observation> observations = readObservations(reference, ObservationType.BMI, 1);
+
+        List<BmiObservation> results = new ArrayList<>();
+
+        for (Observation o : observations) {
+            results.add(convertToBmiObservation(o));
+        }
+
+        return results;
+    }
+
+    /**
+     * Extracts information from FHIR into a BmiObservation.
+     *
+     * @param observation An observation from the FHIR library
+     * @return A BmiObservation
+     */
+    private BmiObservation convertToBmiObservation(Observation observation) {
+        Quantity quantity = (Quantity) observation.getValue();
+
+        return new BmiObservation(
+                quantity.getValue(), // Value
+                quantity.getUnit(), // Unit
+                observation.getCode().getText(), // Description
+                observation.getEffectiveDateTimeType().getValue() // Date observed
+        );
+    }
+
+
+    /**
      * An internal class that maps from the ObservationType to the internal FHIR code.
      * @param type The observation type
      * @return FHIR code representing the observation type
@@ -282,6 +321,8 @@ class FhirService extends HealthService {
                 return "55284-4";
             case SMOKING:
                 return "72166-2";
+            case BMI:
+                return "39156-5";
             default:
                 return null;
         }
