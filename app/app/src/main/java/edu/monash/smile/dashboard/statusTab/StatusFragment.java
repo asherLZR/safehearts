@@ -1,5 +1,6 @@
 package edu.monash.smile.dashboard.statusTab;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,9 +34,9 @@ public class StatusFragment extends Fragment implements Observer, PollCallback {
      * @param patientsMonitor The patients monitor containing the patients to show monitors for.
      * @param poll            A intervallic poll to refresh data hourly.
      */
-    public StatusFragment(PatientsMonitor patientsMonitor, Poll poll) {
+    public StatusFragment(PatientsMonitor patientsMonitor, Poll poll, Context applicationContext) {
         this.poll = poll;
-        this.patientObservationController = new PatientObservationController(patientsMonitor);
+        this.patientObservationController = new PatientObservationController(patientsMonitor, applicationContext);
     }
 
     /**

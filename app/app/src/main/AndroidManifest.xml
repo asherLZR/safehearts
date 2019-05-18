@@ -29,6 +29,10 @@
             android:name=".dashboard.DashboardActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
+        <provider
+            android:name=".data.sqlProvider.PatientFileProvider"
+            android:authorities="edu.monash.smile.data.sqlProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>

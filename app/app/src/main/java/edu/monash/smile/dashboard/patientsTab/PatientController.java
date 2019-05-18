@@ -1,5 +1,7 @@
 package edu.monash.smile.dashboard.patientsTab;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,8 +20,8 @@ class PatientController extends Subject{
     private HashMap<ShPatientReference, ShPatient> shPatients;
     private final HealthService healthService;
 
-    PatientController() {
-        this.healthService = HealthServiceProducer.getService(DashboardActivity.HEALTH_SERVICE_TYPE);
+    PatientController(Context context) {
+        this.healthService = HealthServiceProducer.getService(DashboardActivity.healthServiceType, context);
         this.shPatientReferences = new HashSet<>();
     }
 

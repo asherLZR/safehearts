@@ -1,5 +1,7 @@
 package edu.monash.smile.dashboard.statusTab;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,9 +24,9 @@ class PatientObservationController extends Subject {
     private final PatientsMonitor patientsMonitor;
     private final List<ObservedPatient<? extends ShObservation>> observedPatients = new ArrayList<>();
 
-    PatientObservationController(PatientsMonitor patientsMonitor) {
+    PatientObservationController(PatientsMonitor patientsMonitor, Context context) {
         this.patientsMonitor = patientsMonitor;
-        this.healthService = HealthServiceProducer.getService(DashboardActivity.HEALTH_SERVICE_TYPE);
+        this.healthService = HealthServiceProducer.getService(DashboardActivity.healthServiceType, context);
     }
 
     /**

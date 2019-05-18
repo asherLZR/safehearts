@@ -21,21 +21,18 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/ic_launcher_round"
-            android:layout_gravity="center" />
+            app:srcCompat="@drawable/ic_launcher_round" />
     </androidx.appcompat.widget.Toolbar>
 
     <Button
         android:id="@+id/changePracBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="64dp"
         android:text="Set Practitioner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.655"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pracIdEditText" />
 
@@ -44,15 +41,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:inputType="number"
         android:text="1"
         app:layout_constraintBottom_toTopOf="@+id/changePracBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/choice_chip_group"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/choice_chip_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/pracIdEditText"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        style="@style/Widget.MaterialComponents.Chip.Choice"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/sqlChip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SQLite Database" />
+        <!--app:chipBackgroundColor="@color/colorChip1"-->
+        <com.google.android.material.chip.Chip
+            android:id="@+id/fhirChip"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FHIR Database" />
+        <!--app:chipBackgroundColor="@color/colorChip2"-->
+    </com.google.android.material.chip.ChipGroup>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

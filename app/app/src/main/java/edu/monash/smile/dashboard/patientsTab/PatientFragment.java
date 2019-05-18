@@ -1,5 +1,6 @@
 package edu.monash.smile.dashboard.patientsTab;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -38,11 +39,12 @@ public class PatientFragment extends Fragment implements Observer, PollCallback 
      */
     public PatientFragment(
             PatientsMonitor patientsMonitor,
-            Poll poll
+            Poll poll,
+            Context applicationContext
     ) {
         this.poll = poll;
         this.patientAdapter = new PatientArrayAdapter(patientsMonitor);
-        this.patientController = new PatientController();
+        this.patientController = new PatientController(applicationContext);
     }
 
     /**

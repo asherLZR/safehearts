@@ -24,7 +24,7 @@ public class PatientsMonitor {
      */
     PatientsMonitor(Context context) {
         this.context = context;
-        this.healthServiceType = DashboardActivity.HEALTH_SERVICE_TYPE;
+        this.healthServiceType = DashboardActivity.healthServiceType;
         restoreMonitoredPatientsList();
     }
 

@@ -1,14 +1,17 @@
 package edu.monash.smile.dashboard;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import edu.monash.smile.MainActivity;
 import edu.monash.smile.R;
 import edu.monash.smile.dashboard.patientsTab.PatientFragment;
 import edu.monash.smile.dashboard.statusTab.StatusFragment;
+import edu.monash.smile.data.HealthService;
 import edu.monash.smile.data.HealthServiceType;
 import edu.monash.smile.polling.Poll;
 import edu.monash.smile.preferences.SharedPreferencesHelper;
@@ -16,7 +19,7 @@ import edu.monash.smile.preferences.SharedPreferencesHelper;
 
 public class DashboardActivity extends AppCompatActivity {
     private static final int POLL_INTERVAL = 360000;
-    public static final HealthServiceType HEALTH_SERVICE_TYPE = HealthServiceType.FHIR;
+    public static HealthServiceType healthServiceType;
 
     private PatientFragment patientFragment = null;
     private StatusFragment statusFragment = null;
@@ -30,6 +33,11 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         setupBottomNavigation();
 
+        Bundle bundle = getIntent().getExtras();
+        assert bundle != null;
+        healthServiceType = (HealthServiceType) bundle.get(MainActivity.BUNDLE_HEALTH_SERVICE_TYPE);
+        Log.i("Debug", "onCreate: " + healthServiceType);
+
         if (savedInstanceState == null) {
             initialiseFragments();
         }
@@ -41,8 +49,8 @@ public class DashboardActivity extends AppCompatActivity {
      */
     private void initialiseFragments(){
         PatientsMonitor patientsMonitor = new PatientsMonitor(this.getApplicationContext());
-        this.statusFragment = new StatusFragment(patientsMonitor, this.poll);
-        this.patientFragment = new PatientFragment(patientsMonitor, this.poll);
+        this.statusFragment = new StatusFragment(patientsMonitor, this.poll, getApplicationContext());
+        this.patientFragment = new PatientFragment(patientsMonitor, this.poll, getApplicationContext());
         this.patientFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager()
                 .beginTransaction()
@@ -99,6 +107,7 @@ public class DashboardActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         SharedPreferencesHelper.removeAllSharedPreferences(this);
+        this.finish();
     }
 
     /**
