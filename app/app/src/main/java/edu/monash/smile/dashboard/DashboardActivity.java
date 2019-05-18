@@ -36,7 +36,6 @@ public class DashboardActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
         healthServiceType = (HealthServiceType) bundle.get(MainActivity.BUNDLE_HEALTH_SERVICE_TYPE);
-        Log.i("Debug", "onCreate: " + healthServiceType);
 
         if (savedInstanceState == null) {
             initialiseFragments();
