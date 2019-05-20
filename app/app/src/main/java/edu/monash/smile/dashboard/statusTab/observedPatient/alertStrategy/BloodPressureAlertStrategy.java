@@ -16,6 +16,6 @@ public class BloodPressureAlertStrategy implements AlertStrategy {
         QuantitativeObservation systolic = observation.getSystolicObservation();
         QuantitativeObservation diastolic = observation.getDiastolicObservation();
         // If at any point in time, the patient exceeds normal thresholds, display an alert
-        return systolic.getValue().intValue() > 180 || diastolic.getValue().intValue() > 120;
+        return systolic.getValue().intValue() > 160 || diastolic.getValue().intValue() > 120;
     }
 }
