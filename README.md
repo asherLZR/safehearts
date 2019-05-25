@@ -15,8 +15,11 @@ An Android-FHIR app for medical practitioners to monitor patients' key health st
 4. Design principles and patterns ([`./Report.pdf`](https://github.com/asherLZR/safehearts/blob/master/Report.pdf))
 
 ## Screenshots
-<img src="markdown-assets/home.jpg" alt="drawing" width="150"/>
-<img src="markdown-assets/load.jpg" alt="drawing" width="150"/>
-<br>
-<img src="markdown-assets/dashboard.jpg" alt="drawing" width="150"/>
-<img src="markdown-assets/patients.jpg" alt="drawing" width="150"/>
+<span>
+<img src="markdown-assets/home.jpg" alt="drawing" width="200"/>
+<img src="markdown-assets/load.jpg" alt="drawing" width="200"/>
+</span>
+<span>
+<img src="markdown-assets/dashboard.jpg" alt="drawing" width="200"/>
+<img src="markdown-assets/patients.jpg" alt="drawing" width="200"/>
+</span>
